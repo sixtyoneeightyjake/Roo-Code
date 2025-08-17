@@ -9,8 +9,8 @@ import {
 	openAiModelInfoSaneDefaults,
 	openAiNativeDefaultModelId,
 	openAiNativeModels,
-	_claudeCodeDefaultModelId,
-	_claudeCodeModels,
+	// claudeCodeDefaultModelId,
+	// claudeCodeModels,
 } from "@Mojo-code/types"
 
 import { useRouterModels } from "./useRouterModels"

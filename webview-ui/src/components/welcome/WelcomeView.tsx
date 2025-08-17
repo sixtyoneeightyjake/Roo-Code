@@ -17,7 +17,13 @@ import { Tab, TabContent } from "../common/Tab"
 import MojoHero from "./MojoHero"
 
 const WelcomeView = () => {
-	const { apiConfiguration, currentApiConfigName, setApiConfiguration, uriScheme, machineId } = useExtensionState()
+	const {
+		apiConfiguration,
+		currentApiConfigName,
+		setApiConfiguration,
+		uriScheme: _uriScheme,
+		machineId,
+	} = useExtensionState()
 	const { t } = useAppTranslation()
 	const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
 
@@ -75,13 +81,13 @@ const WelcomeView = () => {
 									name: "Requesty",
 									description: t("welcome:routers.requesty.description"),
 									incentive: t("welcome:routers.requesty.incentive"),
-									authUrl: getRequestyAuthUrl(uriScheme),
+									authUrl: getRequestyAuthUrl(_uriScheme),
 								},
 								{
 									slug: "openrouter",
 									name: "OpenRouter",
 									description: t("welcome:routers.openrouter.description"),
-									authUrl: getOpenRouterAuthUrl(uriScheme),
+									authUrl: getOpenRouterAuthUrl(_uriScheme),
 								},
 							]
 
@@ -124,7 +130,7 @@ const WelcomeView = () => {
 					<ApiOptions
 						fromWelcomeView
 						apiConfiguration={apiConfiguration || {}}
-						uriScheme={uriScheme}
+						uriScheme={_uriScheme}
 						setApiConfigurationField={setApiConfigurationFieldForApiOptions}
 						errorMessage={errorMessage}
 						setErrorMessage={setErrorMessage}

@@ -4,8 +4,6 @@ import { AlertTriangle } from "lucide-react"
 
 import type { ProviderSettingsEntry } from "@Mojo-code/types"
 
-
-
 import { useAppTranslation } from "@/i18n/TranslationContext"
 import {
 	type SearchableSelectOption,
@@ -48,7 +46,7 @@ const ApiConfigManager = ({
 	const newProfileInputRef = useRef<any>(null)
 
 	// All profiles are valid (no organization filtering)
-	const isProfileValid = (profile: ProviderSettingsEntry): boolean => {
+	const isProfileValid = (_profile: ProviderSettingsEntry): boolean => {
 		return true
 	}
 

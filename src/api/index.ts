@@ -4,39 +4,7 @@ import type { ProviderSettings, ModelInfo } from "@Mojo-code/types"
 
 import { ApiStream } from "./transform/stream"
 
-import {
-	GlamaHandler,
-	AnthropicHandler,
-	AwsBedrockHandler,
-	CerebrasHandler,
-	OpenRouterHandler,
-	VertexHandler,
-	AnthropicVertexHandler,
-	OpenAiHandler,
-	LmStudioHandler,
-	GeminiHandler,
-	OpenAiNativeHandler,
-	DeepSeekHandler,
-	MoonshotHandler,
-	MistralHandler,
-	VsCodeLmHandler,
-	UnboundHandler,
-	RequestyHandler,
-	HumanRelayHandler,
-	FakeAIHandler,
-	XAIHandler,
-	GroqHandler,
-	HuggingFaceHandler,
-	ChutesHandler,
-	LiteLLMHandler,
-	ClaudeCodeHandler,
-	SambaNovaHandler,
-	IOIntelligenceHandler,
-	DoubaoHandler,
-	ZAiHandler,
-	FireworksHandler,
-} from "./providers"
-import { NativeOllamaHandler } from "./providers/native-ollama"
+import { AnthropicHandler, OpenAiHandler, GeminiHandler, OpenAiNativeHandler } from "./providers"
 
 export interface SingleCompletionHandler {
 	completePrompt(prompt: string): Promise<string>
@@ -80,68 +48,14 @@ export function buildApiHandler(configuration: ProviderSettings): ApiHandler {
 	switch (apiProvider) {
 		case "anthropic":
 			return new AnthropicHandler(options)
-		case "claude-code":
-			return new ClaudeCodeHandler(options)
-		case "glama":
-			return new GlamaHandler(options)
-		case "openrouter":
-			return new OpenRouterHandler(options)
-		case "bedrock":
-			return new AwsBedrockHandler(options)
-		case "vertex":
-			return options.apiModelId?.startsWith("claude")
-				? new AnthropicVertexHandler(options)
-				: new VertexHandler(options)
 		case "openai":
 			return new OpenAiHandler(options)
-		case "ollama":
-			return new NativeOllamaHandler(options)
-		case "lmstudio":
-			return new LmStudioHandler(options)
 		case "gemini":
 			return new GeminiHandler(options)
 		case "openai-native":
 			return new OpenAiNativeHandler(options)
-		case "deepseek":
-			return new DeepSeekHandler(options)
-		case "doubao":
-			return new DoubaoHandler(options)
-		case "moonshot":
-			return new MoonshotHandler(options)
-		case "vscode-lm":
-			return new VsCodeLmHandler(options)
-		case "mistral":
-			return new MistralHandler(options)
-		case "unbound":
-			return new UnboundHandler(options)
-		case "requesty":
-			return new RequestyHandler(options)
-		case "human-relay":
-			return new HumanRelayHandler()
-		case "fake-ai":
-			return new FakeAIHandler(options)
-		case "xai":
-			return new XAIHandler(options)
-		case "groq":
-			return new GroqHandler(options)
-		case "huggingface":
-			return new HuggingFaceHandler(options)
-		case "chutes":
-			return new ChutesHandler(options)
-		case "litellm":
-			return new LiteLLMHandler(options)
-		case "cerebras":
-			return new CerebrasHandler(options)
-		case "sambanova":
-			return new SambaNovaHandler(options)
-		case "zai":
-			return new ZAiHandler(options)
-		case "fireworks":
-			return new FireworksHandler(options)
-		case "io-intelligence":
-			return new IOIntelligenceHandler(options)
 		default:
-			apiProvider satisfies "gemini-cli" | undefined
+			// Default to anthropic for any unrecognized provider
 			return new AnthropicHandler(options)
 	}
 }

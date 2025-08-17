@@ -3,8 +3,6 @@ import { z } from "zod"
 import { reasoningEffortsSchema, verbosityLevelsSchema, modelInfoSchema } from "./model.js"
 import { codebaseIndexProviderSchema } from "./codebase-index.js"
 
-
-
 // Extended schema that includes "minimal" for GPT-5 models
 export const extendedReasoningEffortsSchema = z.union([reasoningEffortsSchema, z.literal("minimal")])
 
@@ -85,8 +83,6 @@ const claudeCodeSchema = apiModelIdProviderModelSchema.extend({
 	claudeCodeMaxOutputTokens: z.number().int().min(1).max(200000).optional(),
 })
 
-
-
 const openAiSchema = baseProviderSettingsSchema.extend({
 	openAiBaseUrl: z.string().optional(),
 	openAiApiKey: z.string().optional(),
@@ -101,8 +97,6 @@ const openAiSchema = baseProviderSettingsSchema.extend({
 	openAiHeaders: z.record(z.string(), z.string()).optional(),
 })
 
-
-
 const geminiSchema = apiModelIdProviderModelSchema.extend({
 	geminiApiKey: z.string().optional(),
 	googleGeminiBaseUrl: z.string().optional(),
@@ -110,22 +104,16 @@ const geminiSchema = apiModelIdProviderModelSchema.extend({
 	enableGrounding: z.boolean().optional(),
 })
 
-
-
 const openAiNativeSchema = apiModelIdProviderModelSchema.extend({
 	openAiNativeApiKey: z.string().optional(),
 	openAiNativeBaseUrl: z.string().optional(),
 })
-
-
 
 const humanRelaySchema = baseProviderSettingsSchema
 
 const fakeAiSchema = baseProviderSettingsSchema.extend({
 	fakeAi: z.unknown().optional(),
 })
-
-
 
 const defaultSchema = z.object({
 	apiProvider: z.undefined(),
@@ -164,10 +152,7 @@ export type ProviderSettingsWithId = z.infer<typeof providerSettingsWithIdSchema
 
 export const PROVIDER_SETTINGS_KEYS = providerSettingsSchema.keyof().options
 
-export const MODEL_ID_KEYS: Partial<keyof ProviderSettings>[] = [
-	"apiModelId",
-	"openAiModelId",
-]
+export const MODEL_ID_KEYS: Partial<keyof ProviderSettings>[] = ["apiModelId", "openAiModelId"]
 
 export const getModelId = (settings: ProviderSettings): string | undefined => {
 	const modelIdKey = MODEL_ID_KEYS.find((key) => settings[key])
@@ -178,7 +163,7 @@ export const getModelId = (settings: ProviderSettings): string | undefined => {
 export const ANTHROPIC_STYLE_PROVIDERS: ProviderName[] = ["anthropic", "claude-code"]
 
 // Helper function to determine API protocol for a provider and model
-export const getApiProtocol = (provider: ProviderName | undefined, modelId?: string): "anthropic" | "openai" => {
+export const getApiProtocol = (provider: ProviderName | undefined, _modelId?: string): "anthropic" | "openai" => {
 	// First check if the provider is an Anthropic-style provider
 	if (provider && ANTHROPIC_STYLE_PROVIDERS.includes(provider)) {
 		return "anthropic"

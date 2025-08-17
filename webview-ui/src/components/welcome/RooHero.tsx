@@ -8,18 +8,8 @@ const MojoHero = () => {
 
 	return (
 		<div className="flex flex-col items-center justify-center pb-4 forced-color-adjust-none">
-			<div
-				style={{
-					backgroundColor: "var(--vscode-foreground)",
-					WebkitMaskImage: `url('${imagesBaseUri}/Mojo-logo.svg')`,
-					WebkitMaskRepeat: "no-repeat",
-					WebkitMaskSize: "contain",
-					maskImage: `url('${imagesBaseUri}/Mojo-logo.svg')`,
-					maskRepeat: "no-repeat",
-					maskSize: "contain",
-				}}
-				className="mx-auto">
-				<img src={imagesBaseUri + "/Mojo-logo.svg"} alt="Mojo logo" className="h-8 opacity-0" />
+			<div className="mx-auto">
+				<img src={imagesBaseUri + "/logo.png"} alt="Mojo logo" className="h-8 w-auto" />
 			</div>
 		</div>
 	)

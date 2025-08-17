@@ -1,7 +1,7 @@
 import fs from "fs/promises"
 import * as path from "path"
 import matter from "gray-matter"
-import { getGlobalMojoDirectory, getProjectMojoDirectoryForCwd } from "../Mojo-config"
+import { getGlobalMojoDirectory, getProjectMojoDirectoryForCwd } from "../roo-config"
 
 export interface Command {
 	name: string

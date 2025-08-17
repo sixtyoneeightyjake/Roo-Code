@@ -9,21 +9,7 @@ import React, {
 	useRef,
 	useState,
 } from "react"
-import {
-	CheckCheck,
-	SquareMousePointer,
-	Webhook,
-	GitBranch,
-	Bell,
-	Database,
-	SquareTerminal,
-	FlaskConical,
-	AlertTriangle,
-	Globe,
-	Info,
-	MessageSquare,
-	LucideIcon,
-} from "lucide-react"
+import { CheckCheck, Webhook, GitBranch, Bell, AlertTriangle, Info, MessageSquare, LucideIcon } from "lucide-react"
 
 import type { ProviderSettings, ExperimentId } from "@Mojo-code/types"
 
@@ -55,13 +41,10 @@ import { SectionHeader } from "./SectionHeader"
 import ApiConfigManager from "./ApiConfigManager"
 import ApiOptions from "./ApiOptions"
 import { AutoApproveSettings } from "./AutoApproveSettings"
-import { BrowserSettings } from "./BrowserSettings"
+
 import { CheckpointSettings } from "./CheckpointSettings"
 import { NotificationSettings } from "./NotificationSettings"
-import { ContextManagementSettings } from "./ContextManagementSettings"
-import { TerminalSettings } from "./TerminalSettings"
-import { ExperimentalSettings } from "./ExperimentalSettings"
-import { LanguageSettings } from "./LanguageSettings"
+
 import { About } from "./About"
 import { Section } from "./Section"
 import PromptsSettings from "./PromptsSettings"
@@ -78,19 +61,7 @@ export interface SettingsViewRef {
 	checkUnsaveChanges: (then: () => void) => void
 }
 
-const sectionNames = [
-	"providers",
-	"autoApprove",
-	"browser",
-	"checkpoints",
-	"notifications",
-	"contextManagement",
-	"terminal",
-	"prompts",
-	"experimental",
-	"language",
-	"about",
-] as const
+const sectionNames = ["providers", "autoApprove", "checkpoints", "notifications", "prompts", "about"] as const
 
 type SectionName = (typeof sectionNames)[number]
 
@@ -172,7 +143,7 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 		maxImageFileSize,
 		maxTotalImageSize,
 		terminalCompressProgressBar,
-		maxConcurrentFileReads,
+		maxConcurrentFileReads: _maxConcurrentFileReads,
 		condensingApiConfigId,
 		customCondensingPrompt,
 		customSupportPrompts,
@@ -240,7 +211,7 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 		[],
 	)
 
-	const setExperimentEnabled: SetExperimentEnabled = useCallback((id: ExperimentId, enabled: boolean) => {
+	const _setExperimentEnabled: SetExperimentEnabled = useCallback((id: ExperimentId, enabled: boolean) => {
 		setCachedState((prevState) => {
 			if (prevState.experiments?.[id] === enabled) {
 				return prevState
@@ -416,14 +387,9 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 		() => [
 			{ id: "providers", icon: Webhook },
 			{ id: "autoApprove", icon: CheckCheck },
-			{ id: "browser", icon: SquareMousePointer },
 			{ id: "checkpoints", icon: GitBranch },
 			{ id: "notifications", icon: Bell },
-			{ id: "contextManagement", icon: Database },
-			{ id: "terminal", icon: SquareTerminal },
 			{ id: "prompts", icon: MessageSquare },
-			{ id: "experimental", icon: FlaskConical },
-			{ id: "language", icon: Globe },
 			{ id: "about", icon: Info },
 		],
 		[], // No dependencies needed now
@@ -636,18 +602,6 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 						/>
 					)}
 
-					{/* Browser Section */}
-					{activeTab === "browser" && (
-						<BrowserSettings
-							browserToolEnabled={browserToolEnabled}
-							browserViewportSize={browserViewportSize}
-							screenshotQuality={screenshotQuality}
-							remoteBrowserHost={remoteBrowserHost}
-							remoteBrowserEnabled={remoteBrowserEnabled}
-							setCachedStateField={setCachedStateField}
-						/>
-					)}
-
 					{/* Checkpoints Section */}
 					{activeTab === "checkpoints" && (
 						<CheckpointSettings
@@ -667,45 +621,6 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 						/>
 					)}
 
-					{/* Context Management Section */}
-					{activeTab === "contextManagement" && (
-						<ContextManagementSettings
-							autoCondenseContext={autoCondenseContext}
-							autoCondenseContextPercent={autoCondenseContextPercent}
-							listApiConfigMeta={listApiConfigMeta ?? []}
-							maxOpenTabsContext={maxOpenTabsContext}
-							maxWorkspaceFiles={maxWorkspaceFiles ?? 200}
-							showMojoIgnoredFiles={showMojoIgnoredFiles}
-							maxReadFileLine={maxReadFileLine}
-							maxImageFileSize={maxImageFileSize}
-							maxTotalImageSize={maxTotalImageSize}
-							maxConcurrentFileReads={maxConcurrentFileReads}
-							profileThresholds={profileThresholds}
-							includeDiagnosticMessages={includeDiagnosticMessages}
-							maxDiagnosticMessages={maxDiagnosticMessages}
-							writeDelayMs={writeDelayMs}
-							setCachedStateField={setCachedStateField}
-						/>
-					)}
-
-					{/* Terminal Section */}
-					{activeTab === "terminal" && (
-						<TerminalSettings
-							terminalOutputLineLimit={terminalOutputLineLimit}
-							terminalOutputCharacterLimit={terminalOutputCharacterLimit}
-							terminalShellIntegrationTimeout={terminalShellIntegrationTimeout}
-							terminalShellIntegrationDisabled={terminalShellIntegrationDisabled}
-							terminalCommandDelay={terminalCommandDelay}
-							terminalPowershellCounter={terminalPowershellCounter}
-							terminalZshClearEolMark={terminalZshClearEolMark}
-							terminalZshOhMy={terminalZshOhMy}
-							terminalZshP10k={terminalZshP10k}
-							terminalZdotdir={terminalZdotdir}
-							terminalCompressProgressBar={terminalCompressProgressBar}
-							setCachedStateField={setCachedStateField}
-						/>
-					)}
-
 					{/* Prompts Section */}
 					{activeTab === "prompts" && (
 						<PromptsSettings
@@ -716,16 +631,6 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 								setCachedStateField("includeTaskHistoryInEnhance", value)
 							}
 						/>
-					)}
-
-					{/* Experimental Section */}
-					{activeTab === "experimental" && (
-						<ExperimentalSettings setExperimentEnabled={setExperimentEnabled} experiments={experiments} />
-					)}
-
-					{/* Language Section */}
-					{activeTab === "language" && (
-						<LanguageSettings language={language || "en"} setCachedStateField={setCachedStateField} />
 					)}
 
 					{/* About Section */}

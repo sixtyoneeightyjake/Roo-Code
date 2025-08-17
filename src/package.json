@@ -1,10 +1,10 @@
 {
-	"name": "Mojo-cline",
+	"name": "mojo-code",
 	"displayName": "%extension.displayName%",
 	"description": "%extension.description%",
 	"publisher": "MojoVeterinaryInc",
-	"version": "3.25.15",
-	"icon": "assets/icons/icon.png",
+	"version": "1.0.0",
+	"icon": "assets/images/icon.png",
 	"galleryBanner": {
 		"color": "#617A91",
 		"theme": "dark"
@@ -100,7 +100,6 @@
 				"title": "%command.openInEditor.title%",
 				"icon": "$(link-external)"
 			},
-
 			{
 				"command": "Mojo-cline.settingsButtonClicked",
 				"title": "%command.settings.title%",
@@ -229,7 +228,6 @@
 					"group": "navigation@3",
 					"when": "view == Mojo-cline.SidebarProvider"
 				},
-
 				{
 					"command": "Mojo-cline.historyButtonClicked",
 					"group": "overflow@1",
@@ -267,7 +265,6 @@
 					"group": "navigation@3",
 					"when": "activeWebviewPanelId == Mojo-cline.TabPanelProvider"
 				},
-
 				{
 					"command": "Mojo-cline.historyButtonClicked",
 					"group": "overflow@1",
@@ -415,7 +412,6 @@
 		"@mistralai/mistralai": "^1.3.6",
 		"@modelcontextprotocol/sdk": "^1.9.0",
 		"@qdrant/js-client-rest": "^1.14.0",
-
 		"@Mojo-code/ipc": "workspace:^",
 		"@Mojo-code/telemetry": "workspace:^",
 		"@Mojo-code/types": "workspace:^",

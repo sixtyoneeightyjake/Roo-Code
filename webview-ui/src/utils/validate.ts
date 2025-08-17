@@ -4,58 +4,20 @@ import type { ProviderSettings } from "@Mojo-code/types"
 
 import { isRouterName, RouterModels } from "@Mojo/api"
 
-export function validateApiConfiguration(
-	apiConfiguration: ProviderSettings,
-	routerModels?: RouterModels,
-): string | undefined {
+export function validateApiConfiguration(apiConfiguration: ProviderSettings): string | undefined {
 	const keysAndIdsPresentErrorMessage = validateModelsAndKeysProvided(apiConfiguration)
 	if (keysAndIdsPresentErrorMessage) {
 		return keysAndIdsPresentErrorMessage
 	}
 
-	return validateModelId(apiConfiguration, routerModels)
+	return validateModelId(apiConfiguration)
 }
 
 function validateModelsAndKeysProvided(apiConfiguration: ProviderSettings): string | undefined {
 	switch (apiConfiguration.apiProvider) {
-		case "openrouter":
-			if (!apiConfiguration.openRouterApiKey) {
-				return i18next.t("settings:validation.apiKey")
-			}
-			break
-		case "glama":
-			if (!apiConfiguration.glamaApiKey) {
-				return i18next.t("settings:validation.apiKey")
-			}
-			break
-		case "unbound":
-			if (!apiConfiguration.unboundApiKey) {
-				return i18next.t("settings:validation.apiKey")
-			}
-			break
-		case "requesty":
-			if (!apiConfiguration.requestyApiKey) {
-				return i18next.t("settings:validation.apiKey")
-			}
-			break
-		case "litellm":
-			if (!apiConfiguration.litellmApiKey) {
-				return i18next.t("settings:validation.apiKey")
-			}
-			break
 		case "anthropic":
 			if (!apiConfiguration.apiKey) {
 				return i18next.t("settings:validation.apiKey")
-			}
-			break
-		case "bedrock":
-			if (!apiConfiguration.awsRegion) {
-				return i18next.t("settings:validation.awsRegion")
-			}
-			break
-		case "vertex":
-			if (!apiConfiguration.vertexProjectId || !apiConfiguration.vertexRegion) {
-				return i18next.t("settings:validation.googleCloud")
 			}
 			break
 		case "gemini":
@@ -68,60 +30,15 @@ function validateModelsAndKeysProvided(apiConfiguration: ProviderSettings): stri
 				return i18next.t("settings:validation.apiKey")
 			}
 			break
-		case "mistral":
-			if (!apiConfiguration.mistralApiKey) {
-				return i18next.t("settings:validation.apiKey")
-			}
-			break
 		case "openai":
 			if (!apiConfiguration.openAiBaseUrl || !apiConfiguration.openAiApiKey || !apiConfiguration.openAiModelId) {
 				return i18next.t("settings:validation.openAi")
-			}
-			break
-		case "ollama":
-			if (!apiConfiguration.ollamaModelId) {
-				return i18next.t("settings:validation.modelId")
-			}
-			break
-		case "lmstudio":
-			if (!apiConfiguration.lmStudioModelId) {
-				return i18next.t("settings:validation.modelId")
-			}
-			break
-		case "vscode-lm":
-			if (!apiConfiguration.vsCodeLmModelSelector) {
-				return i18next.t("settings:validation.modelSelector")
-			}
-			break
-		case "huggingface":
-			if (!apiConfiguration.huggingFaceApiKey) {
-				return i18next.t("settings:validation.apiKey")
-			}
-			if (!apiConfiguration.huggingFaceModelId) {
-				return i18next.t("settings:validation.modelId")
-			}
-			break
-		case "cerebras":
-			if (!apiConfiguration.cerebrasApiKey) {
-				return i18next.t("settings:validation.apiKey")
-			}
-			break
-		case "fireworks":
-			if (!apiConfiguration.fireworksApiKey) {
-				return i18next.t("settings:validation.apiKey")
-			}
-			break
-		case "io-intelligence":
-			if (!apiConfiguration.ioIntelligenceApiKey) {
-				return i18next.t("settings:validation.apiKey")
 			}
 			break
 	}
 
 	return undefined
 }
-
-
 
 function getModelIdForProvider(apiConfiguration: ProviderSettings, provider: string): string | undefined {
 	switch (provider) {
@@ -170,52 +87,15 @@ export function validateBedrockArn(arn: string, region?: string) {
 	return { isValid: true, arnRegion, errorMessage: undefined }
 }
 
-export function validateModelId(apiConfiguration: ProviderSettings, routerModels?: RouterModels): string | undefined {
+export function validateModelId(apiConfiguration: ProviderSettings): string | undefined {
 	const provider = apiConfiguration.apiProvider ?? ""
 
 	if (!isRouterName(provider)) {
 		return undefined
 	}
 
-	let modelId: string | undefined
-
-	switch (provider) {
-		case "openrouter":
-			modelId = apiConfiguration.openRouterModelId
-			break
-		case "glama":
-			modelId = apiConfiguration.glamaModelId
-			break
-		case "unbound":
-			modelId = apiConfiguration.unboundModelId
-			break
-		case "requesty":
-			modelId = apiConfiguration.requestyModelId
-			break
-		case "ollama":
-			modelId = apiConfiguration.ollamaModelId
-			break
-		case "lmstudio":
-			modelId = apiConfiguration.lmStudioModelId
-			break
-		case "litellm":
-			modelId = apiConfiguration.litellmModelId
-			break
-		case "io-intelligence":
-			modelId = apiConfiguration.ioIntelligenceModelId
-			break
-	}
-
-	if (!modelId) {
-		return i18next.t("settings:validation.modelId")
-	}
-
-	const models = routerModels?.[provider]
-
-	if (models && Object.keys(models).length > 1 && !Object.keys(models).includes(modelId)) {
-		return i18next.t("settings:validation.modelAvailability", { modelId })
-	}
-
+	// For supported providers, we don't need model ID validation since they use apiModelId
+	// and have their own model definitions in the types package
 	return undefined
 }
 
@@ -225,7 +105,7 @@ export function validateModelId(apiConfiguration: ProviderSettings, routerModels
  */
 export function getModelValidationError(
 	apiConfiguration: ProviderSettings,
-	routerModels?: RouterModels,
+	_routerModels?: RouterModels,
 ): string | undefined {
 	const modelId = getModelIdForProvider(apiConfiguration, apiConfiguration.apiProvider || "")
 	const configWithModelId = {
@@ -233,7 +113,7 @@ export function getModelValidationError(
 		apiModelId: modelId || "",
 	}
 
-	return validateModelId(configWithModelId, routerModels)
+	return validateModelId(configWithModelId)
 }
 
 /**
@@ -241,10 +121,7 @@ export function getModelValidationError(
  * This is used for the general API error display to prevent duplication
  * when model errors are shown in the model selector
  */
-export function validateApiConfigurationExcludingModelErrors(
-	apiConfiguration: ProviderSettings,
-	_routerModels?: RouterModels, // keeping this for compatibility with the old function
-): string | undefined {
+export function validateApiConfigurationExcludingModelErrors(apiConfiguration: ProviderSettings): string | undefined {
 	const keysAndIdsPresentErrorMessage = validateModelsAndKeysProvided(apiConfiguration)
 	if (keysAndIdsPresentErrorMessage) {
 		return keysAndIdsPresentErrorMessage

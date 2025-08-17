@@ -31,9 +31,6 @@ import {
 	type HistoryItem,
 	type ClineAsk,
 	MojoCodeEventName,
-	requestyDefaultModelId,
-	openRouterDefaultModelId,
-	glamaDefaultModelId,
 	DEFAULT_TERMINAL_OUTPUT_CHARACTER_LIMIT,
 	DEFAULT_WRITE_DELAY_MS,
 } from "@Mojo-code/types"
@@ -64,7 +61,6 @@ import { ShadowCheckpointService } from "../../services/checkpoints/ShadowCheckp
 import { CodeIndexManager } from "../../services/code-index/manager"
 import type { IndexProgressUpdate } from "../../services/code-index/interfaces/manager"
 
-
 import { fileExistsAtPath } from "../../utils/fs"
 import { setTtsEnabled, setTtsSpeed } from "../../utils/tts"
 import { getWorkspaceGitInfo } from "../../utils/git"
@@ -76,7 +72,7 @@ import { setPanel } from "../../activate/registerCommands"
 import { t } from "../../i18n"
 
 import { buildApiHandler } from "../../api"
-import { forceFullModelDetailsLoad, hasLoadedFullDetails } from "../../api/providers/fetchers/lmstudio"
+// LMStudio fetcher import removed - not in use
 
 import { ContextProxy } from "../config/ContextProxy"
 import { ProviderSettingsManager } from "../config/ProviderSettingsManager"
@@ -120,7 +116,7 @@ export class ClineProvider
 
 	public isViewLaunched = false
 	public settingsImportedAt?: number
-	public readonly latestAnnouncementId = "jul-29-2025-3-25-0" // Update for v3.25.0 announcement
+	public readonly latestAnnouncementId = "jan-01-2025-1-0-0" // Update for v1.0.0 announcement
 	public readonly providerSettingsManager: ProviderSettingsManager
 	public readonly customModesManager: CustomModesManager
 
@@ -129,13 +125,11 @@ export class ClineProvider
 		private readonly outputChannel: vscode.OutputChannel,
 		private readonly renderContext: "sidebar" | "editor" = "sidebar",
 		public readonly contextProxy: ContextProxy,
-
 	) {
 		super()
 
 		this.log("ClineProvider instantiated")
 		ClineProvider.activeInstances.add(this)
-
 
 		this.updateGlobalState("codebaseIndexModels", EMBEDDING_MODEL_PROFILES)
 
@@ -283,21 +277,7 @@ export class ClineProvider
 	}
 
 	async performPreparationTasks(cline: Task) {
-		// LMStudio: We need to force model loading in order to read its context
-		// size; we do it now since we're starting a task with that model selected.
-		if (cline.apiConfiguration && cline.apiConfiguration.apiProvider === "lmstudio") {
-			try {
-				if (!hasLoadedFullDetails(cline.apiConfiguration.lmStudioModelId!)) {
-					await forceFullModelDetailsLoad(
-						cline.apiConfiguration.lmStudioBaseUrl ?? "http://localhost:1234",
-						cline.apiConfiguration.lmStudioModelId!,
-					)
-				}
-			} catch (error) {
-				this.log(`Failed to load full model details for LM Studio: ${error}`)
-				vscode.window.showErrorMessage(error.message)
-			}
-		}
+		// No preparation tasks needed for current providers
 	}
 
 	// Removes and destroys the top Cline instance (the current finished task),
@@ -568,12 +548,7 @@ export class ClineProvider
 			return
 		}
 
-		try {
-			await visibleProvider.createTask(prompt)
-		} catch (error) {
-			// Organization filtering has been removed
-			throw error
-		}
+		await visibleProvider.createTask(prompt)
 	}
 
 	async resolveWebviewView(webviewView: vscode.WebviewView | vscode.WebviewPanel) {
@@ -805,7 +780,7 @@ export class ClineProvider
 
 		const {
 			apiConfiguration,
-			enableDiff,
+			diffEnabled: enableDiff,
 			enableCheckpoints,
 			fuzzyMatchThreshold,
 			experiments,
@@ -1297,39 +1272,6 @@ export class ClineProvider
 		return getSettingsDirectoryPath(globalStoragePath)
 	}
 
-	// OpenRouter
-
-	async handleOpenRouterCallback(code: string) {
-		let { apiConfiguration, currentApiConfigName } = await this.getState()
-
-		let apiKey: string
-		try {
-			const baseUrl = apiConfiguration.openRouterBaseUrl || "https://openrouter.ai/api/v1"
-			// Extract the base domain for the auth endpoint
-			const baseUrlDomain = baseUrl.match(/^(https?:\/\/[^\/]+)/)?.[1] || "https://openrouter.ai"
-			const response = await axios.post(`${baseUrlDomain}/api/v1/auth/keys`, { code })
-			if (response.data && response.data.key) {
-				apiKey = response.data.key
-			} else {
-				throw new Error("Invalid response from OpenRouter API")
-			}
-		} catch (error) {
-			this.log(
-				`Error exchanging code for API key: ${JSON.stringify(error, Object.getOwnPropertyNames(error), 2)}`,
-			)
-			throw error
-		}
-
-		const newConfiguration: ProviderSettings = {
-			...apiConfiguration,
-			apiProvider: "openrouter",
-			openRouterApiKey: apiKey,
-			openRouterModelId: apiConfiguration?.openRouterModelId || openRouterDefaultModelId,
-		}
-
-		await this.upsertProviderProfile(currentApiConfigName, newConfiguration)
-	}
-
 	// Glama
 
 	async handleGlamaCallback(code: string) {
@@ -1350,26 +1292,12 @@ export class ClineProvider
 
 		const { apiConfiguration, currentApiConfigName } = await this.getState()
 
+		// Glama provider removed - using OpenAI native instead
 		const newConfiguration: ProviderSettings = {
 			...apiConfiguration,
-			apiProvider: "glama",
-			glamaApiKey: apiKey,
-			glamaModelId: apiConfiguration?.glamaModelId || glamaDefaultModelId,
-		}
-
-		await this.upsertProviderProfile(currentApiConfigName, newConfiguration)
-	}
-
-	// Requesty
-
-	async handleRequestyCallback(code: string) {
-		let { apiConfiguration, currentApiConfigName } = await this.getState()
-
-		const newConfiguration: ProviderSettings = {
-			...apiConfiguration,
-			apiProvider: "requesty",
-			requestyApiKey: code,
-			requestyModelId: apiConfiguration?.requestyModelId || requestyDefaultModelId,
+			apiProvider: "openai-native",
+			openAiNativeApiKey: apiKey,
+			apiModelId: apiConfiguration?.apiModelId || "gpt-4o",
 		}
 
 		await this.upsertProviderProfile(currentApiConfigName, newConfiguration)
@@ -1685,7 +1613,7 @@ export class ClineProvider
 			maxTotalImageSize,
 			terminalCompressProgressBar,
 			historyPreviewCollapsed,
-	        organizationSettingsVersion,
+			organizationSettingsVersion,
 			maxConcurrentFileReads,
 			condensingApiConfigId,
 			customCondensingPrompt,
@@ -1699,6 +1627,11 @@ export class ClineProvider
 			includeTaskHistoryInEnhance,
 			remoteControlEnabled,
 		} = await this.getState()
+
+		// Cloud functionality removed - set default values for removed variables
+		const cloudUserInfo = undefined
+		const cloudIsAuthenticated = false
+		const sharingEnabled = false
 
 		const telemetryKey = process.env.POSTHOG_API_KEY
 		const machineId = vscode.env.machineId
@@ -1817,7 +1750,7 @@ export class ClineProvider
 				codebaseIndexSearchMinScore: codebaseIndexConfig?.codebaseIndexSearchMinScore,
 			},
 			profileThresholds: profileThresholds ?? {},
-		    hasOpenedModeSelector: this.getGlobalState("hasOpenedModeSelector") ?? false,
+			hasOpenedModeSelector: this.getGlobalState("hasOpenedModeSelector") ?? false,
 			alwaysAllowFollowupQuestions: alwaysAllowFollowupQuestions ?? false,
 			followupAutoApproveTimeoutMs: followupAutoApproveTimeoutMs ?? 60000,
 			includeDiagnosticMessages: includeDiagnosticMessages ?? true,
@@ -1927,7 +1860,7 @@ export class ClineProvider
 			customModes,
 			maxOpenTabsContext: stateValues.maxOpenTabsContext ?? 20,
 			maxWorkspaceFiles: stateValues.maxWorkspaceFiles ?? 200,
-			openRouterUseMiddleOutTransform: stateValues.openRouterUseMiddleOutTransform ?? true,
+
 			browserToolEnabled: stateValues.browserToolEnabled ?? true,
 			telemetrySetting: stateValues.telemetrySetting || "unset",
 			showMojoIgnoredFiles: stateValues.showMojoIgnoredFiles ?? true,
@@ -2064,8 +1997,6 @@ export class ClineProvider
 	public getMcpHub(): McpHub | undefined {
 		return this.mcpHub
 	}
-
-
 
 	// Remote control functionality removed - cloud service integration no longer available
 

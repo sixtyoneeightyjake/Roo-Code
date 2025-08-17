@@ -9,15 +9,8 @@ import { getCacheDirectoryPath } from "../../../utils/storage"
 import { RouterName, ModelRecord } from "../../../shared/api"
 import { fileExistsAtPath } from "../../../utils/fs"
 
-import { getOpenRouterModels } from "./openrouter"
-import { getRequestyModels } from "./requesty"
-import { getGlamaModels } from "./glama"
-import { getUnboundModels } from "./unbound"
-import { getLiteLLMModels } from "./litellm"
 import { GetModelsOptions } from "../../../shared/api"
-import { getOllamaModels } from "./ollama"
-import { getLMStudioModels } from "./lmstudio"
-import { getIOIntelligenceModels } from "./io-intelligence"
+// Removed imports for deleted fetchers: openrouter, requesty, glama, unbound, litellm, ollama, lmstudio, io-intelligence
 const memoryCache = new NodeCache({ stdTTL: 5 * 60, checkperiod: 5 * 60 })
 
 async function writeModels(router: RouterName, data: ModelRecord) {
@@ -52,61 +45,11 @@ export const getModels = async (options: GetModelsOptions): Promise<ModelRecord>
 		return models
 	}
 
-	try {
-		switch (provider) {
-			case "openrouter":
-				models = await getOpenRouterModels()
-				break
-			case "requesty":
-				// Requesty models endpoint requires an API key for per-user custom policies
-				models = await getRequestyModels(options.apiKey)
-				break
-			case "glama":
-				models = await getGlamaModels()
-				break
-			case "unbound":
-				// Unbound models endpoint requires an API key to fetch application specific models
-				models = await getUnboundModels(options.apiKey)
-				break
-			case "litellm":
-				// Type safety ensures apiKey and baseUrl are always provided for litellm
-				models = await getLiteLLMModels(options.apiKey, options.baseUrl)
-				break
-			case "ollama":
-				models = await getOllamaModels(options.baseUrl)
-				break
-			case "lmstudio":
-				models = await getLMStudioModels(options.baseUrl)
-				break
-			case "io-intelligence":
-				models = await getIOIntelligenceModels(options.apiKey)
-				break
-			default: {
-				// Ensures router is exhaustively checked if RouterName is a strict union
-				const exhaustiveCheck: never = provider
-				throw new Error(`Unknown provider: ${exhaustiveCheck}`)
-			}
-		}
-
-		// Cache the fetched models (even if empty, to signify a successful fetch with no models)
-		memoryCache.set(provider, models)
-		await writeModels(provider, models).catch((err) =>
-			console.error(`[getModels] Error writing ${provider} models to file cache:`, err),
-		)
-
-		try {
-			models = await readModels(provider)
-			// console.log(`[getModels] read ${router} models from file cache`)
-		} catch (error) {
-			console.error(`[getModels] error reading ${provider} models from file cache`, error)
-		}
-		return models || {}
-	} catch (error) {
-		// Log the error and re-throw it so the caller can handle it (e.g., show a UI message).
-		console.error(`[getModels] Failed to fetch models in modelCache for ${provider}:`, error)
-
-		throw error // Re-throw the original error to be handled by the caller.
-	}
+	// All external provider fetchers have been removed
+	// Only anthropic, openai, openai-native, and gemini are supported
+	// These providers don't use the modelCache system
+	console.warn(`[getModels] Provider ${provider} is not supported by modelCache system`)
+	return {}
 }
 
 /**

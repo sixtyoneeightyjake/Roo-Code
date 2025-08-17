@@ -266,7 +266,7 @@ export const EVALS_SETTINGS: MojoCodeSettings = {
 	maxDiagnosticMessages: 50,
 
 	language: "en",
-	telemetrySetting: "enabled",
+	telemetrySetting: "disabled",
 
 	mcpEnabled: false,
 

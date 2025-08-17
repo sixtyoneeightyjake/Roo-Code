@@ -10,12 +10,12 @@ import {
 	geminiDefaultModelId,
 } from "@Mojo-code/types"
 
-import { vscode } from "@src/utils/vscode"
-import { validateApiConfigurationExcludingModelErrors, getModelValidationError } from "@src/utils/validate"
+import { vscode as _vscode } from "@src/utils/vscode"
+import { validateApiConfigurationExcludingModelErrors } from "@src/utils/validate"
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { useRouterModels } from "@src/components/ui/hooks/useRouterModels"
 import { useSelectedModel } from "@src/components/ui/hooks/useSelectedModel"
-import { useExtensionState } from "@src/context/ExtensionStateContext"
+import { useExtensionState as _useExtensionState } from "@src/context/ExtensionStateContext"
 import { filterProviders, filterModels } from "./utils/organizationFilters"
 import {
 	Select,
@@ -58,7 +58,7 @@ export interface ApiOptionsProps {
 }
 
 const ApiOptions = ({
-	uriScheme,
+	uriScheme: _uriScheme,
 	apiConfiguration,
 	setApiConfigurationField,
 	fromWelcomeView,
@@ -87,7 +87,7 @@ const ApiOptions = ({
 		info: selectedModelInfo,
 	} = useSelectedModel(apiConfiguration)
 
-	const { data: routerModels, refetch: refetchRouterModels } = useRouterModels()
+	const { data: _routerModels } = useRouterModels()
 
 	// Update `apiModelId` whenever `selectedModelId` changes.
 	useEffect(() => {
@@ -108,15 +108,15 @@ const ApiOptions = ({
 	)
 
 	useEffect(() => {
-		const apiValidationResult = validateApiConfigurationExcludingModelErrors(apiConfiguration, routerModels)
+		const apiValidationResult = validateApiConfigurationExcludingModelErrors(apiConfiguration)
 		setErrorMessage(apiValidationResult)
-	}, [apiConfiguration, routerModels, setErrorMessage])
+	}, [apiConfiguration, setErrorMessage])
 
 	const selectedProviderModels = useMemo(() => {
 		const models = MODELS_BY_PROVIDER[selectedProvider]
 		if (!models) return []
 
-		const filteredModels = filterModels(models, selectedProvider)
+		const filteredModels = filterModels(models)
 
 		const modelOptions = filteredModels
 			? Object.keys(filteredModels).map((modelId) => ({
@@ -182,10 +182,6 @@ const ApiOptions = ({
 		},
 		[setApiConfigurationField, apiConfiguration],
 	)
-
-	const modelValidationError = useMemo(() => {
-		return getModelValidationError(apiConfiguration, routerModels)
-	}, [apiConfiguration, routerModels])
 
 	const docs = useMemo(() => {
 		const provider = PROVIDERS.find(({ value }) => value === selectedProvider)

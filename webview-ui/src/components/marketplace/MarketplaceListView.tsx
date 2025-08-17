@@ -21,7 +21,7 @@ export interface MarketplaceListViewProps {
 export function MarketplaceListView({ stateManager, allTags, filteredTags, filterByType }: MarketplaceListViewProps) {
 	const [state, manager] = useStateManager(stateManager)
 	const { t } = useAppTranslation()
-	const { marketplaceInstalledMetadata, cloudUserInfo } = useExtensionState()
+	const { marketplaceInstalledMetadata } = useExtensionState()
 	const [isTagPopoverOpen, setIsTagPopoverOpen] = React.useState(false)
 	const [tagSearch, setTagSearch] = React.useState("")
 	const allItems = state.displayItems || []
@@ -203,11 +203,7 @@ export function MarketplaceListView({ stateManager, allTags, filteredTags, filte
 						<div className="mb-6">
 							<div className="flex items-center gap-2 mb-3 px-1">
 								<span className="codicon codicon-organization text-lg"></span>
-								<h3 className="text-sm font-semibold text-vscode-foreground">
-									{t("marketplace:sections.organizationMcps", {
-										organization: cloudUserInfo?.organizationName,
-									})}
-								</h3>
+								<h3 className="text-sm font-semibold text-vscode-foreground">Organization MCPs</h3>
 								<div className="flex-1 h-px bg-vscode-input-border"></div>
 							</div>
 							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-3">

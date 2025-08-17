@@ -3,6 +3,7 @@ import { Checkbox } from "vscrui"
 import { VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 
 import type { ProviderSettings } from "@Mojo-code/types"
+
 import { VSCodeButtonLink } from "@src/components/common/VSCodeButtonLink"
 
 import { inputEventTransform } from "../transforms"
@@ -14,8 +15,6 @@ type GeminiProps = {
 }
 
 export const Gemini = ({ apiConfiguration, setApiConfigurationField, fromWelcomeView }: GeminiProps) => {
-	const { t } = useAppTranslation()
-
 	const [googleGeminiBaseUrlSelected, setGoogleGeminiBaseUrlSelected] = useState(
 		!!apiConfiguration?.googleGeminiBaseUrl,
 	)
@@ -37,16 +36,16 @@ export const Gemini = ({ apiConfiguration, setApiConfigurationField, fromWelcome
 				value={apiConfiguration?.geminiApiKey || ""}
 				type="password"
 				onInput={handleInputChange("geminiApiKey")}
-				placeholder={t("settings:placeholders.apiKey")}
+				placeholder="Enter your API key"
 				className="w-full">
-				<label className="block font-medium mb-1">{t("settings:providers.geminiApiKey")}</label>
+				<label className="block font-medium mb-1">Gemini API Key</label>
 			</VSCodeTextField>
 			<div className="text-sm text-vscode-descriptionForeground -mt-2">
-				{t("settings:providers.apiKeyStorageNotice")}
+				API keys are stored securely and never shared.
 			</div>
 			{!apiConfiguration?.geminiApiKey && (
 				<VSCodeButtonLink href="https://ai.google.dev/" appearance="secondary">
-					{t("settings:providers.getGeminiApiKey")}
+					Get Gemini API Key
 				</VSCodeButtonLink>
 			)}
 
@@ -60,14 +59,14 @@ export const Gemini = ({ apiConfiguration, setApiConfigurationField, fromWelcome
 							setApiConfigurationField("googleGeminiBaseUrl", "")
 						}
 					}}>
-					{t("settings:providers.useCustomBaseUrl")}
+					Use Custom Base URL
 				</Checkbox>
 				{googleGeminiBaseUrlSelected && (
 					<VSCodeTextField
 						value={apiConfiguration?.googleGeminiBaseUrl || ""}
 						type="url"
 						onInput={handleInputChange("googleGeminiBaseUrl")}
-						placeholder={t("settings:defaults.geminiUrl")}
+						placeholder="https://generativelanguage.googleapis.com"
 						className="w-full mt-1"
 					/>
 				)}
@@ -79,20 +78,20 @@ export const Gemini = ({ apiConfiguration, setApiConfigurationField, fromWelcome
 							data-testid="checkbox-url-context"
 							checked={!!apiConfiguration.enableUrlContext}
 							onChange={(checked: boolean) => setApiConfigurationField("enableUrlContext", checked)}>
-							{t("settings:providers.geminiParameters.urlContext.title")}
+							Enable URL Context
 						</Checkbox>
 						<div className="text-sm text-vscode-descriptionForeground mb-3 mt-1.5">
-							{t("settings:providers.geminiParameters.urlContext.description")}
+							Allow Gemini to access and analyze content from URLs you provide.
 						</div>
 
 						<Checkbox
 							data-testid="checkbox-grounding-search"
 							checked={!!apiConfiguration.enableGrounding}
 							onChange={(checked: boolean) => setApiConfigurationField("enableGrounding", checked)}>
-							{t("settings:providers.geminiParameters.groundingSearch.title")}
+							Enable Grounding with Google Search
 						</Checkbox>
 						<div className="text-sm text-vscode-descriptionForeground mb-3 mt-1.5">
-							{t("settings:providers.geminiParameters.groundingSearch.description")}
+							Ground Gemini responses with real-time information from Google Search.
 						</div>
 					</>
 				)}

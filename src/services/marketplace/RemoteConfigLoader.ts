@@ -21,7 +21,7 @@ export class RemoteConfigLoader {
 
 	constructor() {
 		// Cloud functionality removed - using hardcoded API URL
-		this.apiBaseUrl = "https://app.Mojocode.com"
+		this.apiBaseUrl = "https://app.roocode.com"
 	}
 
 	async loadAllItems(hideMarketplaceMcps = false): Promise<MarketplaceItem[]> {

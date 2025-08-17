@@ -19,7 +19,7 @@ const tips = [
 	},
 ]
 
-const rootips = () => {
+const RooTips = () => {
 	const { t } = useTranslation("chat")
 
 	return (
@@ -55,4 +55,4 @@ const rootips = () => {
 	)
 }
 
-export default rootips
+export default RooTips

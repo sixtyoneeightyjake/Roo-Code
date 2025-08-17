@@ -6,7 +6,6 @@ import {
 	type ModelInfo,
 	azureOpenAiDefaultApiVersion,
 	openAiModelInfoSaneDefaults,
-	DEEP_SEEK_DEFAULT_TEMPERATURE,
 	OPENAI_AZURE_AI_INFERENCE_PATH,
 } from "@Mojo-code/types"
 
@@ -157,7 +156,7 @@ export class OpenAiHandler extends BaseProvider implements SingleCompletionHandl
 
 			const requestOptions: OpenAI.Chat.Completions.ChatCompletionCreateParamsStreaming = {
 				model: modelId,
-				temperature: this.options.modelTemperature ?? (deepseekReasoner ? DEEP_SEEK_DEFAULT_TEMPERATURE : 0),
+				temperature: this.options.modelTemperature ?? (deepseekReasoner ? 1.0 : 0),
 				messages: convertedMessages,
 				stream: true as const,
 				...(isGrokXAI ? {} : { stream_options: { include_usage: true } }),

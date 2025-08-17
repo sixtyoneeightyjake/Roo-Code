@@ -4,7 +4,7 @@ import { forwardRef, useCallback, useRef, ReactNode, ComponentRef, ComponentProp
 
 // Type for web components that have shadow DOM
 interface WebComponentWithShadowroot extends HTMLElement {
-	shadowroot: Shadowroot | null
+	shadowroot: ShadowRoot | null
 }
 
 export interface VSCodeTextFieldWithNodesProps extends ComponentProps<typeof VSCodeTextField> {

@@ -5,8 +5,6 @@ import { ChevronsUpDown, Check, X } from "lucide-react"
 
 import type { ProviderSettings, ModelInfo } from "@Mojo-code/types"
 
-
-
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { useSelectedModel } from "@/components/ui/hooks/useSelectedModel"
 import { filterModels } from "./utils/organizationFilters"
@@ -28,16 +26,7 @@ import { useEscapeKey } from "@src/hooks/useEscapeKey"
 import { ModelInfoView } from "./ModelInfoView"
 import { ApiErrorMessage } from "./ApiErrorMessage"
 
-type ModelIdKey = keyof Pick<
-	ProviderSettings,
-	| "glamaModelId"
-	| "openRouterModelId"
-	| "unboundModelId"
-	| "requestyModelId"
-	| "openAiModelId"
-	| "litellmModelId"
-	| "ioIntelligenceModelId"
->
+type ModelIdKey = keyof Pick<ProviderSettings, "openAiModelId">
 
 interface ModelPickerProps {
 	defaultModelId: string
@@ -76,10 +65,10 @@ export const ModelPicker = ({
 	const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
 	const modelIds = useMemo(() => {
-		const filteredModels = filterModels(models, apiConfiguration.apiProvider)
+		const filteredModels = filterModels(models)
 
 		return Object.keys(filteredModels ?? {}).sort((a, b) => a.localeCompare(b))
-	}, [models, apiConfiguration.apiProvider])
+	}, [models])
 
 	const { id: selectedModelId, info: selectedModelInfo } = useSelectedModel(apiConfiguration)
 

@@ -32,6 +32,7 @@ export const providerProfilesSchema = z.object({
 			openAiHeadersMigrated: z.boolean().optional(),
 			consecutiveMistakeLimitMigrated: z.boolean().optional(),
 			todoListEnabledMigrated: z.boolean().optional(),
+			oldProvidersRemovedMigrated: z.boolean().optional(),
 		})
 		.optional(),
 })
@@ -56,6 +57,7 @@ export class ProviderSettingsManager {
 			openAiHeadersMigrated: true, // Mark as migrated on fresh installs
 			consecutiveMistakeLimitMigrated: true, // Mark as migrated on fresh installs
 			todoListEnabledMigrated: true, // Mark as migrated on fresh installs
+			oldProvidersRemovedMigrated: true, // Mark as migrated on fresh installs
 		},
 	}
 
@@ -123,37 +125,44 @@ export class ProviderSettingsManager {
 						openAiHeadersMigrated: false,
 						consecutiveMistakeLimitMigrated: false,
 						todoListEnabledMigrated: false,
+						oldProvidersRemovedMigrated: false,
 					} // Initialize with default values
 					isDirty = true
 				}
 
-				if (!providerProfiles.migrations.rateLimitSecondsMigrated) {
+				if (!providerProfiles.migrations?.rateLimitSecondsMigrated) {
 					await this.migrateRateLimitSeconds(providerProfiles)
-					providerProfiles.migrations.rateLimitSecondsMigrated = true
+					providerProfiles.migrations!.rateLimitSecondsMigrated = true
 					isDirty = true
 				}
 
-				if (!providerProfiles.migrations.diffSettingsMigrated) {
+				if (!providerProfiles.migrations?.diffSettingsMigrated) {
 					await this.migrateDiffSettings(providerProfiles)
-					providerProfiles.migrations.diffSettingsMigrated = true
+					providerProfiles.migrations!.diffSettingsMigrated = true
 					isDirty = true
 				}
 
-				if (!providerProfiles.migrations.openAiHeadersMigrated) {
+				if (!providerProfiles.migrations?.openAiHeadersMigrated) {
 					await this.migrateOpenAiHeaders(providerProfiles)
-					providerProfiles.migrations.openAiHeadersMigrated = true
+					providerProfiles.migrations!.openAiHeadersMigrated = true
 					isDirty = true
 				}
 
-				if (!providerProfiles.migrations.consecutiveMistakeLimitMigrated) {
+				if (!providerProfiles.migrations?.consecutiveMistakeLimitMigrated) {
 					await this.migrateConsecutiveMistakeLimit(providerProfiles)
-					providerProfiles.migrations.consecutiveMistakeLimitMigrated = true
+					providerProfiles.migrations!.consecutiveMistakeLimitMigrated = true
 					isDirty = true
 				}
 
-				if (!providerProfiles.migrations.todoListEnabledMigrated) {
+				if (!providerProfiles.migrations?.todoListEnabledMigrated) {
 					await this.migrateTodoListEnabled(providerProfiles)
-					providerProfiles.migrations.todoListEnabledMigrated = true
+					providerProfiles.migrations!.todoListEnabledMigrated = true
+					isDirty = true
+				}
+
+				if (!providerProfiles.migrations?.oldProvidersRemovedMigrated) {
+					await this.migrateRemoveOldProviders(providerProfiles)
+					providerProfiles.migrations!.oldProvidersRemovedMigrated = true
 					isDirty = true
 				}
 
@@ -271,6 +280,65 @@ export class ProviderSettingsManager {
 			}
 		} catch (error) {
 			console.error(`[MigrateTodoListEnabled] Failed to migrate todo list enabled setting:`, error)
+		}
+	}
+
+	private async migrateRemoveOldProviders(providerProfiles: ProviderProfiles) {
+		try {
+			// List of old provider names that should be removed
+			const oldProviders = ["human-relay", "fake-ai", "claude-code", "openai"]
+
+			// Remove configurations with old provider names
+			const configsToRemove: string[] = []
+			for (const [name, apiConfig] of Object.entries(providerProfiles.apiConfigs)) {
+				if (apiConfig.apiProvider && oldProviders.includes(apiConfig.apiProvider as string)) {
+					configsToRemove.push(name)
+				}
+			}
+
+			// Remove the old configurations
+			for (const configName of configsToRemove) {
+				delete providerProfiles.apiConfigs[configName]
+			}
+
+			// If the current active config was removed, switch to default or first available
+			if (configsToRemove.includes(providerProfiles.currentApiConfigName)) {
+				const remainingConfigs = Object.keys(providerProfiles.apiConfigs)
+				if (remainingConfigs.length > 0) {
+					providerProfiles.currentApiConfigName = remainingConfigs.includes("default")
+						? "default"
+						: remainingConfigs[0]
+				} else {
+					// No configs left, create a default one
+					providerProfiles.currentApiConfigName = "default"
+					providerProfiles.apiConfigs["default"] = { id: this.generateId() }
+				}
+			}
+
+			// Update mode configs to remove references to deleted configs
+			if (providerProfiles.modeApiConfigs) {
+				for (const [mode, configId] of Object.entries(providerProfiles.modeApiConfigs)) {
+					// Find if this configId belongs to a removed config
+					const configExists = Object.values(providerProfiles.apiConfigs).some(
+						(config) => config.id === configId,
+					)
+					if (!configExists) {
+						// Set to the current active config's ID
+						const activeConfig = providerProfiles.apiConfigs[providerProfiles.currentApiConfigName]
+						if (activeConfig) {
+							providerProfiles.modeApiConfigs[mode] = activeConfig.id
+						}
+					}
+				}
+			}
+
+			if (configsToRemove.length > 0) {
+				console.log(
+					`[MigrateRemoveOldProviders] Removed ${configsToRemove.length} old provider configurations: ${configsToRemove.join(", ")}`,
+				)
+			}
+		} catch (error) {
+			console.error(`[MigrateRemoveOldProviders] Failed to remove old providers:`, error)
 		}
 	}
 

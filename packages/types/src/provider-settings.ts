@@ -12,15 +12,7 @@ export type ReasoningEffortWithMinimal = z.infer<typeof extendedReasoningEfforts
  * ProviderName
  */
 
-export const providerNames = [
-	"anthropic",
-	"claude-code",
-	"gemini",
-	"openai",
-	"openai-native",
-	"human-relay",
-	"fake-ai",
-] as const
+export const providerNames = ["anthropic", "gemini", "openai", "openai-native"] as const
 
 export const providerNamesSchema = z.enum(providerNames)
 
@@ -78,11 +70,6 @@ const anthropicSchema = apiModelIdProviderModelSchema.extend({
 	anthropicBeta1MContext: z.boolean().optional(), // Enable 'context-1m-2025-08-07' beta for 1M context window
 })
 
-const claudeCodeSchema = apiModelIdProviderModelSchema.extend({
-	claudeCodePath: z.string().optional(),
-	claudeCodeMaxOutputTokens: z.number().int().min(1).max(200000).optional(),
-})
-
 const openAiSchema = baseProviderSettingsSchema.extend({
 	openAiBaseUrl: z.string().optional(),
 	openAiApiKey: z.string().optional(),
@@ -109,36 +96,24 @@ const openAiNativeSchema = apiModelIdProviderModelSchema.extend({
 	openAiNativeBaseUrl: z.string().optional(),
 })
 
-const humanRelaySchema = baseProviderSettingsSchema
-
-const fakeAiSchema = baseProviderSettingsSchema.extend({
-	fakeAi: z.unknown().optional(),
-})
-
 const defaultSchema = z.object({
 	apiProvider: z.undefined(),
 })
 
 export const providerSettingsSchemaDiscriminated = z.discriminatedUnion("apiProvider", [
 	anthropicSchema.merge(z.object({ apiProvider: z.literal("anthropic") })),
-	claudeCodeSchema.merge(z.object({ apiProvider: z.literal("claude-code") })),
 	geminiSchema.merge(z.object({ apiProvider: z.literal("gemini") })),
 	openAiSchema.merge(z.object({ apiProvider: z.literal("openai") })),
 	openAiNativeSchema.merge(z.object({ apiProvider: z.literal("openai-native") })),
-	humanRelaySchema.merge(z.object({ apiProvider: z.literal("human-relay") })),
-	fakeAiSchema.merge(z.object({ apiProvider: z.literal("fake-ai") })),
 	defaultSchema,
 ])
 
 export const providerSettingsSchema = z.object({
 	apiProvider: providerNamesSchema.optional(),
 	...anthropicSchema.shape,
-	...claudeCodeSchema.shape,
 	...geminiSchema.shape,
 	...openAiSchema.shape,
 	...openAiNativeSchema.shape,
-	...humanRelaySchema.shape,
-	...fakeAiSchema.shape,
 	...codebaseIndexProviderSchema.shape,
 })
 
@@ -160,7 +135,7 @@ export const getModelId = (settings: ProviderSettings): string | undefined => {
 }
 
 // Providers that use Anthropic-style API protocol
-export const ANTHROPIC_STYLE_PROVIDERS: ProviderName[] = ["anthropic", "claude-code"]
+export const ANTHROPIC_STYLE_PROVIDERS: ProviderName[] = ["anthropic"]
 
 // Helper function to determine API protocol for a provider and model
 export const getApiProtocol = (provider: ProviderName | undefined, _modelId?: string): "anthropic" | "openai" => {

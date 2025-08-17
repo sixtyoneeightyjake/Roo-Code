@@ -7,8 +7,8 @@ import {
 	type InstallMarketplaceItemOptions,
 	type MarketplaceItem,
 	marketplaceItemSchema,
-} from "@roo-code/types"
-import type { ShareVisibility } from "@roo-code/cloud"
+} from "@Mojo-code/types"
+// Cloud functionality removed
 
 import { Mode } from "./modes"
 
@@ -159,7 +159,7 @@ export interface WebviewMessage {
 		| "browserToolEnabled"
 		| "codebaseIndexEnabled"
 		| "telemetrySetting"
-		| "showRooIgnoredFiles"
+		| "showMojoIgnoredFiles"
 		| "testBrowserConnection"
 		| "browserConnectionResult"
 		| "remoteBrowserEnabled"
@@ -174,9 +174,7 @@ export interface WebviewMessage {
 		| "toggleApiConfigPin"
 		| "setHistoryPreviewCollapsed"
 		| "hasOpenedModeSelector"
-		| "accountButtonClicked"
-		| "rooCloudSignIn"
-		| "rooCloudSignOut"
+
 		| "condenseTaskContextRequest"
 		| "requestIndexingStatus"
 		| "startIndexing"
@@ -213,7 +211,7 @@ export interface WebviewMessage {
 		| "insertTextIntoTextarea"
 	text?: string
 	editedMessageContent?: string
-	tab?: "settings" | "history" | "mcp" | "modes" | "chat" | "marketplace" | "account"
+	tab?: "settings" | "history" | "mcp" | "modes" | "chat" | "marketplace"
 	disabled?: boolean
 	context?: string
 	dataUri?: string
@@ -251,7 +249,7 @@ export interface WebviewMessage {
 	mpItem?: MarketplaceItem
 	mpInstallOptions?: InstallMarketplaceItemOptions
 	config?: Record<string, any> // Add config to the payload
-	visibility?: ShareVisibility // For share visibility
+	// visibility?: ShareVisibility // Cloud functionality removed
 	hasContent?: boolean // For checkRulesDirectoryResult
 	checkOnly?: boolean // For deleteCustomMode check
 	codeIndexSettings?: {

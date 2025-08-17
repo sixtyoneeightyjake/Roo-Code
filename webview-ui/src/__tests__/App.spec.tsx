@@ -90,15 +90,7 @@ vi.mock("@src/components/marketplace/MarketplaceView", () => ({
 	},
 }))
 
-vi.mock("@src/components/account/AccountView", () => ({
-	AccountView: function AccountView({ onDone }: { onDone: () => void }) {
-		return (
-			<div data-testid="account-view" onClick={onDone}>
-				Account View
-			</div>
-		)
-	},
-}))
+
 
 const mockUseExtensionState = vi.fn()
 

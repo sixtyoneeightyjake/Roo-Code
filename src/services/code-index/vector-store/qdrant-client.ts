@@ -60,7 +60,7 @@ export class QdrantVectorStore implements IVectorStore {
 				prefix: urlObj.pathname === "/" ? undefined : urlObj.pathname.replace(/\/+$/, ""),
 				apiKey,
 				headers: {
-					"User-Agent": "Roo-Code",
+					"User-Agent": "Mojo-Code",
 				},
 			})
 		} catch (urlError) {
@@ -70,7 +70,7 @@ export class QdrantVectorStore implements IVectorStore {
 				url: parsedUrl,
 				apiKey,
 				headers: {
-					"User-Agent": "Roo-Code",
+					"User-Agent": "Mojo-Code",
 				},
 			})
 		}
@@ -445,13 +445,13 @@ export class QdrantVectorStore implements IVectorStore {
 				return
 			}
 
-			const workspaceRoot = getWorkspacePath()
+			const workspaceroot = getWorkspacePath()
 
 			// Build filters using pathSegments to match the indexed fields
 			const filters = filePaths.map((filePath) => {
 				// IMPORTANT: Use the relative path to match what's stored in upsertPoints
 				// upsertPoints stores the relative filePath, not the absolute path
-				const relativePath = path.isAbsolute(filePath) ? path.relative(workspaceRoot, filePath) : filePath
+				const relativePath = path.isAbsolute(filePath) ? path.relative(workspaceroot, filePath) : filePath
 
 				// Normalize the relative path
 				const normalizedRelativePath = path.normalize(relativePath)

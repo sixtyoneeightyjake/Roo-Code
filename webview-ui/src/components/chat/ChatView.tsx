@@ -10,18 +10,18 @@ import { LRUCache } from "lru-cache"
 import { useDebounceEffect } from "@src/utils/useDebounceEffect"
 import { appendImages } from "@src/utils/imageUtils"
 
-import type { ClineAsk, ClineMessage } from "@roo-code/types"
+import type { ClineAsk, ClineMessage } from "@Mojo-code/types"
 
-import { ClineSayBrowserAction, ClineSayTool, ExtensionMessage } from "@roo/ExtensionMessage"
-import { McpServer, McpTool } from "@roo/mcp"
-import { findLast } from "@roo/array"
-import { FollowUpData, SuggestionItem } from "@roo-code/types"
-import { combineApiRequests } from "@roo/combineApiRequests"
-import { combineCommandSequences } from "@roo/combineCommandSequences"
-import { getApiMetrics } from "@roo/getApiMetrics"
-import { AudioType } from "@roo/WebviewMessage"
-import { getAllModes } from "@roo/modes"
-import { ProfileValidator } from "@roo/ProfileValidator"
+import { ClineSayBrowserAction, ClineSayTool, ExtensionMessage } from "@Mojo/ExtensionMessage"
+import { McpServer, McpTool } from "@Mojo/mcp"
+import { findLast } from "@Mojo/array"
+import { FollowUpData, SuggestionItem } from "@Mojo-code/types"
+import { combineApiRequests } from "@Mojo/combineApiRequests"
+import { combineCommandSequences } from "@Mojo/combineCommandSequences"
+import { getApiMetrics } from "@Mojo/getApiMetrics"
+import { AudioType } from "@Mojo/WebviewMessage"
+import { getAllModes } from "@Mojo/modes"
+
 
 import { vscode } from "@src/utils/vscode"
 import {
@@ -34,10 +34,10 @@ import { useTranslation } from "react-i18next"
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { useExtensionState } from "@src/context/ExtensionStateContext"
 import { useSelectedModel } from "@src/components/ui/hooks/useSelectedModel"
-import RooHero from "@src/components/welcome/RooHero"
+import MojoHero from "@src/components/welcome/MojoHero"
 import RooTips from "@src/components/welcome/RooTips"
-import RooCloudCTA from "@src/components/welcome/RooCloudCTA"
 import { StandardTooltip } from "@src/components/ui"
+
 import { useAutoApprovalState } from "@src/hooks/useAutoApprovalState"
 import { useAutoApprovalToggles } from "@src/hooks/useAutoApprovalToggles"
 
@@ -52,11 +52,11 @@ import ChatTextArea from "./ChatTextArea"
 import TaskHeader from "./TaskHeader"
 import AutoApproveMenu from "./AutoApproveMenu"
 import SystemPromptWarning from "./SystemPromptWarning"
-import ProfileViolationWarning from "./ProfileViolationWarning"
+
 import { CheckpointWarning } from "./CheckpointWarning"
 import QueuedMessages from "./QueuedMessages"
-import { getLatestTodo } from "@roo/todo"
-import { QueuedMessage } from "@roo-code/types"
+import { getLatestTodo } from "@Mojo/todo"
+import { QueuedMessage } from "@Mojo-code/types"
 
 export interface ChatViewProps {
 	isHidden: boolean
@@ -89,8 +89,7 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 		currentTaskItem,
 		taskHistory,
 		apiConfiguration,
-		organizationAllowList,
-		mcpServers,
+	    mcpServers,
 		alwaysAllowBrowser,
 		alwaysAllowReadOnly,
 		alwaysAllowReadOnlyOutsideWorkspace,
@@ -116,8 +115,7 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 		historyPreviewCollapsed, // Added historyPreviewCollapsed
 		soundEnabled,
 		soundVolume,
-		cloudIsAuthenticated,
-	} = useExtensionState()
+		} = useExtensionState()
 
 	const messagesRef = useRef(messages)
 	useEffect(() => {
@@ -201,10 +199,7 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 		}
 	}, [])
 
-	const isProfileDisabled = useMemo(
-		() => !!apiConfiguration && !ProfileValidator.isProfileAllowed(apiConfiguration, organizationAllowList),
-		[apiConfiguration, organizationAllowList],
-	)
+
 
 	// UI layout depends on the last 2 messages
 	// (since it relies on the content of these messages, we are deep comparing. i.e. the button state after hitting button sets enableButtons to false, and this effect otherwise would have to true again even if messages didn't change
@@ -1748,7 +1743,7 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 		acceptInput: () => {
 			if (enableButtons && primaryButtonText) {
 				handlePrimaryButtonClick(inputValue, selectedImages)
-			} else if (!sendingDisabled && !isProfileDisabled && (inputValue.trim() || selectedImages.length > 0)) {
+			} else if (!sendingDisabled && (inputValue.trim() || selectedImages.length > 0)) {
 				handleSendMessage(inputValue, selectedImages)
 			}
 		},
@@ -1831,11 +1826,11 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 							className="absolute top-2 right-3 z-10"
 						/>
 
-						<RooHero />
+						<MojoHero />
 						{telemetrySetting === "unset" && <TelemetryBanner />}
 
 						<div className="mb-2.5">
-							{cloudIsAuthenticated || taskHistory.length < 4 ? <RooTips /> : <RooCloudCTA />}
+							<RooTips />
 						</div>
 						{/* Show the task history preview if expanded and tasks exist */}
 						{taskHistory.length > 0 && isExpanded && <HistoryPreview />}
@@ -1983,7 +1978,7 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 				ref={textAreaRef}
 				inputValue={inputValue}
 				setInputValue={setInputValue}
-				sendingDisabled={sendingDisabled || isProfileDisabled}
+				sendingDisabled={sendingDisabled}
 				selectApiConfigDisabled={sendingDisabled && clineAsk !== "api_req_failed"}
 				placeholderText={placeholderText}
 				selectedImages={selectedImages}
@@ -2001,13 +1996,9 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 				modeShortcutText={modeShortcutText}
 			/>
 
-			{isProfileDisabled && (
-				<div className="px-3">
-					<ProfileViolationWarning />
-				</div>
-			)}
 
-			<div id="roo-portal" />
+
+			<div id="root-portal" />
 		</div>
 	)
 }

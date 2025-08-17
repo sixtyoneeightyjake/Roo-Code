@@ -11,7 +11,7 @@ import { ClineSayTool } from "../../shared/ExtensionMessage"
 import { getReadablePath } from "../../utils/path"
 import { fileExistsAtPath } from "../../utils/fs"
 import { RecordSource } from "../context-tracking/FileContextTrackerTypes"
-import { DEFAULT_WRITE_DELAY_MS } from "@roo-code/types"
+import { DEFAULT_WRITE_DELAY_MS } from "@Mojo-code/types"
 import { EXPERIMENT_IDS, experiments } from "../../shared/experiments"
 
 /**
@@ -117,16 +117,16 @@ export async function searchAndReplaceTool(
 			endLine: endLine,
 		}
 
-		const accessAllowed = cline.rooIgnoreController?.validateAccess(validRelPath)
+		const accessAllowed = cline.MojoIgnoreController?.validateAccess(validRelPath)
 
 		if (!accessAllowed) {
-			await cline.say("rooignore_error", validRelPath)
-			pushToolResult(formatResponse.toolError(formatResponse.rooIgnoreError(validRelPath)))
+			await cline.say("Mojoignore_error", validRelPath)
+			pushToolResult(formatResponse.toolError(formatResponse.MojoIgnoreError(validRelPath)))
 			return
 		}
 
 		// Check if file is write-protected
-		const isWriteProtected = cline.rooProtectedController?.isWriteProtected(validRelPath) || false
+		const isWriteProtected = cline.MojoProtectedController?.isWriteProtected(validRelPath) || false
 
 		const absolutePath = path.resolve(cline.cwd, validRelPath)
 		const fileExists = await fileExistsAtPath(absolutePath)
@@ -248,7 +248,7 @@ export async function searchAndReplaceTool(
 
 		// Track file edit operation
 		if (relPath) {
-			await cline.fileContextTracker.trackFileContext(relPath, "roo_edited" as RecordSource)
+			await cline.fileContextTracker.trackFileContext(relPath, "Mojo_edited" as RecordSource)
 		}
 
 		cline.didEditFile = true

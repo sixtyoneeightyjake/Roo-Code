@@ -12,9 +12,8 @@ import {
 	type GlobalState,
 	type ClineMessage,
 	TelemetryEventName,
-} from "@roo-code/types"
-import { CloudService } from "@roo-code/cloud"
-import { TelemetryService } from "@roo-code/telemetry"
+} from "@Mojo-code/types"
+import { TelemetryService } from "@Mojo-code/telemetry"
 import { type ApiMessage } from "../task-persistence/apiMessages"
 
 import { ClineProvider } from "./ClineProvider"
@@ -397,49 +396,8 @@ export const webviewMessageHandler = async (
 			}
 			break
 		case "shareCurrentTask":
-			const shareTaskId = provider.getCurrentTask()?.taskId
-			const clineMessages = provider.getCurrentTask()?.clineMessages
-
-			if (!shareTaskId) {
-				vscode.window.showErrorMessage(t("common:errors.share_no_active_task"))
-				break
-			}
-
-			try {
-				const visibility = message.visibility || "organization"
-				const result = await CloudService.instance.shareTask(shareTaskId, visibility, clineMessages)
-
-				if (result.success && result.shareUrl) {
-					// Show success notification
-					const messageKey =
-						visibility === "public"
-							? "common:info.public_share_link_copied"
-							: "common:info.organization_share_link_copied"
-					vscode.window.showInformationMessage(t(messageKey))
-
-					// Send success feedback to webview for inline display
-					await provider.postMessageToWebview({
-						type: "shareTaskSuccess",
-						visibility,
-						text: result.shareUrl,
-					})
-				} else {
-					// Handle error
-					const errorMessage = result.error || "Failed to create share link"
-					if (errorMessage.includes("Authentication")) {
-						vscode.window.showErrorMessage(t("common:errors.share_auth_required"))
-					} else if (errorMessage.includes("sharing is not enabled")) {
-						vscode.window.showErrorMessage(t("common:errors.share_not_enabled"))
-					} else if (errorMessage.includes("not found")) {
-						vscode.window.showErrorMessage(t("common:errors.share_task_not_found"))
-					} else {
-						vscode.window.showErrorMessage(errorMessage)
-					}
-				}
-			} catch (error) {
-				provider.log(`[shareCurrentTask] Unexpected error: ${error}`)
-				vscode.window.showErrorMessage(t("common:errors.share_task_failed"))
-			}
+			// Task sharing functionality removed - cloud service integration no longer available
+			vscode.window.showErrorMessage("Task sharing is no longer available")
 			break
 		case "showTaskWithId":
 			provider.showTaskWithId(message.text!)
@@ -815,11 +773,11 @@ export const webviewMessageHandler = async (
 			}
 
 			const workspaceFolder = vscode.workspace.workspaceFolders[0]
-			const rooDir = path.join(workspaceFolder.uri.fsPath, ".roo")
-			const mcpPath = path.join(rooDir, "mcp.json")
+			const MojoDir = path.join(workspaceFolder.uri.fsPath, ".Mojo")
+			const mcpPath = path.join(MojoDir, "mcp.json")
 
 			try {
-				await fs.mkdir(rooDir, { recursive: true })
+				await fs.mkdir(MojoDir, { recursive: true })
 				const exists = await fileExistsAtPath(mcpPath)
 
 				if (!exists) {
@@ -930,7 +888,7 @@ export const webviewMessageHandler = async (
 			break
 		case "remoteControlEnabled":
 			await updateGlobalState("remoteControlEnabled", message.bool ?? false)
-			await provider.handleRemoteControlToggle(message.bool ?? false)
+			// Remote control functionality removed - cloud service integration no longer available
 			await provider.postStateToWebview()
 			break
 		case "refreshAllMcpServers": {
@@ -1284,8 +1242,8 @@ export const webviewMessageHandler = async (
 			await updateGlobalState("language", message.text as Language)
 			await provider.postStateToWebview()
 			break
-		case "showRooIgnoredFiles":
-			await updateGlobalState("showRooIgnoredFiles", message.bool ?? true)
+		case "showMojoIgnoredFiles":
+			await updateGlobalState("showMojoIgnoredFiles", message.bool ?? true)
 			await provider.postStateToWebview()
 			break
 		case "hasOpenedModeSelector":
@@ -1725,14 +1683,14 @@ export const webviewMessageHandler = async (
 				if (scope === "project") {
 					const workspacePath = getWorkspacePath()
 					if (workspacePath) {
-						rulesFolderPath = path.join(workspacePath, ".roo", `rules-${message.slug}`)
+						rulesFolderPath = path.join(workspacePath, ".Mojo", `rules-${message.slug}`)
 					} else {
-						rulesFolderPath = path.join(".roo", `rules-${message.slug}`)
+						rulesFolderPath = path.join(".Mojo", `rules-${message.slug}`)
 					}
 				} else {
 					// Global scope - use OS home directory
 					const homeDir = os.homedir()
-					rulesFolderPath = path.join(homeDir, ".roo", `rules-${message.slug}`)
+					rulesFolderPath = path.join(homeDir, ".Mojo", `rules-${message.slug}`)
 				}
 
 				// Check if the rules folder exists
@@ -1991,34 +1949,7 @@ export const webviewMessageHandler = async (
 			await provider.postStateToWebview()
 			break
 		}
-		case "accountButtonClicked": {
-			// Navigate to the account tab.
-			provider.postMessageToWebview({ type: "action", action: "accountButtonClicked" })
-			break
-		}
-		case "rooCloudSignIn": {
-			try {
-				TelemetryService.instance.captureEvent(TelemetryEventName.AUTHENTICATION_INITIATED)
-				await CloudService.instance.login()
-			} catch (error) {
-				provider.log(`AuthService#login failed: ${error}`)
-				vscode.window.showErrorMessage("Sign in failed.")
-			}
 
-			break
-		}
-		case "rooCloudSignOut": {
-			try {
-				await CloudService.instance.logout()
-				await provider.postStateToWebview()
-				provider.postMessageToWebview({ type: "authenticatedUser", userInfo: undefined })
-			} catch (error) {
-				provider.log(`AuthService#logout failed: ${error}`)
-				vscode.window.showErrorMessage("Sign out failed.")
-			}
-
-			break
-		}
 
 		case "saveCodeIndexSettingsAtomic": {
 			if (!message.codeIndexSettings) {
@@ -2505,16 +2436,16 @@ export const webviewMessageHandler = async (
 				// Determine the commands directory based on source
 				let commandsDir: string
 				if (source === "global") {
-					const globalConfigDir = path.join(os.homedir(), ".roo")
+					const globalConfigDir = path.join(os.homedir(), ".Mojo")
 					commandsDir = path.join(globalConfigDir, "commands")
 				} else {
 					// Project commands
-					const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath
-					if (!workspaceRoot) {
+					const workspaceroot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath
+					if (!workspaceroot) {
 						vscode.window.showErrorMessage(t("common:errors.no_workspace_for_project_command"))
 						break
 					}
-					commandsDir = path.join(workspaceRoot, ".roo", "commands")
+					commandsDir = path.join(workspaceroot, ".Mojo", "commands")
 				}
 
 				// Ensure the commands directory exists

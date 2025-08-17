@@ -11,7 +11,7 @@ vi.mock("../../ripgrep", () => ({
 // Mock vscode
 vi.mock("vscode", () => ({
 	env: {
-		appRoot: "/mock/app/root",
+		approot: "/mock/app/root",
 	},
 }))
 
@@ -35,7 +35,7 @@ describe("list-files gitignore integration", () => {
 		vi.clearAllMocks()
 
 		// Create a temporary directory for testing
-		tempDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), "roo-gitignore-test-"))
+		tempDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), "Mojo-gitignore-test-"))
 		originalCwd = process.cwd()
 	})
 

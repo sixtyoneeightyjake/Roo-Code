@@ -1,8 +1,8 @@
 import path from "path"
 import fs from "fs/promises"
 
-import { TelemetryService } from "@roo-code/telemetry"
-import { DEFAULT_WRITE_DELAY_MS } from "@roo-code/types"
+import { TelemetryService } from "@Mojo-code/telemetry"
+import { DEFAULT_WRITE_DELAY_MS } from "@Mojo-code/types"
 
 import { ClineSayTool } from "../../shared/ExtensionMessage"
 import { getReadablePath } from "../../utils/path"
@@ -68,11 +68,11 @@ export async function applyDiffToolLegacy(
 				return
 			}
 
-			const accessAllowed = cline.rooIgnoreController?.validateAccess(relPath)
+			const accessAllowed = cline.MojoIgnoreController?.validateAccess(relPath)
 
 			if (!accessAllowed) {
-				await cline.say("rooignore_error", relPath)
-				pushToolResult(formatResponse.toolError(formatResponse.rooIgnoreError(relPath)))
+				await cline.say("Mojoignore_error", relPath)
+				pushToolResult(formatResponse.toolError(formatResponse.MojoIgnoreError(relPath)))
 				return
 			}
 
@@ -151,7 +151,7 @@ export async function applyDiffToolLegacy(
 			)
 
 			// Check if file is write-protected
-			const isWriteProtected = cline.rooProtectedController?.isWriteProtected(relPath) || false
+			const isWriteProtected = cline.MojoProtectedController?.isWriteProtected(relPath) || false
 
 			if (isPreventFocusDisruptionEnabled) {
 				// Direct file write without diff view
@@ -216,7 +216,7 @@ export async function applyDiffToolLegacy(
 
 			// Track file edit operation
 			if (relPath) {
-				await cline.fileContextTracker.trackFileContext(relPath, "roo_edited" as RecordSource)
+				await cline.fileContextTracker.trackFileContext(relPath, "Mojo_edited" as RecordSource)
 			}
 
 			// Used to determine if we should wait for busy terminal to update before sending api request

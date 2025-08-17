@@ -39,9 +39,9 @@ import {
 import { AlertTriangle } from "lucide-react"
 import { useRooPortal } from "@src/components/ui/hooks/useRooPortal"
 import { useEscapeKey } from "@src/hooks/useEscapeKey"
-import type { EmbedderProvider } from "@roo/embeddingModels"
-import type { IndexingStatus } from "@roo/ExtensionMessage"
-import { CODEBASE_INDEX_DEFAULTS } from "@roo-code/types"
+import type { EmbedderProvider } from "@Mojo/embeddingModels"
+import type { IndexingStatus } from "@Mojo/ExtensionMessage"
+import { CODEBASE_INDEX_DEFAULTS } from "@Mojo-code/types"
 
 // Default URLs for providers
 const DEFAULT_QDRANT_URL = "http://localhost:6333"
@@ -511,7 +511,7 @@ export const CodeIndexPopover: React.FC<CodeIndexPopoverProps> = ({
 		return models ? Object.keys(models) : []
 	}
 
-	const portalContainer = useRooPortal("roo-portal")
+	const portalContainer = useRooPortal("root-portal")
 
 	return (
 		<>
@@ -583,15 +583,15 @@ export const CodeIndexPopover: React.FC<CodeIndexPopoverProps> = ({
 							{indexingStatus.systemStatus === "Indexing" && (
 								<div className="mt-2">
 									<ProgressPrimitive.Root
-										className="relative h-2 w-full overflow-hidden rounded-full bg-secondary"
-										value={progressPercentage}>
-										<ProgressPrimitive.Indicator
-											className="h-full w-full flex-1 bg-primary transition-transform duration-300 ease-in-out"
-											style={{
-												transform: transformStyleString,
-											}}
-										/>
-									</ProgressPrimitive.Root>
+									className="relative h-2 w-full overflow-hidden rounded-full bg-secondary"
+									value={progressPercentage}>
+									<ProgressPrimitive.Indicator
+										className="h-full w-full flex-1 bg-primary transition-transform duration-300 ease-in-out"
+										style={{
+											transform: transformStyleString,
+										}}
+									/>
+								</ProgressPrimitive.Root>
 								</div>
 							)}
 						</div>

@@ -12,14 +12,14 @@ function Slider({
 	min = 0,
 	max = 100,
 	...props
-}: React.ComponentProps<typeof SliderPrimitive.Root>) {
+}: React.ComponentProps<typeof SliderPrimitive.root>) {
 	const _values = React.useMemo(
 		() => (Array.isArray(value) ? value : Array.isArray(defaultValue) ? defaultValue : [min, max]),
 		[value, defaultValue, min, max],
 	)
 
 	return (
-		<SliderPrimitive.Root
+		<SliderPrimitive.root
 			data-slot="slider"
 			defaultValue={defaultValue}
 			value={value}
@@ -49,7 +49,7 @@ function Slider({
 					className="border-primary bg-accent block size-4 shrink-0 rounded-full border shadow-sm transition-[color,box-shadow] focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 cursor-pointer"
 				/>
 			))}
-		</SliderPrimitive.Root>
+		</SliderPrimitive.root>
 	)
 }
 

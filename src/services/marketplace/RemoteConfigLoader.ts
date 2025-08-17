@@ -1,9 +1,9 @@
 import axios from "axios"
 import * as yaml from "yaml"
 import { z } from "zod"
-import { getRooCodeApiUrl } from "@roo-code/cloud"
-import type { MarketplaceItem, MarketplaceItemType } from "@roo-code/types"
-import { modeMarketplaceItemSchema, mcpMarketplaceItemSchema } from "@roo-code/types"
+// Cloud functionality removed - using hardcoded API URL
+import type { MarketplaceItem, MarketplaceItemType } from "@Mojo-code/types"
+import { modeMarketplaceItemSchema, mcpMarketplaceItemSchema } from "@Mojo-code/types"
 
 // Response schemas for YAML API responses
 const modeMarketplaceResponse = z.object({
@@ -20,7 +20,8 @@ export class RemoteConfigLoader {
 	private cacheDuration = 5 * 60 * 1000 // 5 minutes
 
 	constructor() {
-		this.apiBaseUrl = getRooCodeApiUrl()
+		// Cloud functionality removed - using hardcoded API URL
+		this.apiBaseUrl = "https://app.Mojocode.com"
 	}
 
 	async loadAllItems(hideMarketplaceMcps = false): Promise<MarketplaceItem[]> {

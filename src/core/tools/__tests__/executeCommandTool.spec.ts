@@ -1,6 +1,6 @@
 // npx vitest run src/core/tools/__tests__/executeCommandTool.spec.ts
 
-import type { ToolUsage } from "@roo-code/types"
+import type { ToolUsage } from "@Mojo-code/types"
 import * as vscode from "vscode"
 
 import { Task } from "../../task/Task"
@@ -46,15 +46,15 @@ beforeEach(() => {
 			return
 		}
 
-		const ignoredFileAttemptedToAccess = cline.rooIgnoreController?.validateCommand(block.params.command)
+		const ignoredFileAttemptedToAccess = cline.MojoIgnoreController?.validateCommand(block.params.command)
 		if (ignoredFileAttemptedToAccess) {
-			await cline.say("rooignore_error", ignoredFileAttemptedToAccess)
+			await cline.say("Mojoignore_error", ignoredFileAttemptedToAccess)
 			// Call the mocked formatResponse functions with the correct arguments
-			const mockRooIgnoreError = "RooIgnore error"
-			;(formatResponse.rooIgnoreError as any).mockReturnValue(mockRooIgnoreError)
+			const mockMojoIgnoreError = "MojoIgnore error"
+			;(formatResponse.MojoIgnoreError as any).mockReturnValue(mockMojoIgnoreError)
 			;(formatResponse.toolError as any).mockReturnValue("Tool error")
-			formatResponse.rooIgnoreError(ignoredFileAttemptedToAccess)
-			formatResponse.toolError(mockRooIgnoreError)
+			formatResponse.MojoIgnoreError(ignoredFileAttemptedToAccess)
+			formatResponse.toolError(mockMojoIgnoreError)
 			pushToolResult("Tool error")
 			return
 		}
@@ -97,7 +97,7 @@ describe("executeCommandTool", () => {
 			sayAndCreateMissingParamError: vitest.fn().mockResolvedValue("Missing parameter error"),
 			consecutiveMistakeCount: 0,
 			didRejectTool: false,
-			rooIgnoreController: {
+			MojoIgnoreController: {
 				validateCommand: vitest.fn().mockReturnValue(null),
 			},
 			recordToolUsage: vitest.fn().mockReturnValue({} as ToolUsage),
@@ -240,17 +240,17 @@ describe("executeCommandTool", () => {
 			expect(mockPushToolResult).not.toHaveBeenCalled()
 		})
 
-		it("should handle rooignore validation failures", async () => {
+		it("should handle Mojoignore validation failures", async () => {
 			// Setup
 			mockToolUse.params.command = "cat .env"
 			// Override the validateCommand mock to return a filename
 			const validateCommandMock = vitest.fn().mockReturnValue(".env")
-			mockCline.rooIgnoreController = {
+			mockCline.MojoIgnoreController = {
 				validateCommand: validateCommandMock,
 			}
 
-			const mockRooIgnoreError = "RooIgnore error"
-			;(formatResponse.rooIgnoreError as any).mockReturnValue(mockRooIgnoreError)
+			const mockMojoIgnoreError = "MojoIgnore error"
+			;(formatResponse.MojoIgnoreError as any).mockReturnValue(mockMojoIgnoreError)
 			;(formatResponse.toolError as any).mockReturnValue("Tool error")
 
 			// Execute
@@ -265,9 +265,9 @@ describe("executeCommandTool", () => {
 
 			// Verify
 			expect(validateCommandMock).toHaveBeenCalledWith("cat .env")
-			expect(mockCline.say).toHaveBeenCalledWith("rooignore_error", ".env")
-			expect(formatResponse.rooIgnoreError).toHaveBeenCalledWith(".env")
-			expect(formatResponse.toolError).toHaveBeenCalledWith(mockRooIgnoreError)
+			expect(mockCline.say).toHaveBeenCalledWith("Mojoignore_error", ".env")
+			expect(formatResponse.MojoIgnoreError).toHaveBeenCalledWith(".env")
+			expect(formatResponse.toolError).toHaveBeenCalledWith(mockMojoIgnoreError)
 			expect(mockPushToolResult).toHaveBeenCalled()
 			expect(mockAskApproval).not.toHaveBeenCalled()
 			expect(mockExecuteCommand).not.toHaveBeenCalled()

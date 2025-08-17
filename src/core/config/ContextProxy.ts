@@ -10,18 +10,18 @@ import {
 	type GlobalSettings,
 	type SecretState,
 	type GlobalState,
-	type RooCodeSettings,
+	type MojoCodeSettings,
 	providerSettingsSchema,
 	globalSettingsSchema,
 	isSecretStateKey,
-} from "@roo-code/types"
-import { TelemetryService } from "@roo-code/telemetry"
+} from "@Mojo-code/types"
+import { TelemetryService } from "@Mojo-code/telemetry"
 
 import { logger } from "../../utils/logging"
 
 type GlobalStateKey = keyof GlobalState
 type SecretStateKey = keyof SecretState
-type RooCodeSettingsKey = keyof RooCodeSettings
+type MojoCodeSettingsKey = keyof MojoCodeSettings
 
 const PASS_THROUGH_STATE_KEYS = ["taskHistory"]
 
@@ -229,25 +229,25 @@ export class ContextProxy {
 	}
 
 	/**
-	 * RooCodeSettings
+	 * MojoCodeSettings
 	 */
 
-	public setValue<K extends RooCodeSettingsKey>(key: K, value: RooCodeSettings[K]) {
+	public setValue<K extends MojoCodeSettingsKey>(key: K, value: MojoCodeSettings[K]) {
 		return isSecretStateKey(key) ? this.storeSecret(key, value as string) : this.updateGlobalState(key, value)
 	}
 
-	public getValue<K extends RooCodeSettingsKey>(key: K): RooCodeSettings[K] {
+	public getValue<K extends MojoCodeSettingsKey>(key: K): MojoCodeSettings[K] {
 		return isSecretStateKey(key)
-			? (this.getSecret(key) as RooCodeSettings[K])
-			: (this.getGlobalState(key) as RooCodeSettings[K])
+			? (this.getSecret(key) as MojoCodeSettings[K])
+			: (this.getGlobalState(key) as MojoCodeSettings[K])
 	}
 
-	public getValues(): RooCodeSettings {
+	public getValues(): MojoCodeSettings {
 		return { ...this.getAllGlobalState(), ...this.getAllSecretState() }
 	}
 
-	public async setValues(values: RooCodeSettings) {
-		const entries = Object.entries(values) as [RooCodeSettingsKey, unknown][]
+	public async setValues(values: MojoCodeSettings) {
+		const entries = Object.entries(values) as [MojoCodeSettingsKey, unknown][]
 		await Promise.all(entries.map(([key, value]) => this.setValue(key, value)))
 	}
 
@@ -259,7 +259,7 @@ export class ContextProxy {
 		try {
 			const globalSettings = globalSettingsExportSchema.parse(this.getValues())
 
-			// Exports should only contain global settings, so this skips project custom modes (those exist in the .roomode folder)
+			// Exports should only contain global settings, so this skips project custom modes (those exist in the .Mojomode folder)
 			globalSettings.customModes = globalSettings.customModes?.filter((mode) => mode.source === "global")
 
 			return Object.fromEntries(Object.entries(globalSettings).filter(([_, value]) => value !== undefined))

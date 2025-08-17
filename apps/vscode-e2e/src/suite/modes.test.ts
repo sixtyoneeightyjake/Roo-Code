@@ -1,17 +1,17 @@
 import * as assert from "assert"
 
-import { RooCodeEventName } from "@roo-code/types"
+import { MojoCodeEventName } from "@Mojo-code/types"
 
 import { waitUntilCompleted } from "./utils"
 import { setDefaultSuiteTimeout } from "./test-utils"
 
-suite("Roo Code Modes", function () {
+suite("Mojo Code Modes", function () {
 	setDefaultSuiteTimeout(this)
 
 	test("Should handle switching modes correctly", async () => {
 		const modes: string[] = []
 
-		globalThis.api.on(RooCodeEventName.TaskModeSwitched, (_taskId, mode) => modes.push(mode))
+		globalThis.api.on(MojoCodeEventName.TaskModeSwitched, (_taskId, mode) => modes.push(mode))
 
 		const switchModesTaskId = await globalThis.api.startNewTask({
 			configuration: { mode: "code", alwaysAllowModeSwitch: true, autoApprovalEnabled: true },

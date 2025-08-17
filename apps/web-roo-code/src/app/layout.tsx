@@ -15,7 +15,7 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
 	metadataBase: new URL(SEO.url),
 	title: {
-		template: "%s | Roo Code",
+		template: "%s | Mojo Code",
 		default: SEO.title,
 	},
 	description: SEO.description,
@@ -82,7 +82,7 @@ export const metadata: Metadata = {
 	category: SEO.category,
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function rootLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<head>

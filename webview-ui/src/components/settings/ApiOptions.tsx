@@ -8,31 +8,9 @@ import {
 	type ProviderName,
 	type ProviderSettings,
 	DEFAULT_CONSECUTIVE_MISTAKE_LIMIT,
-	openRouterDefaultModelId,
-	requestyDefaultModelId,
-	glamaDefaultModelId,
-	unboundDefaultModelId,
-	litellmDefaultModelId,
-	openAiNativeDefaultModelId,
 	anthropicDefaultModelId,
-	doubaoDefaultModelId,
-	claudeCodeDefaultModelId,
 	geminiDefaultModelId,
-	deepSeekDefaultModelId,
-	moonshotDefaultModelId,
-	mistralDefaultModelId,
-	xaiDefaultModelId,
-	groqDefaultModelId,
-	cerebrasDefaultModelId,
-	chutesDefaultModelId,
-	bedrockDefaultModelId,
-	vertexDefaultModelId,
-	sambaNovaDefaultModelId,
-	internationalZAiDefaultModelId,
-	mainlandZAiDefaultModelId,
-	fireworksDefaultModelId,
-	ioIntelligenceDefaultModelId,
-} from "@roo-code/types"
+} from "@Mojo-code/types"
 
 import { vscode } from "@src/utils/vscode"
 import { validateApiConfigurationExcludingModelErrors, getModelValidationError } from "@src/utils/validate"
@@ -59,33 +37,8 @@ import {
 
 import {
 	Anthropic,
-	Bedrock,
-	Cerebras,
-	Chutes,
-	ClaudeCode,
-	DeepSeek,
-	Doubao,
 	Gemini,
-	Glama,
-	Groq,
-	HuggingFace,
-	IOIntelligence,
-	LMStudio,
-	LiteLLM,
-	Mistral,
-	Moonshot,
-	Ollama,
 	OpenAI,
-	OpenAICompatible,
-	OpenRouter,
-	Requesty,
-	SambaNova,
-	Unbound,
-	Vertex,
-	VSCodeLM,
-	XAI,
-	ZAi,
-	Fireworks,
 } from "./providers"
 
 import { MODELS_BY_PROVIDER, PROVIDERS } from "./constants"
@@ -99,7 +52,6 @@ import { TodoListSettingsControl } from "./TodoListSettingsControl"
 import { TemperatureControl } from "./TemperatureControl"
 import { RateLimitSecondsControl } from "./RateLimitSecondsControl"
 import { ConsecutiveMistakeLimitControl } from "./ConsecutiveMistakeLimitControl"
-import { BedrockCustomArn } from "./providers/BedrockCustomArn"
 import { buildDocLink } from "@src/utils/docLinks"
 
 export interface ApiOptionsProps {
@@ -124,7 +76,7 @@ const ApiOptions = ({
 	setErrorMessage,
 }: ApiOptionsProps) => {
 	const { t } = useAppTranslation()
-	const { organizationAllowList } = useExtensionState()
+
 
 	const [customHeaders, setCustomHeaders] = useState<[string, string][]>(() => {
 		const headers = apiConfiguration?.openAiHeaders || {}
@@ -239,16 +191,15 @@ const ApiOptions = ({
 		const apiValidationResult = validateApiConfigurationExcludingModelErrors(
 			apiConfiguration,
 			routerModels,
-			organizationAllowList,
 		)
 		setErrorMessage(apiValidationResult)
-	}, [apiConfiguration, routerModels, organizationAllowList, setErrorMessage])
+	}, [apiConfiguration, routerModels, setErrorMessage])
 
 	const selectedProviderModels = useMemo(() => {
 		const models = MODELS_BY_PROVIDER[selectedProvider]
 		if (!models) return []
 
-		const filteredModels = filterModels(models, selectedProvider, organizationAllowList)
+		const filteredModels = filterModels(models, selectedProvider)
 
 		const modelOptions = filteredModels
 			? Object.keys(filteredModels).map((modelId) => ({
@@ -258,7 +209,7 @@ const ApiOptions = ({
 			: []
 
 		return modelOptions
-	}, [selectedProvider, organizationAllowList])
+	}, [selectedProvider])
 
 	const onProviderChange = useCallback(
 		(value: ProviderName) => {
@@ -298,38 +249,9 @@ const ApiOptions = ({
 					}
 				>
 			> = {
-				openrouter: { field: "openRouterModelId", default: openRouterDefaultModelId },
-				glama: { field: "glamaModelId", default: glamaDefaultModelId },
-				unbound: { field: "unboundModelId", default: unboundDefaultModelId },
-				requesty: { field: "requestyModelId", default: requestyDefaultModelId },
-				litellm: { field: "litellmModelId", default: litellmDefaultModelId },
 				anthropic: { field: "apiModelId", default: anthropicDefaultModelId },
-				cerebras: { field: "apiModelId", default: cerebrasDefaultModelId },
-				"claude-code": { field: "apiModelId", default: claudeCodeDefaultModelId },
-				"openai-native": { field: "apiModelId", default: openAiNativeDefaultModelId },
 				gemini: { field: "apiModelId", default: geminiDefaultModelId },
-				deepseek: { field: "apiModelId", default: deepSeekDefaultModelId },
-				doubao: { field: "apiModelId", default: doubaoDefaultModelId },
-				moonshot: { field: "apiModelId", default: moonshotDefaultModelId },
-				mistral: { field: "apiModelId", default: mistralDefaultModelId },
-				xai: { field: "apiModelId", default: xaiDefaultModelId },
-				groq: { field: "apiModelId", default: groqDefaultModelId },
-				chutes: { field: "apiModelId", default: chutesDefaultModelId },
-				bedrock: { field: "apiModelId", default: bedrockDefaultModelId },
-				vertex: { field: "apiModelId", default: vertexDefaultModelId },
-				sambanova: { field: "apiModelId", default: sambaNovaDefaultModelId },
-				zai: {
-					field: "apiModelId",
-					default:
-						apiConfiguration.zaiApiLine === "china"
-							? mainlandZAiDefaultModelId
-							: internationalZAiDefaultModelId,
-				},
-				fireworks: { field: "apiModelId", default: fireworksDefaultModelId },
-				"io-intelligence": { field: "ioIntelligenceModelId", default: ioIntelligenceDefaultModelId },
-				openai: { field: "openAiModelId" },
-				ollama: { field: "ollamaModelId" },
-				lmstudio: { field: "lmStudioModelId" },
+				"openai-native": { field: "apiModelId" },
 			}
 
 			const config = PROVIDER_MODEL_CONFIG[value]
@@ -345,8 +267,8 @@ const ApiOptions = ({
 	)
 
 	const modelValidationError = useMemo(() => {
-		return getModelValidationError(apiConfiguration, routerModels, organizationAllowList)
-	}, [apiConfiguration, routerModels, organizationAllowList])
+		return getModelValidationError(apiConfiguration, routerModels)
+	}, [apiConfiguration, routerModels])
 
 	const docs = useMemo(() => {
 		const provider = PROVIDERS.find(({ value }) => value === selectedProvider)
@@ -371,11 +293,11 @@ const ApiOptions = ({
 
 	// Convert providers to SearchableSelect options
 	const providerOptions = useMemo(() => {
-		return filterProviders(PROVIDERS, organizationAllowList).map(({ value, label }) => ({
+		return filterProviders(PROVIDERS).map(({ value, label }) => ({
 			value,
 			label,
 		}))
-	}, [organizationAllowList])
+	}, [])
 
 	return (
 		<div className="flex flex-col gap-3">
@@ -412,7 +334,6 @@ const ApiOptions = ({
 					selectedModelId={selectedModelId}
 					uriScheme={uriScheme}
 					fromWelcomeView={fromWelcomeView}
-					organizationAllowList={organizationAllowList}
 					modelValidationError={modelValidationError}
 				/>
 			)}
@@ -423,7 +344,6 @@ const ApiOptions = ({
 					setApiConfigurationField={setApiConfigurationField}
 					routerModels={routerModels}
 					refetchRouterModels={refetchRouterModels}
-					organizationAllowList={organizationAllowList}
 					modelValidationError={modelValidationError}
 				/>
 			)}
@@ -434,7 +354,6 @@ const ApiOptions = ({
 					setApiConfigurationField={setApiConfigurationField}
 					routerModels={routerModels}
 					uriScheme={uriScheme}
-					organizationAllowList={organizationAllowList}
 					modelValidationError={modelValidationError}
 				/>
 			)}
@@ -444,7 +363,6 @@ const ApiOptions = ({
 					apiConfiguration={apiConfiguration}
 					setApiConfigurationField={setApiConfigurationField}
 					routerModels={routerModels}
-					organizationAllowList={organizationAllowList}
 					modelValidationError={modelValidationError}
 				/>
 			)}
@@ -489,7 +407,6 @@ const ApiOptions = ({
 				<OpenAICompatible
 					apiConfiguration={apiConfiguration}
 					setApiConfigurationField={setApiConfigurationField}
-					organizationAllowList={organizationAllowList}
 					modelValidationError={modelValidationError}
 				/>
 			)}
@@ -542,7 +459,6 @@ const ApiOptions = ({
 				<LiteLLM
 					apiConfiguration={apiConfiguration}
 					setApiConfigurationField={setApiConfigurationField}
-					organizationAllowList={organizationAllowList}
 					modelValidationError={modelValidationError}
 				/>
 			)}
@@ -559,7 +475,6 @@ const ApiOptions = ({
 				<IOIntelligence
 					apiConfiguration={apiConfiguration}
 					setApiConfigurationField={setApiConfigurationField}
-					organizationAllowList={organizationAllowList}
 					modelValidationError={modelValidationError}
 				/>
 			)}

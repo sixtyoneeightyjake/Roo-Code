@@ -12,8 +12,8 @@ try {
 	console.warn("Failed to load environment variables:", e)
 }
 
-import { CloudService, ExtensionBridgeService } from "@roo-code/cloud"
-import { TelemetryService, PostHogTelemetryClient } from "@roo-code/telemetry"
+// Cloud service imports removed - cloud functionality has been removed
+import { TelemetryService, PostHogTelemetryClient } from "@Mojo-code/telemetry"
 
 import "./utils/path" // Necessary to have access to String.prototype.toPosix.
 import { createOutputChannelLogger, createDualLogger } from "./utils/outputChannelLogger"
@@ -113,46 +113,9 @@ export async function activate(context: vscode.ExtensionContext) {
 		}
 	}
 
-	// Initialize Roo Code Cloud service.
-	const cloudService = await CloudService.createInstance(context, cloudLogger)
+	// Cloud service initialization removed - cloud functionality has been removed
 
-	try {
-		if (cloudService.telemetryClient) {
-			TelemetryService.instance.register(cloudService.telemetryClient)
-		}
-	} catch (error) {
-		outputChannel.appendLine(
-			`[CloudService] Failed to register TelemetryClient: ${error instanceof Error ? error.message : String(error)}`,
-		)
-	}
-
-	const postStateListener = () => ClineProvider.getVisibleInstance()?.postStateToWebview()
-
-	cloudService.on("auth-state-changed", postStateListener)
-	cloudService.on("settings-updated", postStateListener)
-
-	cloudService.on("user-info", async ({ userInfo }) => {
-		postStateListener()
-
-		const bridgeConfig = await cloudService.cloudAPI?.bridgeConfig().catch(() => undefined)
-
-		if (!bridgeConfig) {
-			outputChannel.appendLine("[CloudService] Failed to get bridge config")
-			return
-		}
-
-		ExtensionBridgeService.handleRemoteControlState(
-			userInfo,
-			contextProxy.getValue("remoteControlEnabled"),
-			{ ...bridgeConfig, provider, sessionId: vscode.env.sessionId },
-			(message: string) => outputChannel.appendLine(message),
-		)
-	})
-
-	// Add to subscriptions for proper cleanup on deactivate.
-	context.subscriptions.push(cloudService)
-
-	const provider = new ClineProvider(context, outputChannel, "sidebar", contextProxy, mdmService)
+	const provider = new ClineProvider(context, outputChannel, "sidebar", contextProxy)
 	TelemetryService.instance.setProvider(provider)
 
 	context.subscriptions.push(
@@ -214,11 +177,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	registerCodeActions(context)
 	registerTerminalActions(context)
 
-	// Allows other extensions to activate once Roo is ready.
+	// Allows other extensions to activate once Mojo is ready.
 	vscode.commands.executeCommand(`${Package.name}.activationCompleted`)
 
-	// Implements the `RooCodeAPI` interface.
-	const socketPath = process.env.ROO_CODE_IPC_SOCKET_PATH
+	// Implements the `MojoCodeAPI` interface.
+	const socketPath = process.env.Mojo_CODE_IPC_SOCKET_PATH
 	const enableLogging = typeof socketPath === "string"
 
 	// Watch the core files and automatically reload the extension host.
@@ -227,7 +190,7 @@ export async function activate(context: vscode.ExtensionContext) {
 			{ path: context.extensionPath, pattern: "**/*.ts" },
 			{ path: path.join(context.extensionPath, "../packages/types"), pattern: "**/*.ts" },
 			{ path: path.join(context.extensionPath, "../packages/telemetry"), pattern: "**/*.ts" },
-			{ path: path.join(context.extensionPath, "node_modules/@roo-code/cloud"), pattern: "**/*" },
+			// Cloud service watch path removed - cloud functionality has been removed
 		]
 
 		console.log(
@@ -280,11 +243,7 @@ export async function activate(context: vscode.ExtensionContext) {
 export async function deactivate() {
 	outputChannel.appendLine(`${Package.name} extension deactivated`)
 
-	const bridgeService = ExtensionBridgeService.getInstance()
-
-	if (bridgeService) {
-		await bridgeService.disconnect()
-	}
+	// Bridge service cleanup removed - cloud functionality has been removed
 
 	await McpServerManager.cleanup(extensionContext)
 	TelemetryService.instance.shutdown()

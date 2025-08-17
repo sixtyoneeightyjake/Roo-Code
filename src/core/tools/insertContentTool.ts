@@ -10,7 +10,7 @@ import { ClineSayTool } from "../../shared/ExtensionMessage"
 import { RecordSource } from "../context-tracking/FileContextTrackerTypes"
 import { fileExistsAtPath } from "../../utils/fs"
 import { insertGroups } from "../diff/insert-groups"
-import { DEFAULT_WRITE_DELAY_MS } from "@roo-code/types"
+import { DEFAULT_WRITE_DELAY_MS } from "@Mojo-code/types"
 import { EXPERIMENT_IDS, experiments } from "../../shared/experiments"
 
 export async function insertContentTool(
@@ -60,16 +60,16 @@ export async function insertContentTool(
 			return
 		}
 
-		const accessAllowed = cline.rooIgnoreController?.validateAccess(relPath)
+		const accessAllowed = cline.MojoIgnoreController?.validateAccess(relPath)
 
 		if (!accessAllowed) {
-			await cline.say("rooignore_error", relPath)
-			pushToolResult(formatResponse.toolError(formatResponse.rooIgnoreError(relPath)))
+			await cline.say("Mojoignore_error", relPath)
+			pushToolResult(formatResponse.toolError(formatResponse.MojoIgnoreError(relPath)))
 			return
 		}
 
 		// Check if file is write-protected
-		const isWriteProtected = cline.rooProtectedController?.isWriteProtected(relPath) || false
+		const isWriteProtected = cline.MojoProtectedController?.isWriteProtected(relPath) || false
 
 		const absolutePath = path.resolve(cline.cwd, relPath)
 		const lineNumber = parseInt(line, 10)
@@ -178,7 +178,7 @@ export async function insertContentTool(
 
 		// Track file edit operation
 		if (relPath) {
-			await cline.fileContextTracker.trackFileContext(relPath, "roo_edited" as RecordSource)
+			await cline.fileContextTracker.trackFileContext(relPath, "Mojo_edited" as RecordSource)
 		}
 
 		cline.didEditFile = true

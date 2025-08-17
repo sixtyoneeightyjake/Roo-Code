@@ -22,16 +22,16 @@ vi.mock("os", () => ({
 }))
 
 import {
-	getGlobalRooDirectory,
-	getProjectRooDirectoryForCwd,
+	getGlobalMojoDirectory,
+	getProjectMojoDirectoryForCwd,
 	directoryExists,
 	fileExists,
 	readFileIfExists,
-	getRooDirectoriesForCwd,
+	getMojoDirectoriesForCwd,
 	loadConfiguration,
 } from "../index"
 
-describe("RooConfigService", () => {
+describe("MojoConfigService", () => {
 	beforeEach(() => {
 		vi.clearAllMocks()
 		mockHomedir.mockReturnValue("/mock/home")
@@ -41,24 +41,24 @@ describe("RooConfigService", () => {
 		vi.restoreAllMocks()
 	})
 
-	describe("getGlobalRooDirectory", () => {
-		it("should return correct path for global .roo directory", () => {
-			const result = getGlobalRooDirectory()
-			expect(result).toBe(path.join("/mock/home", ".roo"))
+	describe("getGlobalMojoDirectory", () => {
+		it("should return correct path for global .Mojo directory", () => {
+			const result = getGlobalMojoDirectory()
+			expect(result).toBe(path.join("/mock/home", ".Mojo"))
 		})
 
 		it("should handle different home directories", () => {
 			mockHomedir.mockReturnValue("/different/home")
-			const result = getGlobalRooDirectory()
-			expect(result).toBe(path.join("/different/home", ".roo"))
+			const result = getGlobalMojoDirectory()
+			expect(result).toBe(path.join("/different/home", ".Mojo"))
 		})
 	})
 
-	describe("getProjectRooDirectoryForCwd", () => {
+	describe("getProjectMojoDirectoryForCwd", () => {
 		it("should return correct path for given cwd", () => {
 			const cwd = "/custom/project/path"
-			const result = getProjectRooDirectoryForCwd(cwd)
-			expect(result).toBe(path.join(cwd, ".roo"))
+			const result = getProjectMojoDirectoryForCwd(cwd)
+			expect(result).toBe(path.join(cwd, ".Mojo"))
 		})
 	})
 
@@ -205,13 +205,13 @@ describe("RooConfigService", () => {
 		})
 	})
 
-	describe("getRooDirectoriesForCwd", () => {
+	describe("getMojoDirectoriesForCwd", () => {
 		it("should return directories for given cwd", () => {
 			const cwd = "/custom/project/path"
 
-			const result = getRooDirectoriesForCwd(cwd)
+			const result = getMojoDirectoriesForCwd(cwd)
 
-			expect(result).toEqual([path.join("/mock/home", ".roo"), path.join(cwd, ".roo")])
+			expect(result).toEqual([path.join("/mock/home", ".Mojo"), path.join(cwd, ".Mojo")])
 		})
 	})
 
@@ -294,8 +294,8 @@ describe("RooConfigService", () => {
 
 			await loadConfiguration("rules/rules.md", "/project/path")
 
-			expect(mockReadFile).toHaveBeenCalledWith(path.join("/mock/home", ".roo", "rules/rules.md"), "utf-8")
-			expect(mockReadFile).toHaveBeenCalledWith(path.join("/project/path", ".roo", "rules/rules.md"), "utf-8")
+			expect(mockReadFile).toHaveBeenCalledWith(path.join("/mock/home", ".Mojo", "rules/rules.md"), "utf-8")
+			expect(mockReadFile).toHaveBeenCalledWith(path.join("/project/path", ".Mojo", "rules/rules.md"), "utf-8")
 		})
 	})
 })

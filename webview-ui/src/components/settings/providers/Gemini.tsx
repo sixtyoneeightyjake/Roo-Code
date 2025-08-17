@@ -2,9 +2,7 @@ import { useCallback, useState } from "react"
 import { Checkbox } from "vscrui"
 import { VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 
-import type { ProviderSettings } from "@roo-code/types"
-
-import { useAppTranslation } from "@src/i18n/TranslationContext"
+import type { ProviderSettings } from "@Mojo-code/types"
 import { VSCodeButtonLink } from "@src/components/common/VSCodeButtonLink"
 
 import { inputEventTransform } from "../transforms"

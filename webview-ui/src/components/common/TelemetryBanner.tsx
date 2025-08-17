@@ -3,7 +3,7 @@ import { VSCodeButton, VSCodeLink } from "@vscode/webview-ui-toolkit/react"
 import styled from "styled-components"
 import { Trans } from "react-i18next"
 
-import { TelemetrySetting } from "@roo/TelemetrySetting"
+import { TelemetrySetting } from "@Mojo/TelemetrySetting"
 
 import { vscode } from "@src/utils/vscode"
 import { useAppTranslation } from "@src/i18n/TranslationContext"
@@ -57,7 +57,7 @@ const TelemetryBanner = () => {
 					<Trans
 						i18nKey="welcome:telemetry.anonymousTelemetry"
 						components={{
-							privacyLink: <VSCodeLink href="https://roocode.com/privacy" />,
+							privacyLink: <VSCodeLink href="https://Mojocode.com/privacy" />,
 						}}
 					/>
 					<div className="mt-1">

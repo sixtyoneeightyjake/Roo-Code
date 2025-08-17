@@ -10,11 +10,11 @@ import { codeParser, DirectoryScanner, FileWatcher } from "./processors"
 import { ICodeParser, IEmbedder, IFileWatcher, IVectorStore } from "./interfaces"
 import { CodeIndexConfigManager } from "./config-manager"
 import { CacheManager } from "./cache-manager"
-import { RooIgnoreController } from "../../core/ignore/RooIgnoreController"
+import { MojoIgnoreController } from "../../core/ignore/RooIgnoreController"
 import { Ignore } from "ignore"
 import { t } from "../../i18n"
-import { TelemetryService } from "@roo-code/telemetry"
-import { TelemetryEventName } from "@roo-code/types"
+import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryEventName } from "@Mojo-code/types"
 
 /**
  * Factory class responsible for creating and configuring code indexing service dependencies.
@@ -162,7 +162,7 @@ export class CodeIndexServiceFactory {
 		vectorStore: IVectorStore,
 		cacheManager: CacheManager,
 		ignoreInstance: Ignore,
-		rooIgnoreController?: RooIgnoreController,
+		MojoIgnoreController?: MojoIgnoreController,
 	): IFileWatcher {
 		return new FileWatcher(
 			this.workspacePath,
@@ -171,7 +171,7 @@ export class CodeIndexServiceFactory {
 			embedder,
 			vectorStore,
 			ignoreInstance,
-			rooIgnoreController,
+			MojoIgnoreController,
 		)
 	}
 
@@ -183,7 +183,7 @@ export class CodeIndexServiceFactory {
 		context: vscode.ExtensionContext,
 		cacheManager: CacheManager,
 		ignoreInstance: Ignore,
-		rooIgnoreController?: RooIgnoreController,
+		MojoIgnoreController?: MojoIgnoreController,
 	): {
 		embedder: IEmbedder
 		vectorStore: IVectorStore
@@ -205,7 +205,7 @@ export class CodeIndexServiceFactory {
 			vectorStore,
 			cacheManager,
 			ignoreInstance,
-			rooIgnoreController,
+			MojoIgnoreController,
 		)
 
 		return {

@@ -1,7 +1,7 @@
 import * as vscode from "vscode"
 import * as os from "os"
 
-import type { ModeConfig, PromptComponent, CustomModePrompts, TodoItem } from "@roo-code/types"
+import type { ModeConfig, PromptComponent, CustomModePrompts, TodoItem } from "@Mojo-code/types"
 
 import type { SystemPromptSettings } from "./types"
 
@@ -57,7 +57,7 @@ async function generatePrompt(
 	experiments?: Record<string, boolean>,
 	enableMcpServerCreation?: boolean,
 	language?: string,
-	rooIgnoreInstructions?: string,
+	MojoIgnoreInstructions?: string,
 	partialReadsEnabled?: boolean,
 	settings?: SystemPromptSettings,
 	todoList?: TodoItem[],
@@ -124,7 +124,7 @@ ${getObjectiveSection(codeIndexManager, experiments)}
 
 ${await addCustomInstructions(baseInstructions, globalCustomInstructions || "", cwd, mode, {
 	language: language ?? formatLanguage(vscode.env.language),
-	rooIgnoreInstructions,
+	MojoIgnoreInstructions,
 	settings,
 })}`
 
@@ -146,7 +146,7 @@ export const SYSTEM_PROMPT = async (
 	experiments?: Record<string, boolean>,
 	enableMcpServerCreation?: boolean,
 	language?: string,
-	rooIgnoreInstructions?: string,
+	MojoIgnoreInstructions?: string,
 	partialReadsEnabled?: boolean,
 	settings?: SystemPromptSettings,
 	todoList?: TodoItem[],
@@ -186,7 +186,7 @@ export const SYSTEM_PROMPT = async (
 			mode,
 			{
 				language: language ?? formatLanguage(vscode.env.language),
-				rooIgnoreInstructions,
+				MojoIgnoreInstructions,
 				settings,
 			},
 		)
@@ -217,7 +217,7 @@ ${customInstructions}`
 		experiments,
 		enableMcpServerCreation,
 		language,
-		rooIgnoreInstructions,
+		MojoIgnoreInstructions,
 		partialReadsEnabled,
 		settings,
 		todoList,

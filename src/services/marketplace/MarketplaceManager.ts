@@ -4,9 +4,9 @@ import * as path from "path"
 import * as vscode from "vscode"
 import * as yaml from "yaml"
 
-import type { MarketplaceItem, MarketplaceItemType, McpMarketplaceItem } from "@roo-code/types"
-import { TelemetryService } from "@roo-code/telemetry"
-import { type OrganizationSettings, CloudService } from "@roo-code/cloud"
+import type { MarketplaceItem, MarketplaceItemType, McpMarketplaceItem } from "@Mojo-code/types"
+import { TelemetryService } from "@Mojo-code/telemetry"
+// Cloud service imports removed - cloud functionality has been removed
 
 import { GlobalFileNames } from "../../shared/globalFileNames"
 import { ensureSettingsDirectoryExists } from "../../utils/globalContext"
@@ -38,39 +38,10 @@ export class MarketplaceManager {
 		try {
 			const errors: string[] = []
 
-			let orgSettings: OrganizationSettings | undefined
-
-			try {
-				if (CloudService.hasInstance() && CloudService.instance.isAuthenticated()) {
-					orgSettings = CloudService.instance.getOrganizationSettings()
-				}
-			} catch (orgError) {
-				console.warn("Failed to load organization settings:", orgError)
-				const orgErrorMessage = orgError instanceof Error ? orgError.message : String(orgError)
-				errors.push(`Organization settings: ${orgErrorMessage}`)
-			}
-
-			const allMarketplaceItems = await this.configLoader.loadAllItems(orgSettings?.hideMarketplaceMcps)
-			let organizationMcps: MarketplaceItem[] = []
-			let marketplaceItems = allMarketplaceItems
-
-			if (orgSettings) {
-				if (orgSettings.mcps && orgSettings.mcps.length > 0) {
-					organizationMcps = orgSettings.mcps.map(
-						(mcp: McpMarketplaceItem): MarketplaceItem => ({
-							...mcp,
-							type: "mcp" as const,
-						}),
-					)
-				}
-
-				if (orgSettings.hiddenMcps && orgSettings.hiddenMcps.length > 0) {
-					const hiddenMcpIds = new Set(orgSettings.hiddenMcps)
-					marketplaceItems = allMarketplaceItems.filter(
-						(item) => item.type !== "mcp" || !hiddenMcpIds.has(item.id),
-					)
-				}
-			}
+			// Cloud functionality removed - organization settings and cloud authentication removed
+			const allMarketplaceItems = await this.configLoader.loadAllItems(false)
+			const organizationMcps: MarketplaceItem[] = []
+			const marketplaceItems = allMarketplaceItems
 
 			return {
 				organizationMcps,
@@ -251,8 +222,8 @@ export class MarketplaceManager {
 				return // No workspace, no project installations
 			}
 
-			// Check modes in .roomodes
-			const projectModesPath = path.join(workspaceFolder.uri.fsPath, ".roomodes")
+			// Check modes in .Mojomodes
+			const projectModesPath = path.join(workspaceFolder.uri.fsPath, ".Mojomodes")
 			try {
 				const content = await fs.readFile(projectModesPath, "utf-8")
 				const data = yaml.parse(content)
@@ -269,8 +240,8 @@ export class MarketplaceManager {
 				// File doesn't exist or can't be read, skip
 			}
 
-			// Check MCPs in .roo/mcp.json
-			const projectMcpPath = path.join(workspaceFolder.uri.fsPath, ".roo", "mcp.json")
+			// Check MCPs in .Mojo/mcp.json
+			const projectMcpPath = path.join(workspaceFolder.uri.fsPath, ".Mojo", "mcp.json")
 			try {
 				const content = await fs.readFile(projectMcpPath, "utf-8")
 				const data = JSON.parse(content)

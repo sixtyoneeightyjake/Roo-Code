@@ -24,12 +24,12 @@ export interface GitCommit {
 
 /**
  * Extracts git repository information from the workspace's .git directory
- * @param workspaceRoot The root path of the workspace
+ * @param workspaceroot The root path of the workspace
  * @returns Git repository information or empty object if not a git repository
  */
-export async function getGitRepositoryInfo(workspaceRoot: string): Promise<GitRepositoryInfo> {
+export async function getGitRepositoryInfo(workspaceroot: string): Promise<GitRepositoryInfo> {
 	try {
-		const gitDir = path.join(workspaceRoot, ".git")
+		const gitDir = path.join(workspaceroot, ".git")
 
 		// Check if .git directory exists
 		try {
@@ -197,8 +197,8 @@ export async function getWorkspaceGitInfo(): Promise<GitRepositoryInfo> {
 	}
 
 	// Use the first workspace folder.
-	const workspaceRoot = workspaceFolders[0].uri.fsPath
-	return getGitRepositoryInfo(workspaceRoot)
+	const workspaceroot = workspaceFolders[0].uri.fsPath
+	return getGitRepositoryInfo(workspaceroot)
 }
 
 async function checkGitRepo(cwd: string): Promise<boolean> {

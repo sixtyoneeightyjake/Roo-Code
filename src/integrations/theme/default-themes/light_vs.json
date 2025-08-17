@@ -38,7 +38,7 @@
 		{
 			"scope": [
 				"meta.embedded",
-				"source.groovy.embedded",
+				"source.gMojovy.embedded",
 				"string meta.image.inline.markdown",
 				"variable.legacy.builtin.python"
 			],

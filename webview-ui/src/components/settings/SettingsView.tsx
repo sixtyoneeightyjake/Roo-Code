@@ -25,9 +25,9 @@ import {
 	LucideIcon,
 } from "lucide-react"
 
-import type { ProviderSettings, ExperimentId } from "@roo-code/types"
+import type { ProviderSettings, ExperimentId } from "@Mojo-code/types"
 
-import { TelemetrySetting } from "@roo/TelemetrySetting"
+import { TelemetrySetting } from "@Mojo/TelemetrySetting"
 
 import { vscode } from "@src/utils/vscode"
 import { useAppTranslation } from "@src/i18n/TranslationContext"
@@ -166,7 +166,7 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 		terminalZshP10k,
 		terminalZdotdir,
 		writeDelayMs,
-		showRooIgnoredFiles,
+		showMojoIgnoredFiles,
 		remoteBrowserEnabled,
 		maxReadFileLine,
 		maxImageFileSize,
@@ -324,7 +324,7 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 			vscode.postMessage({ type: "requestDelaySeconds", value: requestDelaySeconds })
 			vscode.postMessage({ type: "maxOpenTabsContext", value: maxOpenTabsContext })
 			vscode.postMessage({ type: "maxWorkspaceFiles", value: maxWorkspaceFiles ?? 200 })
-			vscode.postMessage({ type: "showRooIgnoredFiles", bool: showRooIgnoredFiles })
+			vscode.postMessage({ type: "showMojoIgnoredFiles", bool: showMojoIgnoredFiles })
 			vscode.postMessage({ type: "maxReadFileLine", value: maxReadFileLine ?? -1 })
 			vscode.postMessage({ type: "maxImageFileSize", value: maxImageFileSize ?? 5 })
 			vscode.postMessage({ type: "maxTotalImageSize", value: maxTotalImageSize ?? 20 })
@@ -675,7 +675,7 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 							listApiConfigMeta={listApiConfigMeta ?? []}
 							maxOpenTabsContext={maxOpenTabsContext}
 							maxWorkspaceFiles={maxWorkspaceFiles ?? 200}
-							showRooIgnoredFiles={showRooIgnoredFiles}
+							showMojoIgnoredFiles={showMojoIgnoredFiles}
 							maxReadFileLine={maxReadFileLine}
 							maxImageFileSize={maxImageFileSize}
 							maxTotalImageSize={maxTotalImageSize}

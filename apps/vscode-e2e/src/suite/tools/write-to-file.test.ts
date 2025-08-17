@@ -3,12 +3,12 @@ import * as fs from "fs/promises"
 import * as path from "path"
 import * as os from "os"
 
-import { RooCodeEventName, type ClineMessage } from "@roo-code/types"
+import { MojoCodeEventName, type ClineMessage } from "@Mojo-code/types"
 
 import { waitFor, sleep } from "../utils"
 import { setDefaultSuiteTimeout } from "../test-utils"
 
-suite("Roo Code write_to_file Tool", function () {
+suite("Mojo Code write_to_file Tool", function () {
 	setDefaultSuiteTimeout(this)
 
 	let tempDir: string
@@ -16,7 +16,7 @@ suite("Roo Code write_to_file Tool", function () {
 
 	// Create a temporary directory for test files
 	suiteSetup(async () => {
-		tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "roo-test-"))
+		tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "Mojo-test-"))
 	})
 
 	// Clean up temporary directory after tests
@@ -110,7 +110,7 @@ suite("Roo Code write_to_file Tool", function () {
 				console.log("AI response:", message.text?.substring(0, 200))
 			}
 		}
-		api.on(RooCodeEventName.Message, messageHandler)
+		api.on(MojoCodeEventName.Message, messageHandler)
 
 		// Listen for task events
 		const taskStartedHandler = (id: string) => {
@@ -119,7 +119,7 @@ suite("Roo Code write_to_file Tool", function () {
 				console.log("Task started:", id)
 			}
 		}
-		api.on(RooCodeEventName.TaskStarted, taskStartedHandler)
+		api.on(MojoCodeEventName.TaskStarted, taskStartedHandler)
 
 		const taskCompletedHandler = (id: string) => {
 			if (id === taskId) {
@@ -127,7 +127,7 @@ suite("Roo Code write_to_file Tool", function () {
 				console.log("Task completed:", id)
 			}
 		}
-		api.on(RooCodeEventName.TaskCompleted, taskCompletedHandler)
+		api.on(MojoCodeEventName.TaskCompleted, taskCompletedHandler)
 
 		let taskId: string
 		try {
@@ -167,7 +167,7 @@ suite("Roo Code write_to_file Tool", function () {
 				testFilePath, // Expected location
 				path.join(tempDir, baseFileName), // In temp directory
 				path.join(process.cwd(), baseFileName), // In current working directory
-				path.join("/tmp/roo-test-workspace-" + "*", baseFileName), // In workspace created by runTest.ts
+				path.join("/tmp/Mojo-test-workspace-" + "*", baseFileName), // In workspace created by runTest.ts
 			]
 
 			let fileFound = false
@@ -177,7 +177,7 @@ suite("Roo Code write_to_file Tool", function () {
 			// First check the workspace directory that was created
 			const workspaceDirs = await fs
 				.readdir("/tmp")
-				.then((files) => files.filter((f) => f.startsWith("roo-test-workspace-")))
+				.then((files) => files.filter((f) => f.startsWith("Mojo-test-workspace-")))
 				.catch(() => [])
 
 			for (const wsDir of workspaceDirs) {
@@ -238,7 +238,7 @@ suite("Roo Code write_to_file Tool", function () {
 					const tmpFiles = await fs.readdir("/tmp")
 					console.log(
 						"Test files in /tmp:",
-						tmpFiles.filter((f) => f.includes("test-file") || f.includes("roo-test")),
+						tmpFiles.filter((f) => f.includes("test-file") || f.includes("Mojo-test")),
 					)
 				} catch (e) {
 					console.log("Could not list /tmp:", e)
@@ -259,9 +259,9 @@ suite("Roo Code write_to_file Tool", function () {
 			console.log("write_to_file tool was properly executed")
 		} finally {
 			// Clean up
-			api.off(RooCodeEventName.Message, messageHandler)
-			api.off(RooCodeEventName.TaskStarted, taskStartedHandler)
-			api.off(RooCodeEventName.TaskCompleted, taskCompletedHandler)
+			api.off(MojoCodeEventName.Message, messageHandler)
+			api.off(MojoCodeEventName.TaskStarted, taskStartedHandler)
+			api.off(MojoCodeEventName.TaskCompleted, taskCompletedHandler)
 		}
 	})
 
@@ -302,7 +302,7 @@ suite("Roo Code write_to_file Tool", function () {
 				console.log("Tool request:", message.text?.substring(0, 200))
 			}
 		}
-		api.on(RooCodeEventName.Message, messageHandler)
+		api.on(MojoCodeEventName.Message, messageHandler)
 
 		// Listen for task events
 		const taskStartedHandler = (id: string) => {
@@ -311,7 +311,7 @@ suite("Roo Code write_to_file Tool", function () {
 				console.log("Task started:", id)
 			}
 		}
-		api.on(RooCodeEventName.TaskStarted, taskStartedHandler)
+		api.on(MojoCodeEventName.TaskStarted, taskStartedHandler)
 
 		const taskCompletedHandler = (id: string) => {
 			if (id === taskId) {
@@ -319,7 +319,7 @@ suite("Roo Code write_to_file Tool", function () {
 				console.log("Task completed:", id)
 			}
 		}
-		api.on(RooCodeEventName.TaskCompleted, taskCompletedHandler)
+		api.on(MojoCodeEventName.TaskCompleted, taskCompletedHandler)
 
 		let taskId: string
 		try {
@@ -355,7 +355,7 @@ suite("Roo Code write_to_file Tool", function () {
 			// Check workspace directories
 			const workspaceDirs = await fs
 				.readdir("/tmp")
-				.then((files) => files.filter((f) => f.startsWith("roo-test-workspace-")))
+				.then((files) => files.filter((f) => f.startsWith("Mojo-test-workspace-")))
 				.catch(() => [])
 
 			for (const wsDir of workspaceDirs) {
@@ -440,9 +440,9 @@ suite("Roo Code write_to_file Tool", function () {
 			console.log("write_to_file tool was properly executed")
 		} finally {
 			// Clean up
-			api.off(RooCodeEventName.Message, messageHandler)
-			api.off(RooCodeEventName.TaskStarted, taskStartedHandler)
-			api.off(RooCodeEventName.TaskCompleted, taskCompletedHandler)
+			api.off(MojoCodeEventName.Message, messageHandler)
+			api.off(MojoCodeEventName.TaskStarted, taskStartedHandler)
+			api.off(MojoCodeEventName.TaskCompleted, taskCompletedHandler)
 		}
 	})
 })

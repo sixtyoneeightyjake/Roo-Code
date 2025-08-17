@@ -1,9 +1,9 @@
-// npx vitest core/prompts/__tests__/responses-rooignore.spec.ts
+// npx vitest core/prompts/__tests__/responses-Mojoignore.spec.ts
 
 import type { Mock } from "vitest"
 
 import { formatResponse } from "../responses"
-import { RooIgnoreController, LOCK_TEXT_SYMBOL } from "../../ignore/RooIgnoreController"
+import { MojoIgnoreController, LOCK_TEXT_SYMBOL } from "../../ignore/RooIgnoreController"
 import { fileExistsAtPath } from "../../../utils/fs"
 import * as fs from "fs/promises"
 import { toPosix } from "./utils"
@@ -26,7 +26,7 @@ vi.mock("vscode", () => {
 	}
 })
 
-describe("RooIgnore Response Formatting", () => {
+describe("MojoIgnore Response Formatting", () => {
 	const TEST_CWD = "/test/path"
 	let mockFileExists: Mock<typeof fileExistsAtPath>
 	let mockReadFile: Mock<typeof fs.readFile>
@@ -44,17 +44,17 @@ describe("RooIgnore Response Formatting", () => {
 		mockReadFile.mockResolvedValue("node_modules\n.git\nsecrets/**\n*.log")
 	})
 
-	describe("formatResponse.rooIgnoreError", () => {
+	describe("formatResponse.MojoIgnoreError", () => {
 		/**
 		 * Tests the error message format for ignored files
 		 */
 		it("should format error message for ignored files", () => {
-			const errorMessage = formatResponse.rooIgnoreError("secrets/api-keys.json")
+			const errorMessage = formatResponse.MojoIgnoreError("secrets/api-keys.json")
 
 			// Verify error message format
-			expect(errorMessage).toContain("Access to secrets/api-keys.json is blocked by the .rooignore file settings")
+			expect(errorMessage).toContain("Access to secrets/api-keys.json is blocked by the .Mojoignore file settings")
 			expect(errorMessage).toContain("continue in the task without using this file")
-			expect(errorMessage).toContain("ask the user to update the .rooignore file")
+			expect(errorMessage).toContain("ask the user to update the .Mojoignore file")
 		})
 
 		/**
@@ -65,19 +65,19 @@ describe("RooIgnore Response Formatting", () => {
 
 			// Test each path
 			for (const testPath of paths) {
-				const errorMessage = formatResponse.rooIgnoreError(testPath)
+				const errorMessage = formatResponse.MojoIgnoreError(testPath)
 				expect(errorMessage).toContain(`Access to ${testPath} is blocked`)
 			}
 		})
 	})
 
-	describe("formatResponse.formatFilesList with RooIgnoreController", () => {
+	describe("formatResponse.formatFilesList with MojoIgnoreController", () => {
 		/**
-		 * Tests file listing with rooignore controller
+		 * Tests file listing with Mojoignore controller
 		 */
 		it("should format files list with lock symbols for ignored files", async () => {
 			// Create controller
-			const controller = new RooIgnoreController(TEST_CWD)
+			const controller = new MojoIgnoreController(TEST_CWD)
 			await controller.initialize()
 
 			// Mock validateAccess to control which files are ignored
@@ -117,11 +117,11 @@ describe("RooIgnore Response Formatting", () => {
 		})
 
 		/**
-		 * Tests formatFilesList when showRooIgnoredFiles is set to false
+		 * Tests formatFilesList when showMojoIgnoredFiles is set to false
 		 */
-		it("should hide ignored files when showRooIgnoredFiles is false", async () => {
+		it("should hide ignored files when showMojoIgnoredFiles is false", async () => {
 			// Create controller
-			const controller = new RooIgnoreController(TEST_CWD)
+			const controller = new MojoIgnoreController(TEST_CWD)
 			await controller.initialize()
 
 			// Mock validateAccess to control which files are ignored
@@ -143,13 +143,13 @@ describe("RooIgnore Response Formatting", () => {
 				"secrets/keys.json", // ignored
 			]
 
-			// Format with controller and showRooIgnoredFiles = false
+			// Format with controller and showMojoIgnoredFiles = false
 			const result = formatResponse.formatFilesList(
 				TEST_CWD,
 				files,
 				false,
 				controller as any,
-				false, // showRooIgnoredFiles = false
+				false, // showMojoIgnoredFiles = false
 			)
 
 			// Should contain allowed files
@@ -168,11 +168,11 @@ describe("RooIgnore Response Formatting", () => {
 		})
 
 		/**
-		 * Tests formatFilesList handles truncation correctly with RooIgnoreController
+		 * Tests formatFilesList handles truncation correctly with MojoIgnoreController
 		 */
-		it("should handle truncation with RooIgnoreController", async () => {
+		it("should handle truncation with MojoIgnoreController", async () => {
 			// Create controller
-			const controller = new RooIgnoreController(TEST_CWD)
+			const controller = new MojoIgnoreController(TEST_CWD)
 			await controller.initialize()
 
 			// Format with controller and truncation flag
@@ -192,9 +192,9 @@ describe("RooIgnore Response Formatting", () => {
 		/**
 		 * Tests formatFilesList handles empty results
 		 */
-		it("should handle empty file list with RooIgnoreController", async () => {
+		it("should handle empty file list with MojoIgnoreController", async () => {
 			// Create controller
-			const controller = new RooIgnoreController(TEST_CWD)
+			const controller = new MojoIgnoreController(TEST_CWD)
 			await controller.initialize()
 
 			// Format with empty files array
@@ -209,16 +209,16 @@ describe("RooIgnore Response Formatting", () => {
 		/**
 		 * Tests the instructions format
 		 */
-		it("should format .rooignore instructions for the LLM", async () => {
+		it("should format .Mojoignore instructions for the LLM", async () => {
 			// Create controller
-			const controller = new RooIgnoreController(TEST_CWD)
+			const controller = new MojoIgnoreController(TEST_CWD)
 			await controller.initialize()
 
 			// Get instructions
 			const instructions = controller.getInstructions()
 
 			// Verify format and content
-			expect(instructions).toContain("# .rooignore")
+			expect(instructions).toContain("# .Mojoignore")
 			expect(instructions).toContain(LOCK_TEXT_SYMBOL)
 			expect(instructions).toContain("node_modules")
 			expect(instructions).toContain(".git")
@@ -233,12 +233,12 @@ describe("RooIgnore Response Formatting", () => {
 		/**
 		 * Tests null/undefined case
 		 */
-		it("should return undefined when no .rooignore exists", async () => {
-			// Set up no .rooignore
+		it("should return undefined when no .Mojoignore exists", async () => {
+			// Set up no .Mojoignore
 			mockFileExists.mockResolvedValue(false)
 
-			// Create controller without .rooignore
-			const controller = new RooIgnoreController(TEST_CWD)
+			// Create controller without .Mojoignore
+			const controller = new MojoIgnoreController(TEST_CWD)
 			await controller.initialize()
 
 			// Should return undefined

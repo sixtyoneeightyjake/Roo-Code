@@ -8,14 +8,14 @@ const tips = [
 	{
 		icon: "codicon-account",
 		href: buildDocLink("basic-usage/using-modes", "tips"),
-		titleKey: "rooTips.customizableModes.title",
-		descriptionKey: "rooTips.customizableModes.description",
+		titleKey: "rootips.customizableModes.title",
+		descriptionKey: "rootips.customizableModes.description",
 	},
 	{
 		icon: "codicon-list-tree",
 		href: buildDocLink("features/boomerang-tasks", "tips"),
-		titleKey: "rooTips.boomerangTasks.title",
-		descriptionKey: "rooTips.boomerangTasks.description",
+		titleKey: "rootips.boomerangTasks.title",
+		descriptionKey: "rootips.boomerangTasks.description",
 	},
 ]
 

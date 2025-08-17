@@ -2,7 +2,7 @@ import { useState, memo } from "react"
 import { Trans } from "react-i18next"
 import { VSCodeLink } from "@vscode/webview-ui-toolkit/react"
 
-import { Package } from "@roo/package"
+import { Package } from "@Mojo/package"
 
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@src/components/ui"
@@ -105,11 +105,11 @@ const Announcement = ({ hideAnnouncement }: AnnouncementProps) => {
 
 const DiscordLink = () => (
 	<VSCodeLink
-		href="https://discord.gg/roocode"
+		href="https://discord.gg/Mojocode"
 		onClick={(e) => {
 			e.preventDefault()
 			window.postMessage(
-				{ type: "action", action: "openExternal", data: { url: "https://discord.gg/roocode" } },
+				{ type: "action", action: "openExternal", data: { url: "https://discord.gg/Mojocode" } },
 				"*",
 			)
 		}}>
@@ -119,11 +119,11 @@ const DiscordLink = () => (
 
 const RedditLink = () => (
 	<VSCodeLink
-		href="https://reddit.com/r/RooCode"
+		href="https://reddit.com/r/MojoCode"
 		onClick={(e) => {
 			e.preventDefault()
 			window.postMessage(
-				{ type: "action", action: "openExternal", data: { url: "https://reddit.com/r/RooCode" } },
+				{ type: "action", action: "openExternal", data: { url: "https://reddit.com/r/MojoCode" } },
 				"*",
 			)
 		}}>

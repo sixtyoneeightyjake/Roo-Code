@@ -6,13 +6,13 @@ import {
 	type ModelInfo,
 	type ReasoningEffortWithMinimal,
 	reasoningEfforts,
-} from "@roo-code/types"
+} from "@Mojo-code/types"
 
 import {
 	DEFAULT_HYBRID_REASONING_MODEL_MAX_TOKENS,
 	DEFAULT_HYBRID_REASONING_MODEL_THINKING_TOKENS,
 	GEMINI_25_PRO_MIN_THINKING_TOKENS,
-} from "@roo/api"
+} from "@Mojo/api"
 
 import { useAppTranslation } from "@src/i18n/TranslationContext"
 import { Slider, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@src/components/ui"

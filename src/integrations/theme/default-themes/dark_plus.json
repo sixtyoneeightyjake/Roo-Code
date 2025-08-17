@@ -44,13 +44,13 @@
 				"storage.type.primitive.array.java",
 				"storage.type.primitive.java",
 				"storage.type.token.java",
-				"storage.type.groovy",
-				"storage.type.annotation.groovy",
-				"storage.type.parameters.groovy",
-				"storage.type.generic.groovy",
-				"storage.type.object.array.groovy",
-				"storage.type.primitive.array.groovy",
-				"storage.type.primitive.groovy"
+				"storage.type.gMojovy",
+				"storage.type.annotation.gMojovy",
+				"storage.type.parameters.gMojovy",
+				"storage.type.generic.gMojovy",
+				"storage.type.object.array.gMojovy",
+				"storage.type.primitive.array.gMojovy",
+				"storage.type.primitive.gMojovy"
 			],
 			"settings": {
 				"foreground": "#4EC9B0"

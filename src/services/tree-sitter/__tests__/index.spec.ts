@@ -200,7 +200,7 @@ export const CheckboxExample = () => (
 				const indent = "  ".repeat(depth)
 
 				// Print node details
-				result += `${indent}Type: ${node.type || "ROOT"}\n`
+				result += `${indent}Type: ${node.type || "root"}\n`
 				result += `${indent}Text: "${node.text ? node.text() : "root"}"`
 
 				// Print fields if available
@@ -219,7 +219,7 @@ export const CheckboxExample = () => (
 				return result
 			}
 
-			const mockRootNode: TreeNode = {
+			const mockrootNode: TreeNode = {
 				toString: () => fixtureContent,
 				text: () => fixtureContent,
 				printTree: function (depth = 0) {
@@ -270,7 +270,7 @@ export const CheckboxExample = () => (
 
 			const mockParser = {
 				parse: vi.fn().mockReturnValue({
-					rootNode: mockRootNode,
+					rootNode: mockrootNode,
 				}),
 			}
 
@@ -278,10 +278,10 @@ export const CheckboxExample = () => (
 				captures: vi.fn().mockImplementation(() => {
 					// Log tree structure for debugging
 					console.log("TREE STRUCTURE:")
-					if (mockRootNode.printTree) {
-						console.log(mockRootNode.printTree())
+					if (mockrootNode.printTree) {
+						console.log(mockrootNode.printTree())
 					} else {
-						console.log("Tree structure:", JSON.stringify(mockRootNode, null, 2))
+						console.log("Tree structure:", JSON.stringify(mockrootNode, null, 2))
 					}
 
 					return [

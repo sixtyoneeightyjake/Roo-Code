@@ -11,7 +11,7 @@ import {
 	type ReasoningEffort,
 	type VerbosityLevel,
 	type ReasoningEffortWithMinimal,
-} from "@roo-code/types"
+} from "@Mojo-code/types"
 
 import type { ApiHandlerOptions } from "../../shared/api"
 
@@ -265,7 +265,7 @@ export class OpenAiNativeHandler extends BaseProvider implements SingleCompletio
 		})
 
 		// Build a request body (also used for fallback)
-		// Ensure we explicitly pass max_output_tokens for GPT‑5 based on Roo's reserved model response calculation
+		// Ensure we explicitly pass max_output_tokens for GPT‑5 based on Mojo's reserved model response calculation
 		// so requests do not default to very large limits (e.g., 120k).
 		interface Gpt5RequestBody {
 			model: string
@@ -291,7 +291,7 @@ export class OpenAiNativeHandler extends BaseProvider implements SingleCompletio
 			text: { verbosity: (verbosity || "medium") as VerbosityLevel },
 			temperature: this.options.modelTemperature ?? GPT5_DEFAULT_TEMPERATURE,
 			// Explicitly include the calculated max output tokens for GPT‑5.
-			// Use the per-request reserved output computed by Roo (params.maxTokens from getModelParams).
+			// Use the per-request reserved output computed by Mojo (params.maxTokens from getModelParams).
 			...(model.maxTokens ? { max_output_tokens: model.maxTokens } : {}),
 			...(requestPreviousResponseId && { previous_response_id: requestPreviousResponseId }),
 		}

@@ -49,9 +49,9 @@ import {
 	ioIntelligenceDefaultModelId,
 	ioIntelligenceModels,
 	BEDROCK_CLAUDE_SONNET_4_MODEL_ID,
-} from "@roo-code/types"
+} from "@Mojo-code/types"
 
-import type { ModelRecord, RouterModels } from "@roo/api"
+import type { ModelRecord, RouterModels } from "@Mojo/api"
 
 import { useRouterModels } from "./useRouterModels"
 import { useOpenRouterModelProviders } from "./useOpenRouterModelProviders"

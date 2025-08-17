@@ -1,11 +1,9 @@
-// npx vitest core/webview/__tests__/ClineProvider.sticky-mode.spec.ts
-
 import * as vscode from "vscode"
-import { TelemetryService } from "@roo-code/telemetry"
+import { TelemetryService } from "@Mojo-code/telemetry"
 import { ClineProvider } from "../ClineProvider"
 import { ContextProxy } from "../../config/ContextProxy"
 import { Task } from "../../task/Task"
-import type { HistoryItem, ProviderName } from "@roo-code/types"
+import type { HistoryItem, ProviderName } from "@Mojo-code/types"
 
 vi.mock("vscode", () => ({
 	ExtensionContext: vi.fn(),
@@ -70,7 +68,7 @@ vi.mock("../../task/Task", () => ({
 		getTaskNumber: vi.fn().mockReturnValue(0),
 		setTaskNumber: vi.fn(),
 		setParentTask: vi.fn(),
-		setRootTask: vi.fn(),
+		setrootTask: vi.fn(),
 		emit: vi.fn(),
 		parentTask: options.parentTask,
 	})),
@@ -104,21 +102,7 @@ vi.mock("../../diff/strategies/multi-search-replace", () => ({
 	})),
 }))
 
-vi.mock("@roo-code/cloud", () => ({
-	CloudService: {
-		hasInstance: vi.fn().mockReturnValue(true),
-		get instance() {
-			return {
-				isAuthenticated: vi.fn().mockReturnValue(false),
-			}
-		},
-	},
-	getRooCodeApiUrl: vi.fn().mockReturnValue("https://app.roocode.com"),
-	ORGANIZATION_ALLOW_ALL: {
-		allowAll: true,
-		providers: {},
-	},
-}))
+// Removed cloud functionality mock
 
 vi.mock("../../../shared/modes", () => ({
 	modes: [
@@ -170,7 +154,7 @@ vi.mock("fs/promises", () => ({
 	rmdir: vi.fn().mockResolvedValue(undefined),
 }))
 
-vi.mock("@roo-code/telemetry", () => ({
+vi.mock("@Mojo-code/telemetry", () => ({
 	TelemetryService: {
 		hasInstance: vi.fn().mockReturnValue(true),
 		createInstance: vi.fn(),

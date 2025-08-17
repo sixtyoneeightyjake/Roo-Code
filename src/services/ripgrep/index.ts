@@ -4,7 +4,7 @@ import * as readline from "readline"
 
 import * as vscode from "vscode"
 
-import { RooIgnoreController } from "../../core/ignore/RooIgnoreController"
+import { MojoIgnoreController } from "../../core/ignore/RooIgnoreController"
 import { fileExistsAtPath } from "../../utils/fs"
 /*
 This file provides functionality to perform regex searches on files using ripgrep.
@@ -82,9 +82,9 @@ export function truncateLine(line: string, maxLength: number = MAX_LINE_LENGTH):
 /**
  * Get the path to the ripgrep binary within the VSCode installation
  */
-export async function getBinPath(vscodeAppRoot: string): Promise<string | undefined> {
+export async function getBinPath(vscodeApproot: string): Promise<string | undefined> {
 	const checkPath = async (pkgFolder: string) => {
-		const fullPath = path.join(vscodeAppRoot, pkgFolder, binName)
+		const fullPath = path.join(vscodeApproot, pkgFolder, binName)
 		return (await fileExistsAtPath(fullPath)) ? fullPath : undefined
 	}
 
@@ -141,10 +141,10 @@ export async function regexSearchFiles(
 	directoryPath: string,
 	regex: string,
 	filePattern?: string,
-	rooIgnoreController?: RooIgnoreController,
+	MojoIgnoreController?: MojoIgnoreController,
 ): Promise<string> {
-	const vscodeAppRoot = vscode.env.appRoot
-	const rgPath = await getBinPath(vscodeAppRoot)
+	const vscodeApproot = vscode.env.appRoot
+	const rgPath = await getBinPath(vscodeApproot)
 
 	if (!rgPath) {
 		throw new Error("Could not find ripgrep binary")
@@ -212,9 +212,9 @@ export async function regexSearchFiles(
 
 	// console.log(results)
 
-	// Filter results using RooIgnoreController if provided
-	const filteredResults = rooIgnoreController
-		? results.filter((result) => rooIgnoreController.validateAccess(result.file))
+	// Filter results using MojoIgnoreController if provided
+	const filteredResults = MojoIgnoreController
+		? results.filter((result) => MojoIgnoreController.validateAccess(result.file))
 		: results
 
 	return formatResults(filteredResults, cwd)

@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from "@/utils/test-utils"
 import { vi, describe, it, expect, beforeEach } from "vitest"
 import { TaskActions } from "../TaskActions"
-import type { HistoryItem } from "@roo-code/types"
+import type { HistoryItem } from "@Mojo-code/types"
 import { vscode } from "@/utils/vscode"
 import { useExtensionState } from "@/context/ExtensionStateContext"
 
@@ -39,10 +39,10 @@ vi.mock("react-i18next", () => ({
 				"chat:task.sharePublicly": "Share Publicly",
 				"chat:task.sharePubliclyDescription": "Anyone with the link can access",
 				"chat:task.connectToCloud": "Connect to Cloud",
-				"chat:task.connectToCloudDescription": "Sign in to Roo Code Cloud to share tasks",
+				"chat:task.connectToCloudDescription": "Sign in to Mojo Code Cloud to share tasks",
 				"chat:task.sharingDisabledByOrganization": "Sharing disabled by organization",
-				"account:cloudBenefitsTitle": "Connect to Roo Code Cloud",
-				"account:cloudBenefitsSubtitle": "Sign in to Roo Code Cloud to share tasks",
+				"account:cloudBenefitsTitle": "Connect to Mojo Code Cloud",
+				"account:cloudBenefitsSubtitle": "Sign in to Mojo Code Cloud to share tasks",
 				"account:cloudBenefitHistory": "Access your task history from anywhere",
 				"account:cloudBenefitSharing": "Share tasks with your team",
 				"account:cloudBenefitMetrics": "Track usage and costs",
@@ -195,8 +195,8 @@ describe("TaskActions", () => {
 			const shareButton = screen.getByTestId("share-button")
 			fireEvent.click(shareButton)
 
-			expect(screen.getByText("Connect to Roo Code Cloud")).toBeInTheDocument()
-			expect(screen.getByText("Sign in to Roo Code Cloud to share tasks")).toBeInTheDocument()
+			expect(screen.getByText("Connect to Mojo Code Cloud")).toBeInTheDocument()
+			expect(screen.getByText("Sign in to Mojo Code Cloud to share tasks")).toBeInTheDocument()
 			expect(screen.getByText("Connect")).toBeInTheDocument()
 		})
 
@@ -211,20 +211,7 @@ describe("TaskActions", () => {
 			expect(screen.queryByText("Share Publicly")).not.toBeInTheDocument()
 		})
 
-		it("sends rooCloudSignIn message when connect to cloud is selected", () => {
-			render(<TaskActions item={mockItem} buttonsDisabled={false} />)
 
-			// Find share button by its test ID and click it
-			const shareButton = screen.getByTestId("share-button")
-			fireEvent.click(shareButton)
-
-			const connectOption = screen.getByText("Connect")
-			fireEvent.click(connectOption)
-
-			expect(mockPostMessage).toHaveBeenCalledWith({
-				type: "rooCloudSignIn",
-			})
-		})
 	})
 
 	describe("Mixed Authentication States", () => {
@@ -259,7 +246,7 @@ describe("TaskActions", () => {
 			// Verify popover is not open initially
 			expect(screen.queryByText("Share with Organization")).not.toBeInTheDocument()
 
-			// Simulate user becoming authenticated (e.g., from AccountView)
+			// Simulate user becoming authenticated
 			mockUseExtensionState.mockReturnValue({
 				sharingEnabled: true,
 				cloudIsAuthenticated: true,
@@ -273,44 +260,6 @@ describe("TaskActions", () => {
 			// Verify popover does NOT automatically open when auth happens from elsewhere
 			expect(screen.queryByText("Share with Organization")).not.toBeInTheDocument()
 			expect(screen.queryByText("Share Publicly")).not.toBeInTheDocument()
-		})
-
-		it("automatically opens popover when user authenticates from share button", () => {
-			// Start with unauthenticated state
-			mockUseExtensionState.mockReturnValue({
-				sharingEnabled: false,
-				cloudIsAuthenticated: false,
-			} as any)
-
-			const { rerender } = render(<TaskActions item={mockItem} buttonsDisabled={false} />)
-
-			// Click share button to open connect modal
-			const shareButton = screen.getByTestId("share-button")
-			fireEvent.click(shareButton)
-
-			// Click connect button to initiate authentication
-			const connectButton = screen.getByText("Connect")
-			fireEvent.click(connectButton)
-
-			// Verify rooCloudSignIn message was sent
-			expect(mockPostMessage).toHaveBeenCalledWith({
-				type: "rooCloudSignIn",
-			})
-
-			// Simulate user becoming authenticated after clicking connect from share button
-			mockUseExtensionState.mockReturnValue({
-				sharingEnabled: true,
-				cloudIsAuthenticated: true,
-				cloudUserInfo: {
-					organizationName: "Test Organization",
-				},
-			} as any)
-
-			rerender(<TaskActions item={mockItem} buttonsDisabled={false} />)
-
-			// Verify popover automatically opens when auth was initiated from share button
-			expect(screen.getByText("Share with Organization")).toBeInTheDocument()
-			expect(screen.getByText("Share Publicly")).toBeInTheDocument()
 		})
 	})
 

@@ -71,13 +71,13 @@ export function sourcemapPlugin(): Plugin {
 							fs.writeFileSync(jsPath, jsContent)
 						}
 
-						// Make sure map file is in the correct format and has proper sourceRoot
+						// Make sure map file is in the correct format and has proper sourceroot
 						try {
 							const mapContent = JSON.parse(fs.readFileSync(mapPath, "utf8"))
 
-							// Ensure the sourceRoot is set correctly for VSCode webview
-							if (!mapContent.sourceRoot) {
-								mapContent.sourceRoot = ""
+							// Ensure the sourceroot is set correctly for VSCode webview
+							if (!mapContent.sourceroot) {
+								mapContent.sourceroot = ""
 							}
 
 							// Make sure "sources" paths are relative

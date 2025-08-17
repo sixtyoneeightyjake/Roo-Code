@@ -7,10 +7,10 @@ import { IconButton } from "./IconButton"
 import { vscode } from "@/utils/vscode"
 import { useExtensionState } from "@/context/ExtensionStateContext"
 import { useAppTranslation } from "@/i18n/TranslationContext"
-import { Mode, getAllModes } from "@roo/modes"
-import { ModeConfig, CustomModePrompts } from "@roo-code/types"
+import { Mode, getAllModes } from "@Mojo/modes"
+import { ModeConfig, CustomModePrompts } from "@Mojo-code/types"
 import { telemetryClient } from "@/utils/TelemetryClient"
-import { TelemetryEventName } from "@roo-code/types"
+import { TelemetryEventName } from "@Mojo-code/types"
 import { Fzf } from "fzf"
 
 // Minimum number of modes required to show search functionality
@@ -42,7 +42,7 @@ export const ModeSelector = ({
 	const [open, setOpen] = React.useState(false)
 	const [searchValue, setSearchValue] = React.useState("")
 	const searchInputRef = React.useRef<HTMLInputElement>(null)
-	const portalContainer = useRooPortal("roo-portal")
+	const portalContainer = useRooPortal("root-portal")
 	const { hasOpenedModeSelector, setHasOpenedModeSelector } = useExtensionState()
 	const { t } = useAppTranslation()
 

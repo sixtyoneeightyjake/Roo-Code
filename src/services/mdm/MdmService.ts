@@ -4,7 +4,7 @@ import * as os from "os"
 import * as vscode from "vscode"
 import { z } from "zod"
 
-import { CloudService, getClerkBaseUrl, PRODUCTION_CLERK_BASE_URL } from "@roo-code/cloud"
+// Cloud imports removed - cloud functionality has been removed
 import { Package } from "../../shared/package"
 import { t } from "../../i18n"
 
@@ -60,58 +60,11 @@ export class MdmService {
 
 	/**
 	 * Check if the current state is compliant with MDM policy
+	 * Note: Cloud authentication functionality has been removed
 	 */
 	public isCompliant(): ComplianceResult {
-		// If no MDM policy, always compliant
-		if (!this.requiresCloudAuth()) {
-			return { compliant: true }
-		}
-
-		// Check if cloud service is available and has active or attempting session
-		if (!CloudService.hasInstance() || !CloudService.instance.hasOrIsAcquiringActiveSession()) {
-			return {
-				compliant: false,
-				reason: t("mdm.errors.cloud_auth_required"),
-			}
-		}
-
-		// Check organization match if specified
-		const requiredOrgId = this.getRequiredOrganizationId()
-		if (requiredOrgId) {
-			try {
-				// First try to get from active session
-				let currentOrgId = CloudService.instance.getOrganizationId()
-
-				// If no active session, check stored credentials
-				if (!currentOrgId) {
-					const storedOrgId = CloudService.instance.getStoredOrganizationId()
-
-					// null means personal account, which is not compliant for org requirements
-					if (storedOrgId === null || storedOrgId !== requiredOrgId) {
-						return {
-							compliant: false,
-							reason: t("mdm.errors.organization_mismatch"),
-						}
-					}
-
-					currentOrgId = storedOrgId
-				}
-
-				if (currentOrgId !== requiredOrgId) {
-					return {
-						compliant: false,
-						reason: t("mdm.errors.organization_mismatch"),
-					}
-				}
-			} catch (error) {
-				this.log("[MDM] Error checking organization ID:", error)
-				return {
-					compliant: false,
-					reason: t("mdm.errors.verification_failed"),
-				}
-			}
-		}
-
+		// Cloud service integration has been removed
+		// MDM policies requiring cloud authentication are no longer supported
 		return { compliant: true }
 	}
 
@@ -144,24 +97,24 @@ export class MdmService {
 	 */
 	private getMdmConfigPath(): string {
 		const platform = os.platform()
-		const isProduction = getClerkBaseUrl() === PRODUCTION_CLERK_BASE_URL
-		const configFileName = isProduction ? "mdm.json" : "mdm.dev.json"
+		// Cloud service integration removed - defaulting to development config
+		const configFileName = "mdm.dev.json"
 
 		switch (platform) {
 			case "win32": {
-				// Windows: %ProgramData%\RooCode\mdm.json or mdm.dev.json
+				// Windows: %ProgramData%\MojoCode\mdm.json or mdm.dev.json
 				const programData = process.env.PROGRAMDATA || "C:\\ProgramData"
-				return path.join(programData, "RooCode", configFileName)
+				return path.join(programData, "MojoCode", configFileName)
 			}
 
 			case "darwin":
-				// macOS: /Library/Application Support/RooCode/mdm.json or mdm.dev.json
-				return `/Library/Application Support/RooCode/${configFileName}`
+				// macOS: /Library/Application Support/MojoCode/mdm.json or mdm.dev.json
+				return `/Library/Application Support/MojoCode/${configFileName}`
 
 			case "linux":
 			default:
-				// Linux: /etc/roo-code/mdm.json or mdm.dev.json
-				return `/etc/roo-code/${configFileName}`
+				// Linux: /etc/Mojo-code/mdm.json or mdm.dev.json
+				return `/etc/Mojo-code/${configFileName}`
 		}
 	}
 

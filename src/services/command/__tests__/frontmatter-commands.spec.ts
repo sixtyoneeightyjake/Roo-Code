@@ -5,9 +5,9 @@ import { getCommand, getCommands } from "../commands"
 
 // Mock fs and path modules
 vi.mock("fs/promises")
-vi.mock("../roo-config", () => ({
-	getGlobalRooDirectory: vi.fn(() => "/mock/global/.roo"),
-	getProjectRooDirectoryForCwd: vi.fn(() => "/mock/project/.roo"),
+vi.mock("../Mojo-config", () => ({
+	getGlobalMojoDirectory: vi.fn(() => "/mock/global/.Mojo"),
+	getProjectMojoDirectoryForCwd: vi.fn(() => "/mock/project/.Mojo"),
 }))
 
 const mockFs = vi.mocked(fs)
@@ -41,7 +41,7 @@ npm run build
 				name: "setup",
 				content: "# Setup Command\n\nRun the following commands:\n```bash\nnpm install\nnpm run build\n```",
 				source: "project",
-				filePath: path.join("/test/cwd", ".roo", "commands", "setup.md"),
+				filePath: path.join("/test/cwd", ".Mojo", "commands", "setup.md"),
 				description: "Sets up the development environment",
 				argumentHint: undefined,
 			})
@@ -65,7 +65,7 @@ npm run build
 				name: "setup",
 				content: "# Setup Command\n\nRun the following commands:\n```bash\nnpm install\nnpm run build\n```",
 				source: "project",
-				filePath: path.join("/test/cwd", ".roo", "commands", "setup.md"),
+				filePath: path.join("/test/cwd", ".Mojo", "commands", "setup.md"),
 				description: undefined,
 				argumentHint: undefined,
 			})
@@ -108,7 +108,7 @@ Command content here.`
 				name: "setup",
 				content: commandContent.trim(),
 				source: "project",
-				filePath: path.join("/test/cwd", ".roo", "commands", "setup.md"),
+				filePath: path.join("/test/cwd", ".Mojo", "commands", "setup.md"),
 				description: undefined,
 				argumentHint: undefined,
 			})
@@ -143,7 +143,7 @@ Global setup instructions.`
 				name: "setup",
 				content: "# Project Setup\n\nProject-specific setup instructions.",
 				source: "project",
-				filePath: path.join("/test/cwd", ".roo", "commands", "setup.md"),
+				filePath: path.join("/test/cwd", ".Mojo", "commands", "setup.md"),
 				description: "Project-specific setup",
 				argumentHint: undefined,
 			})
@@ -170,7 +170,7 @@ Global setup instructions.`
 				name: "setup",
 				content: "# Global Setup\n\nGlobal setup instructions.",
 				source: "global",
-				filePath: expect.stringContaining(path.join(".roo", "commands", "setup.md")),
+				filePath: expect.stringContaining(path.join(".Mojo", "commands", "setup.md")),
 				description: "Global setup command",
 				argumentHint: undefined,
 			})
@@ -180,7 +180,7 @@ Global setup instructions.`
 	describe("argument-hint functionality", () => {
 		it("should load command with argument-hint from frontmatter", async () => {
 			const commandContent = `---
-description: Create a new release of the Roo Code extension
+description: Create a new release of the Mojo Code extension
 argument-hint: patch | minor | major
 ---
 
@@ -197,8 +197,8 @@ Create a new release.`
 				name: "release",
 				content: "# Release Command\n\nCreate a new release.",
 				source: "project",
-				filePath: path.join("/test/cwd", ".roo", "commands", "release.md"),
-				description: "Create a new release of the Roo Code extension",
+				filePath: path.join("/test/cwd", ".Mojo", "commands", "release.md"),
+				description: "Create a new release of the Mojo Code extension",
 				argumentHint: "patch | minor | major",
 			})
 		})
@@ -223,7 +223,7 @@ Deploy the application.`
 				name: "deploy",
 				content: "# Deploy Command\n\nDeploy the application.",
 				source: "project",
-				filePath: path.join("/test/cwd", ".roo", "commands", "deploy.md"),
+				filePath: path.join("/test/cwd", ".Mojo", "commands", "deploy.md"),
 				description: "Deploy application to environment",
 				argumentHint: "staging | production",
 			})

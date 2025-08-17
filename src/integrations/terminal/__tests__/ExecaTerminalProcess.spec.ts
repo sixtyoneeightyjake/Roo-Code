@@ -23,10 +23,10 @@ vitest.mock("ps-tree", () => ({
 
 import { execa } from "execa"
 import { ExecaTerminalProcess } from "../ExecaTerminalProcess"
-import type { RooTerminal } from "../types"
+import type { rooterminal } from "../types"
 
 describe("ExecaTerminalProcess", () => {
-	let mockTerminal: RooTerminal
+	let mockTerminal: rooterminal
 	let terminalProcess: ExecaTerminalProcess
 	let originalEnv: NodeJS.ProcessEnv
 
@@ -46,7 +46,7 @@ describe("ExecaTerminalProcess", () => {
 			getUnretrievedOutput: vitest.fn().mockReturnValue(""),
 			getLastCommand: vitest.fn().mockReturnValue(""),
 			cleanCompletedProcessQueue: vitest.fn(),
-		} as unknown as RooTerminal
+		} as unknown as rooterminal
 		terminalProcess = new ExecaTerminalProcess(mockTerminal)
 	})
 

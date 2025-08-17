@@ -122,7 +122,7 @@ function ensureFirstLevelDirectoriesIncluded(
 		return [results, true]
 	}
 
-	// We need to make room for the missing directories
+	// We need to make Mojom for the missing directories
 	// Remove items from the end (which are likely deeper in the tree)
 	const itemsToRemove = Math.min(missingDirs.length, results.length)
 	const adjustedResults = results.slice(0, results.length - itemsToRemove)
@@ -161,8 +161,8 @@ async function handleSpecialDirectories(dirPath: string): Promise<[string[], boo
 
 	// Do not allow listing files in root directory
 	const root = process.platform === "win32" ? path.parse(absolutePath).root : "/"
-	const isRoot = arePathsEqual(absolutePath, root)
-	if (isRoot) {
+	const isroot = arePathsEqual(absolutePath, root)
+	if (isroot) {
 		return [[root], false]
 	}
 
@@ -180,8 +180,8 @@ async function handleSpecialDirectories(dirPath: string): Promise<[string[], boo
  * Get the path to the ripgrep binary
  */
 async function getRipgrepPath(): Promise<string> {
-	const vscodeAppRoot = vscode.env.appRoot
-	const rgPath = await getBinPath(vscodeAppRoot)
+	const vscodeApproot = vscode.env.approot
+	const rgPath = await getBinPath(vscodeApproot)
 
 	if (!rgPath) {
 		throw new Error("Could not find ripgrep binary")
@@ -548,7 +548,7 @@ function shouldIncludeRegularDirectory(dirName: string, fullDirPath: string, con
  */
 function shouldIncludeDirectory(dirName: string, fullDirPath: string, context: ScanContext): boolean {
 	// If this is the explicitly targeted directory, allow it even if it's hidden
-	// This preserves the ability to explicitly target hidden directories like .roo-memory
+	// This preserves the ability to explicitly target hidden directories like .Mojo-memory
 	if (context.isTargetDir) {
 		return shouldIncludeTargetDirectory(dirName)
 	}

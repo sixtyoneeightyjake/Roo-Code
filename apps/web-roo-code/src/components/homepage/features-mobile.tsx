@@ -13,7 +13,7 @@ export function FeaturesMobile() {
 		delay: 5000,
 		stopOnInteraction: true,
 		stopOnMouseEnter: true,
-		rootNode: (emblaRoot) => emblaRoot,
+		rootNode: (emblaroot) => emblaroot,
 	})
 
 	const [emblaRef, emblaApi] = useEmblaCarousel(

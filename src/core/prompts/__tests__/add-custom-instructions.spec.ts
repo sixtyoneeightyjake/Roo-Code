@@ -45,7 +45,7 @@ vi.mock("fs/promises")
 
 import * as vscode from "vscode"
 
-import { ModeConfig } from "@roo-code/types"
+import { ModeConfig } from "@Mojo-code/types"
 
 import { SYSTEM_PROMPT } from "../system"
 import { McpHub } from "../../../services/mcp/McpHub"
@@ -205,7 +205,7 @@ describe("addCustomInstructions", () => {
 			undefined, // experiments
 			true, // enableMcpServerCreation
 			undefined, // language
-			undefined, // rooIgnoreInstructions
+			undefined, // MojoIgnoreInstructions
 			undefined, // partialReadsEnabled
 		)
 
@@ -228,7 +228,7 @@ describe("addCustomInstructions", () => {
 			undefined, // experiments
 			true, // enableMcpServerCreation
 			undefined, // language
-			undefined, // rooIgnoreInstructions
+			undefined, // MojoIgnoreInstructions
 			undefined, // partialReadsEnabled
 		)
 
@@ -253,7 +253,7 @@ describe("addCustomInstructions", () => {
 			undefined, // experiments
 			true, // enableMcpServerCreation
 			undefined, // language
-			undefined, // rooIgnoreInstructions
+			undefined, // MojoIgnoreInstructions
 			undefined, // partialReadsEnabled
 		)
 
@@ -279,7 +279,7 @@ describe("addCustomInstructions", () => {
 			undefined, // experiments
 			false, // enableMcpServerCreation
 			undefined, // language
-			undefined, // rooIgnoreInstructions
+			undefined, // MojoIgnoreInstructions
 			undefined, // partialReadsEnabled
 		)
 
@@ -303,7 +303,7 @@ describe("addCustomInstructions", () => {
 			undefined, // experiments
 			true, // enableMcpServerCreation
 			undefined, // language
-			undefined, // rooIgnoreInstructions
+			undefined, // MojoIgnoreInstructions
 			true, // partialReadsEnabled
 		)
 

@@ -1,34 +1,34 @@
 import EventEmitter from "events"
 
-export type RooTerminalProvider = "vscode" | "execa"
+export type rooterminalProvider = "vscode" | "execa"
 
-export interface RooTerminal {
-	provider: RooTerminalProvider
+export interface rooterminal {
+	provider: rooterminalProvider
 	id: number
 	busy: boolean
 	running: boolean
 	taskId?: string
-	process?: RooTerminalProcess
+	process?: rooterminalProcess
 	getCurrentWorkingDirectory(): string
 	isClosed: () => boolean
-	runCommand: (command: string, callbacks: RooTerminalCallbacks) => RooTerminalProcessResultPromise
+	runCommand: (command: string, callbacks: rooterminalCallbacks) => rooterminalProcessResultPromise
 	setActiveStream(stream: AsyncIterable<string> | undefined, pid?: number): void
 	shellExecutionComplete(exitDetails: ExitCodeDetails): void
-	getProcessesWithOutput(): RooTerminalProcess[]
+	getProcessesWithOutput(): rooterminalProcess[]
 	getUnretrievedOutput(): string
 	getLastCommand(): string
 	cleanCompletedProcessQueue(): void
 }
 
-export interface RooTerminalCallbacks {
-	onLine: (line: string, process: RooTerminalProcess) => void
-	onCompleted: (output: string | undefined, process: RooTerminalProcess) => void
-	onShellExecutionStarted: (pid: number | undefined, process: RooTerminalProcess) => void
-	onShellExecutionComplete: (details: ExitCodeDetails, process: RooTerminalProcess) => void
-	onNoShellIntegration?: (message: string, process: RooTerminalProcess) => void
+export interface rooterminalCallbacks {
+	onLine: (line: string, process: rooterminalProcess) => void
+	onCompleted: (output: string | undefined, process: rooterminalProcess) => void
+	onShellExecutionStarted: (pid: number | undefined, process: rooterminalProcess) => void
+	onShellExecutionComplete: (details: ExitCodeDetails, process: rooterminalProcess) => void
+	onNoShellIntegration?: (message: string, process: rooterminalProcess) => void
 }
 
-export interface RooTerminalProcess extends EventEmitter<RooTerminalProcessEvents> {
+export interface rooterminalProcess extends EventEmitter<rooterminalProcessEvents> {
 	command: string
 	isHot: boolean
 	run: (command: string) => Promise<void>
@@ -38,9 +38,9 @@ export interface RooTerminalProcess extends EventEmitter<RooTerminalProcessEvent
 	getUnretrievedOutput: () => string
 }
 
-export type RooTerminalProcessResultPromise = RooTerminalProcess & Promise<void>
+export type rooterminalProcessResultPromise = rooterminalProcess & Promise<void>
 
-export interface RooTerminalProcessEvents {
+export interface rooterminalProcessEvents {
 	line: [line: string]
 	continue: []
 	completed: [output?: string]

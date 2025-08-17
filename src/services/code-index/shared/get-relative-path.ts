@@ -5,12 +5,12 @@ import path from "path"
  * Handles path resolution and normalization to ensure consistent absolute paths.
  *
  * @param filePath - The file path to normalize (can be relative or absolute)
- * @param workspaceRoot - The root directory of the workspace (required)
+ * @param workspaceroot - The root directory of the workspace (required)
  * @returns The normalized absolute path
  */
-export function generateNormalizedAbsolutePath(filePath: string, workspaceRoot: string): string {
+export function generateNormalizedAbsolutePath(filePath: string, workspaceroot: string): string {
 	// Resolve the path to make it absolute if it's relative
-	const resolvedPath = path.resolve(workspaceRoot, filePath)
+	const resolvedPath = path.resolve(workspaceroot, filePath)
 	// Normalize to handle any . or .. segments and duplicate slashes
 	return path.normalize(resolvedPath)
 }
@@ -20,12 +20,12 @@ export function generateNormalizedAbsolutePath(filePath: string, workspaceRoot: 
  * Ensures consistent relative path generation across different platforms.
  *
  * @param normalizedAbsolutePath - The normalized absolute path to convert
- * @param workspaceRoot - The root directory of the workspace (required)
- * @returns The relative path from workspaceRoot to the file
+ * @param workspaceroot - The root directory of the workspace (required)
+ * @returns The relative path from workspaceroot to the file
  */
-export function generateRelativeFilePath(normalizedAbsolutePath: string, workspaceRoot: string): string {
+export function generateRelativeFilePath(normalizedAbsolutePath: string, workspaceroot: string): string {
 	// Generate the relative path
-	const relativePath = path.relative(workspaceRoot, normalizedAbsolutePath)
+	const relativePath = path.relative(workspaceroot, normalizedAbsolutePath)
 	// Normalize to ensure consistent path separators
 	return path.normalize(relativePath)
 }

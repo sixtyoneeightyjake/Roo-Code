@@ -8,8 +8,8 @@ import type {
 	Experiments,
 	ClineMessage,
 	MarketplaceItem,
-} from "@roo-code/types"
-import type { CloudUserInfo, OrganizationAllowList, ShareVisibility } from "@roo-code/cloud"
+} from "@Mojo-code/types"
+// Cloud functionality removed
 
 import { GitCommit } from "../utils/git"
 
@@ -128,7 +128,6 @@ export interface ExtensionMessage {
 		| "historyButtonClicked"
 		| "promptsButtonClicked"
 		| "marketplaceButtonClicked"
-		| "accountButtonClicked"
 		| "didBecomeVisible"
 		| "focusInput"
 		| "switchTab"
@@ -180,14 +179,14 @@ export interface ExtensionMessage {
 	value?: any
 	hasContent?: boolean // For checkRulesDirectoryResult
 	items?: MarketplaceItem[]
-	userInfo?: CloudUserInfo
-	organizationAllowList?: OrganizationAllowList
+	// Cloud functionality removed - userInfo field removed
+
 	tab?: string
 	marketplaceItems?: MarketplaceItem[]
 	organizationMcps?: MarketplaceItem[]
 	marketplaceInstalledMetadata?: MarketplaceInstalledMetadata
 	errors?: string[]
-	visibility?: ShareVisibility
+	// visibility?: ShareVisibility // Cloud functionality removed
 	rulesFolderPath?: string
 	settings?: any
 	messageTs?: number
@@ -234,7 +233,7 @@ export type ExtensionState = Pick<
 	| "soundVolume"
 	// | "maxOpenTabsContext" // Optional in GlobalSettings, required here.
 	// | "maxWorkspaceFiles" // Optional in GlobalSettings, required here.
-	// | "showRooIgnoredFiles" // Optional in GlobalSettings, required here.
+	// | "showMojoIgnoredFiles" // Optional in GlobalSettings, required here.
 	// | "maxReadFileLine" // Optional in GlobalSettings, required here.
 	| "maxConcurrentFileReads" // Optional in GlobalSettings, required here.
 	| "terminalOutputLineLimit"
@@ -286,7 +285,7 @@ export type ExtensionState = Pick<
 	enableCheckpoints: boolean
 	maxOpenTabsContext: number // Maximum number of VSCode open tabs to include in context (0-500)
 	maxWorkspaceFiles: number // Maximum number of files to include in current working directory details (0-500)
-	showRooIgnoredFiles: boolean // Whether to show .rooignore'd files in listings
+	showMojoIgnoredFiles: boolean // Whether to show .Mojoignore'd files in listings
 	maxReadFileLine: number // Maximum number of lines to read from a file before truncating
 	maxImageFileSize: number // Maximum size of image files to process in MB
 	maxTotalImageSize: number // Maximum total size for all images in a single read operation in MB
@@ -309,11 +308,8 @@ export type ExtensionState = Pick<
 	settingsImportedAt?: number
 	historyPreviewCollapsed?: boolean
 
-	cloudUserInfo: CloudUserInfo | null
-	cloudIsAuthenticated: boolean
-	cloudApiUrl?: string
-	sharingEnabled: boolean
-	organizationAllowList: OrganizationAllowList
+	// Cloud functionality removed - cloudUserInfo, cloudIsAuthenticated, cloudApiUrl, and sharingEnabled fields removed
+
 	organizationSettingsVersion?: number
 
 	autoCondenseContext: boolean

@@ -85,14 +85,14 @@ vi.mock("../Announcement", () => ({
 	},
 }))
 
-// Mock RooCloudCTA component
-vi.mock("@src/components/welcome/RooCloudCTA", () => ({
-	default: function MockRooCloudCTA() {
+// Mock MojoCloudCTA component
+vi.mock("@src/components/welcome/MojoCloudCTA", () => ({
+	default: function MockMojoCloudCTA() {
 		return (
-			<div data-testid="roo-cloud-cta">
-				<div>rooCloudCTA.title</div>
-				<div>rooCloudCTA.description</div>
-				<div>rooCloudCTA.joinWaitlist</div>
+			<div data-testid="Mojo-cloud-cta">
+				<div>MojoCloudCTA.title</div>
+				<div>MojoCloudCTA.description</div>
+				<div>MojoCloudCTA.joinWaitlist</div>
 			</div>
 		)
 	},
@@ -128,14 +128,14 @@ vi.mock("../QueuedMessages", () => ({
 // Mock RooTips component
 vi.mock("@src/components/welcome/RooTips", () => ({
 	default: function MockRooTips() {
-		return <div data-testid="roo-tips">Tips content</div>
+		return <div data-testid="Mojo-tips">Tips content</div>
 	},
 }))
 
-// Mock RooHero component
-vi.mock("@src/components/welcome/RooHero", () => ({
-	default: function MockRooHero() {
-		return <div data-testid="roo-hero">Hero content</div>
+// Mock MojoHero component
+vi.mock("@src/components/welcome/MojoHero", () => ({
+	default: function MockMojoHero() {
+		return <div data-testid="Mojo-hero">Hero content</div>
 	},
 }))
 
@@ -1273,10 +1273,10 @@ describe("ChatView - Version Indicator Tests", () => {
 	})
 })
 
-describe("ChatView - RooCloudCTA Display Tests", () => {
+describe("ChatView - MojoCloudCTA Display Tests", () => {
 	beforeEach(() => vi.clearAllMocks())
 
-	it("does not show RooCloudCTA when user is authenticated to Cloud", () => {
+	it("does not show MojoCloudCTA when user is authenticated to Cloud", () => {
 		const { queryByTestId } = renderChatView()
 
 		// Hydrate state with user authenticated to cloud
@@ -1291,11 +1291,11 @@ describe("ChatView - RooCloudCTA Display Tests", () => {
 			clineMessages: [], // No active task
 		})
 
-		// Should not show RooCloudCTA when authenticated
-		expect(queryByTestId("roo-cloud-cta")).not.toBeInTheDocument()
+		// Should not show MojoCloudCTA when authenticated
+		expect(queryByTestId("Mojo-cloud-cta")).not.toBeInTheDocument()
 	})
 
-	it("does not show RooCloudCTA when user has only run 3 tasks in their history", () => {
+	it("does not show MojoCloudCTA when user has only run 3 tasks in their history", () => {
 		const { queryByTestId } = renderChatView()
 
 		// Hydrate state with user not authenticated but only 3 tasks
@@ -1309,11 +1309,11 @@ describe("ChatView - RooCloudCTA Display Tests", () => {
 			clineMessages: [], // No active task
 		})
 
-		// Should not show RooCloudCTA with less than 4 tasks
-		expect(queryByTestId("roo-cloud-cta")).not.toBeInTheDocument()
+		// Should not show MojoCloudCTA with less than 4 tasks
+		expect(queryByTestId("Mojo-cloud-cta")).not.toBeInTheDocument()
 	})
 
-	it("shows RooCloudCTA when user is not authenticated and has run 4 or more tasks", async () => {
+	it("shows MojoCloudCTA when user is not authenticated and has run 4 or more tasks", async () => {
 		const { getByTestId } = renderChatView()
 
 		// Hydrate state with user not authenticated and 4 tasks
@@ -1328,13 +1328,13 @@ describe("ChatView - RooCloudCTA Display Tests", () => {
 			clineMessages: [], // No active task
 		})
 
-		// Wait for component to render and show RooCloudCTA
+		// Wait for component to render and show MojoCloudCTA
 		await waitFor(() => {
-			expect(getByTestId("roo-cloud-cta")).toBeInTheDocument()
+			expect(getByTestId("Mojo-cloud-cta")).toBeInTheDocument()
 		})
 	})
 
-	it("shows RooCloudCTA when user is not authenticated and has run 5 tasks", async () => {
+	it("shows MojoCloudCTA when user is not authenticated and has run 5 tasks", async () => {
 		const { getByTestId } = renderChatView()
 
 		// Hydrate state with user not authenticated and 5 tasks
@@ -1350,13 +1350,13 @@ describe("ChatView - RooCloudCTA Display Tests", () => {
 			clineMessages: [], // No active task
 		})
 
-		// Wait for component to render and show RooCloudCTA
+		// Wait for component to render and show MojoCloudCTA
 		await waitFor(() => {
-			expect(getByTestId("roo-cloud-cta")).toBeInTheDocument()
+			expect(getByTestId("Mojo-cloud-cta")).toBeInTheDocument()
 		})
 	})
 
-	it("does not show RooCloudCTA when there is an active task (regardless of auth status)", async () => {
+	it("does not show MojoCloudCTA when there is an active task (regardless of auth status)", async () => {
 		const { queryByTestId } = renderChatView()
 
 		// Hydrate state with active task
@@ -1380,16 +1380,16 @@ describe("ChatView - RooCloudCTA Display Tests", () => {
 
 		// Wait for component to render with active task
 		await waitFor(() => {
-			// Should not show RooCloudCTA during active task
-			expect(queryByTestId("roo-cloud-cta")).not.toBeInTheDocument()
+			// Should not show MojoCloudCTA during active task
+			expect(queryByTestId("Mojo-cloud-cta")).not.toBeInTheDocument()
 			// Should not show RooTips either since the entire welcome screen is hidden during active tasks
-			expect(queryByTestId("roo-tips")).not.toBeInTheDocument()
-			// Should not show RooHero either since the entire welcome screen is hidden during active tasks
-			expect(queryByTestId("roo-hero")).not.toBeInTheDocument()
+			expect(queryByTestId("Mojo-tips")).not.toBeInTheDocument()
+			// Should not show MojoHero either since the entire welcome screen is hidden during active tasks
+			expect(queryByTestId("Mojo-hero")).not.toBeInTheDocument()
 		})
 	})
 
-	it("shows RooTips when user is authenticated (instead of RooCloudCTA)", () => {
+	it("shows RooTips when user is authenticated (instead of MojoCloudCTA)", () => {
 		const { queryByTestId, getByTestId } = renderChatView()
 
 		// Hydrate state with user authenticated to cloud
@@ -1404,12 +1404,12 @@ describe("ChatView - RooCloudCTA Display Tests", () => {
 			clineMessages: [], // No active task
 		})
 
-		// Should not show RooCloudCTA but should show RooTips
-		expect(queryByTestId("roo-cloud-cta")).not.toBeInTheDocument()
-		expect(getByTestId("roo-tips")).toBeInTheDocument()
+		// Should not show MojoCloudCTA but should show RooTips
+		expect(queryByTestId("Mojo-cloud-cta")).not.toBeInTheDocument()
+		expect(getByTestId("Mojo-tips")).toBeInTheDocument()
 	})
 
-	it("shows RooTips when user has fewer than 4 tasks (instead of RooCloudCTA)", () => {
+	it("shows RooTips when user has fewer than 4 tasks (instead of MojoCloudCTA)", () => {
 		const { queryByTestId, getByTestId } = renderChatView()
 
 		// Hydrate state with user not authenticated but fewer than 4 tasks
@@ -1423,9 +1423,9 @@ describe("ChatView - RooCloudCTA Display Tests", () => {
 			clineMessages: [], // No active task
 		})
 
-		// Should not show RooCloudCTA but should show RooTips
-		expect(queryByTestId("roo-cloud-cta")).not.toBeInTheDocument()
-		expect(getByTestId("roo-tips")).toBeInTheDocument()
+		// Should not show MojoCloudCTA but should show RooTips
+		expect(queryByTestId("Mojo-cloud-cta")).not.toBeInTheDocument()
+		expect(getByTestId("Mojo-tips")).toBeInTheDocument()
 	})
 })
 

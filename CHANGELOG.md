@@ -1,40 +1,40 @@
-# Roo Code Changelog
+# Mojo Code Changelog
 
 ## [3.25.15] - 2025-08-14
 
-- Fix: Remove 500-message limit to prevent scrollbar jumping in long conversations (#7052, #7063 by @daniel-lxs, PR by @app/roomote)
+- Fix: Remove 500-message limit to prevent scrollbar jumping in long conversations (#7052, #7063 by @daniel-lxs, PR by @app/Mojomote)
 - Fix: Reset condensing state when switching tasks (#6919 by @f14XuanLv, PR by @f14XuanLv)
 - Fix: Implement sitemap generation in TypeScript and remove XML file (#5231 by @abumalick, PR by @abumalick)
 - Fix: allowedMaxRequests and allowedMaxCost values not showing in the settings UI (thanks @chrarnoldus!)
 
 ## [3.25.14] - 2025-08-13
 
-- Fix: Only include verbosity parameter for models that support it (#7054 by @eastonmeth, PR by @app/roomote)
+- Fix: Only include verbosity parameter for models that support it (#7054 by @eastonmeth, PR by @app/Mojomote)
 - Fix: AWS Bedrock 1M context - Move anthropic_beta to additionalModelRequestFields (thanks @daniel-lxs!)
 - Fix: Make cancelling requests more responsive by reverting recent changes
 
 ## [3.25.13] - 2025-08-12
 
 - Add Sonnet 1M context checkbox to Bedrock
-- Fix: add --no-messages flag to ripgrep to suppress file access errors (#6756 by @R-omk, PR by @app/roomote)
-- Add support for AGENT.md alongside AGENTS.md (#6912 by @Brendan-Z, PR by @app/roomote)
+- Fix: add --no-messages flag to ripgrep to suppress file access errors (#6756 by @R-omk, PR by @app/Mojomote)
+- Add support for AGENT.md alongside AGENTS.md (#6912 by @Brendan-Z, PR by @app/Mojomote)
 - Remove deprecated GPT-4.5 Preview model (thanks @PeterDaveHello!)
 
 ## [3.25.12] - 2025-08-12
 
 - Update: Claude Sonnet 4 context window configurable to 1 million tokens in Anthropic provider (thanks @daniel-lxs!)
 - Add: Minimal reasoning support to OpenRouter (thanks @daniel-lxs!)
-- Fix: Add configurable API request timeout for local providers (#6521 by @dabockster, PR by @app/roomote)
+- Fix: Add configurable API request timeout for local providers (#6521 by @dabockster, PR by @app/Mojomote)
 - Fix: Add --no-sandbox flag to browser launch options (#6632 by @QuinsZouls, PR by @QuinsZouls)
-- Fix: Ensure JSON files respect .rooignore during indexing (#6690 by @evermoving, PR by @app/roomote)
-- Add: New Chutes provider models (#6698 by @fstandhartinger, PR by @app/roomote)
-- Add: OpenAI gpt-oss models to Amazon Bedrock dropdown (#6752 by @josh-clanton-powerschool, PR by @app/roomote)
-- Fix: Correct tool repetition detector to not block first tool call when limit is 1 (#6834 by @NaccOll, PR by @app/roomote)
+- Fix: Ensure JSON files respect .Mojoignore during indexing (#6690 by @evermoving, PR by @app/Mojomote)
+- Add: New Chutes provider models (#6698 by @fstandhartinger, PR by @app/Mojomote)
+- Add: OpenAI gpt-oss models to Amazon Bedrock dropdown (#6752 by @josh-clanton-powerschool, PR by @app/Mojomote)
+- Fix: Correct tool repetition detector to not block first tool call when limit is 1 (#6834 by @NaccOll, PR by @app/Mojomote)
 - Fix: Improve checkpoint service initialization handling (thanks @NaccOll!)
 - Update: Improve zh-TW Traditional Chinese locale (thanks @PeterDaveHello!)
-- Add: Task expand and collapse translations (thanks @app/roomote!)
-- Update: Exclude GPT-5 models from 20% context window output token cap (thanks @app/roomote!)
-- Fix: Truncate long model names in model selector to prevent overflow (thanks @app/roomote!)
+- Add: Task expand and collapse translations (thanks @app/Mojomote!)
+- Update: Exclude GPT-5 models from 20% context window output token cap (thanks @app/Mojomote!)
+- Fix: Truncate long model names in model selector to prevent overflow (thanks @app/Mojomote!)
 - Add: Requesty base url support (thanks @requesty-JohnCosta27!)
 
 ## [3.25.11] - 2025-08-11
@@ -43,30 +43,30 @@
 - Add: IO Intelligence Provider support (thanks @ertan2002!)
 - Fix: MCP startup issues and remove refresh notifications (thanks @hannesrudolph!)
 - Fix: Improvements to GPT-5 OpenAI provider configuration (thanks @hannesrudolph!)
-- Fix: Clarify codebase_search path parameter as optional and improve tool descriptions (thanks @app/roomote!)
+- Fix: Clarify codebase_search path parameter as optional and improve tool descriptions (thanks @app/Mojomote!)
 - Fix: Bedrock provider workaround for LiteLLM passthrough issues (thanks @jr!)
 - Fix: Token usage and cost being underreported on cancelled requests (thanks @chrarnoldus!)
 
 ## [3.25.10] - 2025-08-07
 
-- Add support for GPT-5 (thanks Cline and @app/roomote!)
+- Add support for GPT-5 (thanks Cline and @app/Mojomote!)
 - Fix: Use CDATA sections in XML examples to prevent parser errors (#4852 by @hannesrudolph, PR by @hannesrudolph)
-- Fix: Add missing MCP error translation keys (thanks @app/roomote!)
+- Fix: Add missing MCP error translation keys (thanks @app/Mojomote!)
 
 ## [3.25.9] - 2025-08-07
 
 - Fix: Resolve rounding issue with max tokens (#6806 by @markp018, PR by @mrubens)
-- Add support for GLM-4.5 and OpenAI gpt-oss models in Fireworks provider (#6753 by @alexfarlander, PR by @app/roomote)
-- Improve UX by focusing chat input when clicking plus button in extension menu (thanks @app/roomote!)
+- Add support for GLM-4.5 and OpenAI gpt-oss models in Fireworks provider (#6753 by @alexfarlander, PR by @app/Mojomote)
+- Improve UX by focusing chat input when clicking plus button in extension menu (thanks @app/Mojomote!)
 
 ## [3.25.8] - 2025-08-06
 
-- Fix: Prevent disabled MCP servers from starting processes and show correct status (#6036 by @hannesrudolph, PR by @app/roomote)
-- Fix: Handle current directory path "." correctly in codebase_search tool (#6514 by @hannesrudolph, PR by @app/roomote)
-- Fix: Trim whitespace from OpenAI base URL to fix model detection (#6559 by @vauhochzett, PR by @app/roomote)
-- Feat: Reduce Gemini 2.5 Pro minimum thinking budget to 128 (thanks @app/roomote!)
-- Fix: Improve handling of net::ERR_ABORTED errors in URL fetching (#6632 by @QuinsZouls, PR by @app/roomote)
-- Fix: Recover from error state when Qdrant becomes available (#6660 by @hannesrudolph, PR by @app/roomote)
+- Fix: Prevent disabled MCP servers from starting processes and show correct status (#6036 by @hannesrudolph, PR by @app/Mojomote)
+- Fix: Handle current directory path "." correctly in codebase_search tool (#6514 by @hannesrudolph, PR by @app/Mojomote)
+- Fix: Trim whitespace from OpenAI base URL to fix model detection (#6559 by @vauhochzett, PR by @app/Mojomote)
+- Feat: Reduce Gemini 2.5 Pro minimum thinking budget to 128 (thanks @app/Mojomote!)
+- Fix: Improve handling of net::ERR_ABORTED errors in URL fetching (#6632 by @QuinsZouls, PR by @app/Mojomote)
+- Fix: Recover from error state when Qdrant becomes available (#6660 by @hannesrudolph, PR by @app/Mojomote)
 - Fix: Resolve memory leak in ChatView virtual scrolling implementation (thanks @xyOz-dev!)
 - Add: Swift files to fallback list (#5857 by @niteshbalusu11, #6555 by @sealad886, PR by @niteshbalusu11)
 - Feat: Clamp default model max tokens to 20% of context window (thanks @mrubens!)
@@ -82,8 +82,8 @@
 - Make mode selection dropdowns responsive (#6423 by @AyazKaan, PR by @AyazKaan)
 - Redesigned task header and task history (thanks @brunobergher!)
 - Fix checkpoints timing and ensure checkpoints work properly (#4827 by @mrubens, PR by @NaccOll)
-- Fix empty mode names from being saved (#5766 by @kfxmvp, PR by @app/roomote)
-- Fix MCP server creation when setting is disabled (#6607 by @characharm, PR by @app/roomote)
+- Fix empty mode names from being saved (#5766 by @kfxmvp, PR by @app/Mojomote)
+- Fix MCP server creation when setting is disabled (#6607 by @characharm, PR by @app/Mojomote)
 - Update highlight layer style and align to textarea (#6647 by @NaccOll, PR by @NaccOll)
 - Fix UI for approving chained commands
 - Use assistantMessageParser class instead of parseAssistantMessage (#5340 by @qdaxb, PR by @qdaxb)
@@ -92,12 +92,12 @@
 
 ## [3.25.6] - 2025-08-01
 
-- Set horizon-beta model max tokens to 32k for OpenRouter (requested by @hannesrudolph, PR by @app/roomote)
+- Set horizon-beta model max tokens to 32k for OpenRouter (requested by @hannesrudolph, PR by @app/Mojomote)
 - Add support for syncing provider profiles from the cloud
 
 ## [3.25.5] - 2025-08-01
 
-- Fix: Improve Claude Code ENOENT error handling with installation guidance (#5866 by @JamieJ1, PR by @app/roomote)
+- Fix: Improve Claude Code ENOENT error handling with installation guidance (#5866 by @JamieJ1, PR by @app/Mojomote)
 - Fix: LM Studio model context length (#5075 by @Angular-Angel, PR by @pwilkin)
 - Fix: VB.NET indexing by implementing fallback chunking system (#6420 by @JensvanZutphen, PR by @daniel-lxs)
 - Add auto-approved cost limits (thanks @hassoncs!)
@@ -109,34 +109,34 @@
 - Handle more variations of chaining and subshell command validation
 - More tolerant search/replace match
 - Clean up the auto-approve UI (thanks @mrubens!)
-- Skip interpolation for non-existent slash commands (thanks @app/roomote!)
+- Skip interpolation for non-existent slash commands (thanks @app/Mojomote!)
 
 ## [3.25.4] - 2025-07-30
 
 - feat: add SambaNova provider integration (#6077 by @snova-jorgep, PR by @snova-jorgep)
 - feat: add Doubao provider integration (thanks @AntiMoron!)
-- feat: set horizon-alpha model max tokens to 32k for OpenRouter (thanks @app/roomote!)
-- feat: add zai-org/GLM-4.5-FP8 model to Chutes AI provider (#6440 by @leakless21, PR by @app/roomote)
-- feat: add symlink support for AGENTS.md file loading (thanks @app/roomote!)
+- feat: set horizon-alpha model max tokens to 32k for OpenRouter (thanks @app/Mojomote!)
+- feat: add zai-org/GLM-4.5-FP8 model to Chutes AI provider (#6440 by @leakless21, PR by @app/Mojomote)
+- feat: add symlink support for AGENTS.md file loading (thanks @app/Mojomote!)
 - feat: optionally add task history context to prompt enhancement (thanks @liwilliam2021!)
 - fix: remove misleading task resumption message (#5850 by @KJ7LNW, PR by @KJ7LNW)
 - feat: add pattern to support Databricks /invocations endpoints (thanks @adambrand!)
-- fix: resolve navigator global error by updating mammoth and bluebird dependencies (#6356 by @hishtadlut, PR by @app/roomote)
+- fix: resolve navigator global error by updating mammoth and bluebird dependencies (#6356 by @hishtadlut, PR by @app/Mojomote)
 - feat: enhance token counting by extracting text from messages using VSCode LM API (#6112 by @sebinseban, PR by @NaccOll)
-- feat: auto-refresh marketplace data when organization settings change (thanks @app/roomote!)
+- feat: auto-refresh marketplace data when organization settings change (thanks @app/Mojomote!)
 - fix: kill button for execute_command tool (thanks @daniel-lxs!)
 
 ## [3.25.3] - 2025-07-30
 
 - Allow queueing messages with images
-- Increase Claude Code default max output tokens to 16k (#6125 by @bpeterson1991, PR by @app/roomote)
+- Increase Claude Code default max output tokens to 16k (#6125 by @bpeterson1991, PR by @app/Mojomote)
 - Add docs link for slash commands
 - Hide Gemini checkboxes on the welcome view
 - Clarify apply_diff tool descriptions to emphasize surgical edits
 - Fix: Prevent input clearing when clicking chat buttons (thanks @hassoncs!)
 - Update PR reviewer rules and mode configuration (thanks @daniel-lxs!)
-- Add translation check action to pull_request.opened event (thanks @app/roomote!)
-- Remove "(prev Roo Cline)" from extension title in all languages (thanks @app/roomote!)
+- Add translation check action to pull_request.opened event (thanks @app/Mojomote!)
+- Remove "(prev Mojo Cline)" from extension title in all languages (thanks @app/Mojomote!)
 - Remove event types mention from PR reviewer rules (thanks @daniel-lxs!)
 
 ## [3.25.2] - 2025-07-29
@@ -147,27 +147,27 @@
 
 ## [3.25.1] - 2025-07-29
 
-- Add support for GLM-4.5-Air model to Chutes AI provider (#6376 by @matbgn, PR by @app/roomote)
+- Add support for GLM-4.5-Air model to Chutes AI provider (#6376 by @matbgn, PR by @app/Mojomote)
 - Improve subshell validation for commands
 
 ## [3.25.0] - 2025-07-29
 
-- Add message queueing (thanks @app/roomote!)
+- Add message queueing (thanks @app/Mojomote!)
 - Add custom slash commands
 - Add options for URL Context and Grounding with Google Search to the Gemini provider (thanks @HahaBill!)
 - Add image support to read_file tool (thanks @samhvw8!)
-- Add experimental setting to prevent editor focus disruption (#4784 by @hannesrudolph, PR by @app/roomote)
+- Add experimental setting to prevent editor focus disruption (#4784 by @hannesrudolph, PR by @app/Mojomote)
 - Add prompt caching support for LiteLLM (#5791 by @steve-gore-snapdocs, PR by @MuriloFP)
 - Add markdown table rendering support
 - Fix list_files recursive mode now works for dot directories (#2992 by @avtc, #4807 by @zhang157686, #5409 by @MuriloFP, PR by @MuriloFP)
 - Add search functionality to mode selector popup and reorganize layout
 - Sync API config selector style with mode selector
-- Fix keyboard shortcuts for non-QWERTY layouts (#6161 by @shlgug, PR by @app/roomote)
-- Add ESC key handling for modes, API provider, and indexing settings popovers (thanks @app/roomote!)
-- Make task mode sticky to task (thanks @app/roomote!)
-- Add text wrapping to command patterns in Manage Command Permissions (thanks @app/roomote!)
+- Fix keyboard shortcuts for non-QWERTY layouts (#6161 by @shlgug, PR by @app/Mojomote)
+- Add ESC key handling for modes, API provider, and indexing settings popovers (thanks @app/Mojomote!)
+- Make task mode sticky to task (thanks @app/Mojomote!)
+- Add text wrapping to command patterns in Manage Command Permissions (thanks @app/Mojomote!)
 - Update list-files test for fixed hidden files bug (thanks @daniel-lxs!)
-- Fix normalize Windows paths to forward slashes in mode export (#6307 by @hannesrudolph, PR by @app/roomote)
+- Fix normalize Windows paths to forward slashes in mode export (#6307 by @hannesrudolph, PR by @app/Mojomote)
 - Ensure form-data >= 4.0.4
 - Fix filter out non-text tab inputs (Kilo-Org/kilocode#712 by @szermatt, PR by @hassoncs)
 
@@ -189,7 +189,7 @@
 
 ## [3.23.19] - 2025-07-23
 
-- Add Roo Code Cloud Waitlist CTAs (thanks @brunobergher!)
+- Add Mojo Code Cloud Waitlist CTAs (thanks @brunobergher!)
 - Split commands on newlines when evaluating auto-approve
 - Smarter auto-deny of commands
 
@@ -232,7 +232,7 @@
 
 - Fix configurable delay for diagnostics to prevent premature error reporting
 - Add command timeout allowlist
-- Add description and whenToUse fields to custom modes in .roomodes (thanks @RandalSchwartz!)
+- Add description and whenToUse fields to custom modes in .Mojomodes (thanks @RandalSchwartz!)
 - Fix Claude model detection by name for API protocol selection (thanks @daniel-lxs!)
 - Move marketplace icon from overflow menu to top navigation
 - Optional setting to prevent completion with open todos
@@ -357,7 +357,7 @@
 - Chat index UI enhancements (thanks @MuriloFP!)
 - Fix model search being prefilled on dropdown (thanks @kevinvandijk!)
 - Improve chat UI - add camera icon margin and make placeholder non-selectable (thanks @MuriloFP!)
-- Delete .roo/rules-{mode} folder when custom mode is deleted
+- Delete .Mojo/rules-{mode} folder when custom mode is deleted
 - Enforce file restrictions for all edit tools in architect mode
 - Add User-Agent header to API providers
 - Fix auto question timer unmount (thanks @liwilliam2021!)
@@ -403,7 +403,7 @@
 
 ## [3.22.3] - 2025-06-27
 
-- Restore JSON backwards compatibility for .roomodes files (thanks @daniel-lxs!)
+- Restore JSON backwards compatibility for .Mojomodes files (thanks @daniel-lxs!)
 
 ## [3.22.2] - 2025-06-27
 
@@ -424,7 +424,7 @@
 ## [3.22.0] - 2025-06-25
 
 - Add 1-click task sharing
-- Add support for loading rules from a global .roo directory (thanks @samhvw8!)
+- Add support for loading rules from a global .Mojo directory (thanks @samhvw8!)
 - Modes selector improvements (thanks @brunobergher!)
 - Use safeWriteJson for all JSON file writes to avoid task history corruption (thanks @KJ7LNW!)
 - Improve YAML error handling when editing modes
@@ -489,7 +489,7 @@
 
 ## [3.21.0] - 2025-06-17
 
-- Add Roo Marketplace to make it easy to discover and install great MCPs and modes!
+- Add Mojo Marketplace to make it easy to discover and install great MCPs and modes!
 - Add Gemini 2.5 models (Pro, Flash and Flash Lite) (thanks @daniel-lxs!)
 - Add support for Excel (.xlsx) files in tools (thanks @chrarnoldus!)
 - Add max tokens checkbox option for OpenAI compatible provider (thanks @AlexandruSmirnov!)
@@ -500,7 +500,7 @@
 - Fix codebase indexing alignment with list-files hidden directory filtering (thanks @daniel-lxs!)
 - Fix subtask completion mismatch (thanks @feifei325!)
 - Fix Windows path normalization in MCP variable injection (thanks @daniel-lxs!)
-- Update marketplace branding to 'Roo Marketplace' (thanks @SannidhyaSah!)
+- Update marketplace branding to 'Mojo Marketplace' (thanks @SannidhyaSah!)
 - Refactor to more consistent history UI (thanks @elianiva!)
 - Adjust context menu positioning to be near Copilot
 - Update evals Docker setup to work on Windows (thanks @StevenTCramer!)
@@ -592,8 +592,8 @@
 - Add OpenAI Compatible embedder for codebase indexing (thanks @SannidhyaSah!)
 - Fix multiple memory leaks in ChatView component (thanks @kiwina!)
 - Fix WorkspaceTracker resource leaks by disposing FileSystemWatcher (thanks @kiwina!)
-- Fix RooTips setTimeout cleanup to prevent state updates on unmounted components (thanks @kiwina!)
-- Fix FileSystemWatcher leak in RooIgnoreController (thanks @kiwina!)
+- Fix rootips setTimeout cleanup to prevent state updates on unmounted components (thanks @kiwina!)
+- Fix FileSystemWatcher leak in MojoIgnoreController (thanks @kiwina!)
 - Fix clipboard memory leak by clearing setTimeout in useCopyToClipboard (thanks @kiwina!)
 - Fix ClineProvider instance cleanup (thanks @xyOz-dev!)
 - Enforce codebase_search as primary tool for code understanding tasks (thanks @hannesrudolph!)
@@ -639,9 +639,9 @@
 - Skip condense and show error if context grows during condensing
 - Transform Prompts tab into Modes tab and move support prompts to Settings for better organization
 - Add DeepSeek R1 0528 model support to Chutes provider (thanks @zeozeozeo!)
-- Fix @directory not respecting .rooignore files (thanks @xyOz-dev!)
-- Add rooignore checking for insert_content and search_and_replace tools
-- Fix menu breaking when Roo is moved between primary and secondary sidebars (thanks @chrarnoldus!)
+- Fix @directory not respecting .Mojoignore files (thanks @xyOz-dev!)
+- Add Mojoignore checking for insert_content and search_and_replace tools
+- Fix menu breaking when Mojo is moved between primary and secondary sidebars (thanks @chrarnoldus!)
 - Resolve memory leak in ChatView by stabilizing callback props (thanks @samhvw8!)
 - Fix write_to_file to properly create empty files when content is empty (thanks @Ruakij!)
 - Fix chat input clearing during running tasks (thanks @xyOz-dev!)
@@ -720,7 +720,7 @@
 
 ## [3.17.2] - 2025-05-15
 
-- Revert "Switch to the new Roo message parser" (appears to cause a tool parsing bug)
+- Revert "Switch to the new Mojo message parser" (appears to cause a tool parsing bug)
 - Lock the versions of vsce and ovsx
 
 ## [3.17.1] - 2025-05-15
@@ -735,14 +735,14 @@
 - Add experimental feature to intelligently condense the task context instead of truncating it
 - Fix one of the causes of the gray screen issue (thanks @xyOz-dev!)
 - Focus improvements for better UI interactions (thanks Cline!)
-- Switch to the new Roo message parser for improved performance (thanks Cline!)
+- Switch to the new Mojo message parser for improved performance (thanks Cline!)
 - Enable source maps for improved debugging (thanks @KJ7LNW!)
 - Update OpenRouter provider to use provider-specific model info (thanks @daniel-lxs!)
 - Fix Requesty cost/token reporting (thanks @dtrugman!)
 - Improve command execution UI
 - Add more in-app links to relevant documentation
 - Update the new task tool description and the ask mode custom instructions in the system prompt
-- Add IPC types to roo-code.d.ts
+- Add IPC types to Mojo-code.d.ts
 - Add build VSIX workflow to pull requests (thanks @SmartManoj!)
 - Improve apply_diff tool to intelligently deduce line numbers (thanks @samhvw8!)
 - Fix command validation for shell array indexing (thanks @KJ7LNW!)
@@ -809,7 +809,7 @@
 - Fix display issue of the programming language dropdown in the code block component (thanks @zhangtony239)
 - MCP server errors are now captured and shown in a new "Errors" tab (thanks @robertheadley)
 - Error logging will no longer break MCP functionality if the server is properly connected (thanks @ksze)
-- You can now toggle the `terminal.integrated.inheritEnv` VSCode setting directly for the Roo Code settings (thanks @KJ7LNW)
+- You can now toggle the `terminal.integrated.inheritEnv` VSCode setting directly for the Mojo Code settings (thanks @KJ7LNW)
 - Add `gemini-2.5-pro-preview-05-06` to the Vertex and Gemini providers (thanks @zetaloop)
 - Ensure evals exercises are up-to-date before running evals (thanks @shariqriazz)
 - Lots of general UI improvements (thanks @elianiva)
@@ -826,7 +826,7 @@
 
 ## [3.15.4] - 2025-05-04
 
-- Fix a nasty bug that would cause Roo Code to hang, particularly in orchestrator mode
+- Fix a nasty bug that would cause Mojo Code to hang, particularly in orchestrator mode
 - Improve Gemini caching efficiency
 
 ## [3.15.3] - 2025-05-02
@@ -865,8 +865,8 @@
 - Improve the auto-approve toggle buttons for some high-contrast VSCode themes
 - Offload expensive count token operations to a web worker (thanks @samhvw8)
 - Improve support for mult-root workspaces (thanks @snoyiatk)
-- Simplify and streamline Roo Code's quick actions
-- Allow Roo Code settings to be imported from the welcome screen (thanks @julionav)
+- Simplify and streamline Mojo Code's quick actions
+- Allow Mojo Code settings to be imported from the welcome screen (thanks @julionav)
 - Remove unused types (thanks @wkordalski)
 - Improve the performance of mode switching (thanks @dlab-anton)
 - Fix importing & exporting of custom modes (thanks @julionav)
@@ -880,7 +880,7 @@
 - Clean up settings data model
 - Omit reasoning params for non-reasoning models
 - Clearer documentation for adding settings (thanks @shariqriazz!)
-- Fix word wrapping in Roo message title (thanks @zhangtony239!)
+- Fix word wrapping in Mojo message title (thanks @zhangtony239!)
 - Update default model id for Unbound from claude 3.5 to 3.7 (thanks @pugazhendhi-m!)
 
 ## [3.14.2] - 2025-04-24
@@ -1030,12 +1030,12 @@
 - Improve readFileTool XML output format (thanks @KJ7LNW!)
 - Add o1-pro support (thanks @arthurauffray!)
 - Follow symlinked rules files/directories to allow for more flexible rule setups
-- Focus Roo Code in the sidebar when running tasks in the sidebar via the API
+- Focus Mojo Code in the sidebar when running tasks in the sidebar via the API
 - Improve subtasks UI
 
 ## [3.11.10] - 2025-04-08
 
-- Fix bug where nested .roo/rules directories are not respected properly (thanks @taisukeoe!)
+- Fix bug where nested .Mojo/rules directories are not respected properly (thanks @taisukeoe!)
 - Handle long command output more efficiently in the chat row (thanks @samhvw8!)
 - Fix cache usage tracking for OpenAI-compatible providers
 - Add custom translation instructions for zh-CN (thanks @System233!)
@@ -1044,7 +1044,7 @@
 ## [3.11.9] - 2025-04-07
 
 - Rate-limit setting updated to be per-profile (thanks @ross and @olweraltuve!)
-- You can now place multiple rules files in the .roo/rules/ and .roo/rules-{mode}/ folders (thanks @upamune!)
+- You can now place multiple rules files in the .Mojo/rules/ and .Mojo/rules-{mode}/ folders (thanks @upamune!)
 - Prevent unnecessary autoscroll when buttons appear (thanks @shtse8!)
 - Add Gemini 2.5 Pro Preview to Vertex AI (thanks @nbihan-mediware!)
 - Tidy up following ClineProvider refactor (thanks @diarmidmackenzie!)
@@ -1052,7 +1052,7 @@
 - Enhance Rust tree-sitter parser with advanced language structures (thanks @KJ7LNW!)
 - Persist settings on api.setConfiguration (thanks @gtaylor!)
 - Add deep links to settings sections
-- Add command to focus Roo Code input field (thanks @axkirillov!)
+- Add command to focus Mojo Code input field (thanks @axkirillov!)
 - Add resize and hover actions to the browser (thanks @SplittyDev!)
 - Add resumeTask and isTaskInHistory to the API (thanks @franekp!)
 - Fix bug displaying boolean/numeric suggested answers
@@ -1064,7 +1064,7 @@
 - Add searchable dropdown to API config profiles on the settings screen (thanks @samhvw8!)
 - Add workspace tracking to history items in preparation for future filtering (thanks @samhvw8!)
 - Fix search highlighting UI in history search (thanks @samhvw8!)
-- Add support for .roorules and give deprecation warning for .clinerules (thanks @upamune!)
+- Add support for .Mojorules and give deprecation warning for .clinerules (thanks @upamune!)
 - Fix nodejs version format in .tool-versions file (thanks @upamune!)
 
 ## [3.11.7] - 2025-04-04
@@ -1101,7 +1101,7 @@
 - Fix issue where prompts and settings tabs were not scrollable when accessed from dropdown menus
 - Update AWS region dropdown menu to the most recent data (thanks @Smartsheet-JB-Brown!)
 - Fix prompt enhancement for Bedrock (thanks @Smartsheet-JB-Brown!)
-- Allow processes to access the Roo Code API via a unix socket
+- Allow processes to access the Mojo Code API via a unix socket
 - Improve zh-TW Traditional Chinese translations (thanks @PeterDaveHello!)
 - Add support for Azure AI Inference Service with DeepSeek-V3 model (thanks @thomasjeung!)
 - Fix off-by-one error in tree-sitter line numbers
@@ -1126,7 +1126,7 @@
 ## [3.11.0] - 2025-03-30
 
 - Replace single-block-diff with multi-block-diff fast editing strategy
-- Support project-level MCP config in .roo/mcp.json (thanks @aheizi!)
+- Support project-level MCP config in .Mojo/mcp.json (thanks @aheizi!)
 - Show OpenRouter and Requesty key balance on the settings screen
 - Support import/export of settings
 - Add pinning and sorting for API configuration dropdown (thanks @jwcraig!)
@@ -1138,7 +1138,7 @@
 - Fix list_code_definition_names to support files (thanks @KJ7LNW!)
 - Refactor tool-calling logic to make the code a lot easier to work with (thanks @diarmidmackenzie, @bramburn, @KJ7LNW, and everyone else who helped!)
 - Prioritize “Add to Context” in the code actions and include line numbers (thanks @samhvw8!)
-- Add an activation command that other extensions can use to interface with Roo Code (thanks @gtaylor!)
+- Add an activation command that other extensions can use to interface with Mojo Code (thanks @gtaylor!)
 - Preserve language characters in file @-mentions (thanks @aheizi!)
 - Browser tool improvements (thanks @afshawnlotfi!)
 - Display info about partial reads in the chat row
@@ -1226,13 +1226,13 @@
 
 ## [3.9.1] - 2025-03-18
 
-- Pass current language to system prompt correctly so Roo thinks and speaks in the selected language
+- Pass current language to system prompt correctly so Mojo thinks and speaks in the selected language
 
 ## [3.9.0] - 2025-03-18
 
-- Internationalize Roo Code into Catalan, German, Spanish, French, Hindi, Italian, Japanese, Korean, Polish, Portuguese, Turkish, Vietnamese, Simplified Chinese, and Traditional Chinese (thanks @feifei325!)
+- Internationalize Mojo Code into Catalan, German, Spanish, French, Hindi, Italian, Japanese, Korean, Polish, Portuguese, Turkish, Vietnamese, Simplified Chinese, and Traditional Chinese (thanks @feifei325!)
 - Bring back support for MCP over SSE (thanks @aheizi!)
-- Add a text-to-speech option to have Roo talk to you as it works (thanks @heyseth!)
+- Add a text-to-speech option to have Mojo talk to you as it works (thanks @heyseth!)
 - Choose a specific provider when using OpenRouter (thanks PhunkyBob!)
 - Support batch deletion of task history (thanks @aheizi!)
 - Internationalize Human Relay, adjust the layout, and make it work on the welcome screen (thanks @NyxJae!)
@@ -1240,12 +1240,12 @@
 - Fix display updating for Bedrock custom ARNs that are prompt routers (thanks @Smartsheet-JB-Brown!)
 - Fix to exclude search highlighting when copying items from task history (thanks @im47cn!)
 - Fix context mentions to work with multiple-workspace projects (thanks @teddyOOXX!)
-- Fix to task history saving when running multiple Roos (thanks @samhvw8!)
+- Fix to task history saving when running multiple Mojos (thanks @samhvw8!)
 - Improve task deletion when underlying files are missing (thanks @GitlyHallows!)
 - Improve support for NixOS & direnv (thanks @wkordalski!)
-- Fix wheel scrolling when Roo is opened in editor tabs (thanks @GitlyHallows!)
+- Fix wheel scrolling when Mojo is opened in editor tabs (thanks @GitlyHallows!)
 - Don’t automatically mention the file when using the "Add to context" code action (thanks @qdaxb!)
-- Expose task stack in `RooCodeAPI` (thanks @franekp!)
+- Expose task stack in `MojoCodeAPI` (thanks @franekp!)
 - Give the models visibility into the current task's API cost
 
 ## [3.8.6] - 2025-03-13
@@ -1283,7 +1283,7 @@
 ## [3.8.4] - 2025-03-09
 
 - Roll back multi-diff progress indicator temporarily to fix a double-confirmation in saving edits
-- Add an option in the prompts tab to save tokens by disabling the ability to ask Roo to create/edit custom modes for you (thanks @hannesrudolph!)
+- Add an option in the prompts tab to save tokens by disabling the ability to ask Mojo to create/edit custom modes for you (thanks @hannesrudolph!)
 
 ## [3.8.3] - 2025-03-09
 
@@ -1310,17 +1310,17 @@
 
 ## [3.8.0] - 2025-03-07
 
-- Add opt-in telemetry to help us improve Roo Code faster (thanks Cline!)
+- Add opt-in telemetry to help us improve Mojo Code faster (thanks Cline!)
 - Fix terminal overload / gray screen of death, and other terminal issues
 - Add a new experimental diff editing strategy that applies multiple diff edits at once (thanks @qdaxb!)
-- Add support for a .rooignore to prevent Roo Code from read/writing certain files, with a setting to also exclude them from search/lists (thanks Cline!)
+- Add support for a .Mojoignore to prevent Mojo Code from read/writing certain files, with a setting to also exclude them from search/lists (thanks Cline!)
 - Update the new_task tool to return results to the parent task on completion, supporting better orchestration (thanks @shaybc!)
-- Support running Roo in multiple editor windows simultaneously (thanks @samhvw8!)
+- Support running Mojo in multiple editor windows simultaneously (thanks @samhvw8!)
 - Make checkpoints asynchronous and exclude more files to speed them up
 - Redesign the settings page to make it easier to navigate
 - Add credential-based authentication for Vertex AI, enabling users to easily switch between Google Cloud accounts (thanks @eonghk!)
 - Update the DeepSeek provider with the correct baseUrl and track caching correctly (thanks @olweraltuve!)
-- Add a new “Human Relay” provider that allows you to manually copy information to a Web AI when needed, and then paste the AI's response back into Roo Code (thanks @NyxJae)!
+- Add a new “Human Relay” provider that allows you to manually copy information to a Web AI when needed, and then paste the AI's response back into Mojo Code (thanks @NyxJae)!
 - Add observability for OpenAI providers (thanks @refactorthis!)
 - Support speculative decoding for LM Studio local models (thanks @adamwlarson!)
 - Improve UI for mode/provider selectors in chat
@@ -1383,7 +1383,7 @@
 
 ## [3.7.5] - 2025-02-26
 
-- Fix context window truncation math (see [#1173](https://github.com/RooCodeInc/Roo-Code/issues/1173))
+- Fix context window truncation math (see [#1173](https://github.com/MojoCodeInc/Mojo-Code/issues/1173))
 - Fix various issues with the model picker (thanks @System233!)
 - Fix model input / output cost parsing (thanks @System233!)
 - Add drag-and-drop for files
@@ -1409,7 +1409,7 @@
 
 ## [3.7.0] - 2025-02-24
 
-- Introducing Roo Code 3.7, with support for the new Claude Sonnet 3.7. Because who cares about skipping version numbers anymore? Thanks @lupuletic and @cte for the PRs!
+- Introducing Mojo Code 3.7, with support for the new Claude Sonnet 3.7. Because who cares about skipping version numbers anymore? Thanks @lupuletic and @cte for the PRs!
 
 ## [3.3.26] - 2025-02-27
 
@@ -1437,7 +1437,7 @@
 - Add support for setting custom preferred languages on the Prompts tab, as well as adding Catalan to the list of languages (thanks @alarno!)
 - Add a button to delete MCP servers (thanks @hannesrudolph!)
 - Fix a bug where the button to copy the system prompt preview always copied the Code mode version
-- Fix a bug where the .roomodes file was not automatically created when adding custom modes from the Prompts tab
+- Fix a bug where the .Mojomodes file was not automatically created when adding custom modes from the Prompts tab
 - Allow setting a wildcard (`*`) to auto-approve all command execution (use with caution!)
 
 ## [3.3.21] - 2025-02-17
@@ -1446,12 +1446,12 @@
 - Fix default preferred language for zh-cn and zh-tw (thanks @System233!)
 - Fix Mistral integration (thanks @d-oit!)
 - Feature to mention `@terminal` to pull terminal output into context (thanks Cline!)
-- Fix system prompt to make sure Roo knows about all available modes
+- Fix system prompt to make sure Mojo knows about all available modes
 - Enable streaming mode for OpenAI o1
 
 ## [3.3.20] - 2025-02-14
 
-- Support project-specific custom modes in a .roomodes file
+- Support project-specific custom modes in a .Mojomodes file
 - Add more Mistral models (thanks @d-oit and @bramburn!)
 - By popular request, make it so Ask mode can't write to Markdown files and is purely for chatting with
 - Add a setting to control the number of open editor tabs to tell the model about (665 is probably too many!)
@@ -1550,11 +1550,11 @@
 - Capture reasoning from more variants of DeepSeek R1 (thanks @Szpadel!)
 - Use an exponential backoff for API retries (if delay after first error is 5s, delay after second consecutive error will be 10s, then 20s, etc)
 - Add a slider in advanced settings to enable rate limiting requests to avoid overloading providers (i.e. wait at least 10 seconds between API requests)
-- Prompt tweaks to make Roo better at creating new custom modes for you
+- Prompt tweaks to make Mojo better at creating new custom modes for you
 
 ## [3.3.6]
 
-- Add a "new task" tool that allows Roo to start new tasks with an initial message and mode
+- Add a "new task" tool that allows Mojo to start new tasks with an initial message and mode
 - Fix a bug that was preventing the use of qwen-max and potentially other OpenAI-compatible providers (thanks @Szpadel!)
 - Add support for perplexity/sonar-reasoning (thanks @Szpadel!)
 - Visual fixes to dropdowns (thanks @psv2522!)
@@ -1598,7 +1598,7 @@
 - Ask and Architect modes can now edit markdown files
 - Custom modes can now be restricted to specific file patterns (for example, a technical writer who can only edit markdown files 👋)
 - Support for configuring the Bedrock provider with AWS Profiles
-- New Roo Code community Discord at https://roocode.com/discord!
+- New Mojo Code community Discord at https://Mojocode.com/discord!
 
 ## [3.2.8]
 
@@ -1630,15 +1630,15 @@
 
 ## [3.2.0 - 3.2.2]
 
-- **Name Change From Roo Cline to Roo Code:** We're excited to announce our new name! After growing beyond 50,000 installations, we've rebranded from Roo Cline to Roo Code to better reflect our identity as we chart our own course.
+- **Name Change From Mojo Cline to Mojo Code:** We're excited to announce our new name! After growing beyond 50,000 installations, we've rebranded from Mojo Cline to Mojo Code to better reflect our identity as we chart our own course.
 
-- **Custom Modes:** Create your own personas for Roo Code! While our built-in modes (Code, Architect, Ask) are still here, you can now shape entirely new ones:
+- **Custom Modes:** Create your own personas for Mojo Code! While our built-in modes (Code, Architect, Ask) are still here, you can now shape entirely new ones:
     - Define custom prompts
     - Choose which tools each mode can access
     - Create specialized assistants for any workflow
     - Just type "Create a new mode for <X>" or visit the Prompts tab in the top menu to get started
 
-Join us at https://www.reddit.com/r/RooCode to share your custom modes and be part of our next chapter!
+Join us at https://www.reddit.com/r/MojoCode to share your custom modes and be part of our next chapter!
 
 ## [3.1.7]
 
@@ -1691,7 +1691,7 @@ Join us at https://www.reddit.com/r/RooCode to share your custom modes and be pa
 
 ## [3.0.0]
 
-- This release adds chat modes! Now you can ask Roo Code questions about system architecture or the codebase without immediately jumping into writing code. You can even assign different API configuration profiles to each mode if you prefer to use different models for thinking vs coding. Would love feedback in the new Roo Code Reddit! https://www.reddit.com/r/RooCode
+- This release adds chat modes! Now you can ask Mojo Code questions about system architecture or the codebase without immediately jumping into writing code. You can even assign different API configuration profiles to each mode if you prefer to use different models for thinking vs coding. Would love feedback in the new Mojo Code Reddit! https://www.reddit.com/r/MojoCode
 
 ## [2.2.46]
 
@@ -1812,7 +1812,7 @@ Join us at https://www.reddit.com/r/RooCode to share your custom modes and be pa
 
 ## [2.2.16]
 
-- Incorporate Premshay's [PR](https://github.com/RooCodeInc/Roo-Code/pull/60) to add support for Amazon Nova and Meta Llama Models via Bedrock (3, 3.1, 3.2) and unified Bedrock calls using BedrockClient and Bedrock Runtime API
+- Incorporate Premshay's [PR](https://github.com/MojoCodeInc/Mojo-Code/pull/60) to add support for Amazon Nova and Meta Llama Models via Bedrock (3, 3.1, 3.2) and unified Bedrock calls using BedrockClient and Bedrock Runtime API
 
 ## [2.2.14 - 2.2.15]
 
@@ -1884,7 +1884,7 @@ Join us at https://www.reddit.com/r/RooCode to share your custom modes and be pa
 
 ## [2.1.15]
 
-- Incorporate dbasclpy's [PR](https://github.com/RooCodeInc/Roo-Code/pull/54) to add support for gemini-exp-1206
+- Incorporate dbasclpy's [PR](https://github.com/MojoCodeInc/Mojo-Code/pull/54) to add support for gemini-exp-1206
 - Make it clear that diff editing is very experimental
 
 ## [2.1.14]
@@ -1894,7 +1894,7 @@ Join us at https://www.reddit.com/r/RooCode to share your custom modes and be pa
 
 ## [2.1.13]
 
-- Fix https://github.com/RooCodeInc/Roo-Code/issues/50 where sound effects were not respecting settings
+- Fix https://github.com/MojoCodeInc/Mojo-Code/issues/50 where sound effects were not respecting settings
 
 ## [2.1.12]
 
@@ -1902,7 +1902,7 @@ Join us at https://www.reddit.com/r/RooCode to share your custom modes and be pa
 
 ## [2.1.11]
 
-- Incorporate lloydchang's [PR](https://github.com/RooCodeInc/Roo-Code/pull/42) to add support for OpenRouter compression
+- Incorporate lloydchang's [PR](https://github.com/MojoCodeInc/Mojo-Code/pull/42) to add support for OpenRouter compression
 
 ## [2.1.10]
 
@@ -1914,7 +1914,7 @@ Join us at https://www.reddit.com/r/RooCode to share your custom modes and be pa
 
 ## [2.1.8]
 
-- Roo Cline now allows configuration of which commands are allowed without approval!
+- Mojo Cline now allows configuration of which commands are allowed without approval!
 
 ## [2.1.7]
 
@@ -1928,7 +1928,7 @@ Join us at https://www.reddit.com/r/RooCode to share your custom modes and be pa
 
 ## [2.1.6]
 
-- Roo Cline now runs in all VSCode-compatible editors
+- Mojo Cline now runs in all VSCode-compatible editors
 
 ## [2.1.5]
 
@@ -1936,11 +1936,11 @@ Join us at https://www.reddit.com/r/RooCode to share your custom modes and be pa
 
 ## [2.1.4]
 
-- Roo Cline now can run side-by-side with Cline
+- Mojo Cline now can run side-by-side with Cline
 
 ## [2.1.3]
 
-- Roo Cline now allows browser actions without approval when `alwaysAllowBrowser` is true
+- Mojo Cline now allows browser actions without approval when `alwaysAllowBrowser` is true
 
 ## [2.1.2]
 

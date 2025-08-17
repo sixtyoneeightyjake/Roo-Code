@@ -3,50 +3,50 @@ import * as os from "os"
 import fs from "fs/promises"
 
 /**
- * Gets the global .roo directory path based on the current platform
+ * Gets the global .Mojo directory path based on the current platform
  *
- * @returns The absolute path to the global .roo directory
+ * @returns The absolute path to the global .Mojo directory
  *
  * @example Platform-specific paths:
  * ```
- * // macOS/Linux: ~/.roo/
- * // Example: /Users/john/.roo
+ * // macOS/Linux: ~/.Mojo/
+ * // Example: /Users/john/.Mojo
  *
- * // Windows: %USERPROFILE%\.roo\
- * // Example: C:\Users\john\.roo
+ * // Windows: %USERPROFILE%\.Mojo\
+ * // Example: C:\Users\john\.Mojo
  * ```
  *
  * @example Usage:
  * ```typescript
- * const globalDir = getGlobalRooDirectory()
- * // Returns: "/Users/john/.roo" (on macOS/Linux)
- * // Returns: "C:\\Users\\john\\.roo" (on Windows)
+ * const globalDir = getGlobalMojoDirectory()
+ * // Returns: "/Users/john/.Mojo" (on macOS/Linux)
+ * // Returns: "C:\\Users\\john\\.Mojo" (on Windows)
  * ```
  */
-export function getGlobalRooDirectory(): string {
+export function getGlobalMojoDirectory(): string {
 	const homeDir = os.homedir()
-	return path.join(homeDir, ".roo")
+	return path.join(homeDir, ".Mojo")
 }
 
 /**
- * Gets the project-local .roo directory path for a given cwd
+ * Gets the project-local .Mojo directory path for a given cwd
  *
  * @param cwd - Current working directory (project path)
- * @returns The absolute path to the project-local .roo directory
+ * @returns The absolute path to the project-local .Mojo directory
  *
  * @example
  * ```typescript
- * const projectDir = getProjectRooDirectoryForCwd('/Users/john/my-project')
- * // Returns: "/Users/john/my-project/.roo"
+ * const projectDir = getProjectMojoDirectoryForCwd('/Users/john/my-project')
+ * // Returns: "/Users/john/my-project/.Mojo"
  *
- * const windowsProjectDir = getProjectRooDirectoryForCwd('C:\\Users\\john\\my-project')
- * // Returns: "C:\\Users\\john\\my-project\\.roo"
+ * const windowsProjectDir = getProjectMojoDirectoryForCwd('C:\\Users\\john\\my-project')
+ * // Returns: "C:\\Users\\john\\my-project\\.Mojo"
  * ```
  *
  * @example Directory structure:
  * ```
  * /Users/john/my-project/
- * ├── .roo/                    # Project-local configuration directory
+ * ├── .Mojo/                    # Project-local configuration directory
  * │   ├── rules/
  * │   │   └── rules.md
  * │   ├── custom-instructions.md
@@ -57,8 +57,8 @@ export function getGlobalRooDirectory(): string {
  * └── package.json
  * ```
  */
-export function getProjectRooDirectoryForCwd(cwd: string): string {
-	return path.join(cwd, ".roo")
+export function getProjectMojoDirectoryForCwd(cwd: string): string {
+	return path.join(cwd, ".Mojo")
 }
 
 /**
@@ -112,7 +112,7 @@ export async function readFileIfExists(filePath: string): Promise<string | null>
 }
 
 /**
- * Gets the ordered list of .roo directories to check (global first, then project-local)
+ * Gets the ordered list of .Mojo directories to check (global first, then project-local)
  *
  * @param cwd - Current working directory (project path)
  * @returns Array of directory paths to check in order [global, project-local]
@@ -120,23 +120,23 @@ export async function readFileIfExists(filePath: string): Promise<string | null>
  * @example
  * ```typescript
  * // For a project at /Users/john/my-project
- * const directories = getRooDirectoriesForCwd('/Users/john/my-project')
+ * const directories = getMojoDirectoriesForCwd('/Users/john/my-project')
  * // Returns:
  * // [
- * //   '/Users/john/.roo',           // Global directory
- * //   '/Users/john/my-project/.roo' // Project-local directory
+ * //   '/Users/john/.Mojo',           // Global directory
+ * //   '/Users/john/my-project/.Mojo' // Project-local directory
  * // ]
  * ```
  *
  * @example Directory structure:
  * ```
  * /Users/john/
- * ├── .roo/                    # Global configuration
+ * ├── .Mojo/                    # Global configuration
  * │   ├── rules/
  * │   │   └── rules.md
  * │   └── custom-instructions.md
  * └── my-project/
- *     ├── .roo/                # Project-specific configuration
+ *     ├── .Mojo/                # Project-specific configuration
  *     │   ├── rules/
  *     │   │   └── rules.md     # Overrides global rules
  *     │   └── project-notes.md
@@ -144,22 +144,22 @@ export async function readFileIfExists(filePath: string): Promise<string | null>
  *         └── index.ts
  * ```
  */
-export function getRooDirectoriesForCwd(cwd: string): string[] {
+export function getMojoDirectoriesForCwd(cwd: string): string[] {
 	const directories: string[] = []
 
 	// Add global directory first
-	directories.push(getGlobalRooDirectory())
+	directories.push(getGlobalMojoDirectory())
 
 	// Add project-local directory second
-	directories.push(getProjectRooDirectoryForCwd(cwd))
+	directories.push(getProjectMojoDirectoryForCwd(cwd))
 
 	return directories
 }
 
 /**
- * Loads configuration from multiple .roo directories with project overriding global
+ * Loads configuration from multiple .Mojo directories with project overriding global
  *
- * @param relativePath - The relative path within each .roo directory (e.g., 'rules/rules.md')
+ * @param relativePath - The relative path within each .Mojo directory (e.g., 'rules/rules.md')
  * @param cwd - Current working directory (project path)
  * @returns Object with global and project content, plus merged content
  *
@@ -170,8 +170,8 @@ export function getRooDirectoriesForCwd(cwd: string): string[] {
  *
  * // Returns:
  * // {
- * //   global: "Global rules content...",     // From ~/.roo/rules/rules.md
- * //   project: "Project rules content...",   // From /Users/john/my-project/.roo/rules/rules.md
+ * //   global: "Global rules content...",     // From ~/.Mojo/rules/rules.md
+ * //   project: "Project rules content...",   // From /Users/john/my-project/.Mojo/rules/rules.md
  * //   merged: "Global rules content...\n\n# Project-specific rules (override global):\n\nProject rules content..."
  * // }
  * ```
@@ -182,8 +182,8 @@ export function getRooDirectoriesForCwd(cwd: string): string[] {
  * cwd: '/Users/john/my-project'
  *
  * Reads from:
- * - Global: /Users/john/.roo/rules/rules.md
- * - Project: /Users/john/my-project/.roo/rules/rules.md
+ * - Global: /Users/john/.Mojo/rules/rules.md
+ * - Project: /Users/john/my-project/.Mojo/rules/rules.md
  *
  * Other common relativePath examples:
  * - 'custom-instructions.md'
@@ -215,8 +215,8 @@ export async function loadConfiguration(
 	project: string | null
 	merged: string
 }> {
-	const globalDir = getGlobalRooDirectory()
-	const projectDir = getProjectRooDirectoryForCwd(cwd)
+	const globalDir = getGlobalMojoDirectory()
+	const projectDir = getProjectMojoDirectoryForCwd(cwd)
 
 	const globalFilePath = path.join(globalDir, relativePath)
 	const projectFilePath = path.join(projectDir, relativePath)
@@ -249,4 +249,4 @@ export async function loadConfiguration(
 }
 
 // Export with backward compatibility alias
-export const loadRooConfiguration: typeof loadConfiguration = loadConfiguration
+export const loadMojoConfiguration: typeof loadConfiguration = loadConfiguration

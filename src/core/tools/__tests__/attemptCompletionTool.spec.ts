@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
-import { TodoItem } from "@roo-code/types"
+import { TodoItem } from "@Mojo-code/types"
 import { AttemptCompletionToolUse } from "../../../shared/tools"
 
 // Mock the formatResponse module before importing the tool
@@ -21,7 +21,7 @@ vi.mock("vscode", () => ({
 // Mock Package module
 vi.mock("../../../shared/package", () => ({
 	Package: {
-		name: "roo-cline",
+		name: "Mojo-cline",
 	},
 }))
 

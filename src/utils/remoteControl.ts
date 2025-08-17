@@ -1,11 +1,11 @@
-import type { CloudUserInfo } from "@roo-code/cloud"
+// Cloud functionality removed - remote control no longer supported
 
 /**
  * Determines if remote control features should be enabled
- * @param cloudUserInfo - User information from cloud service
  * @param remoteControlEnabled - User's remote control setting
- * @returns true if remote control should be enabled
+ * @returns false as remote control is no longer supported
  */
-export function isRemoteControlEnabled(cloudUserInfo?: CloudUserInfo | null, remoteControlEnabled?: boolean): boolean {
-	return !!(cloudUserInfo?.id && cloudUserInfo.extensionBridgeEnabled && remoteControlEnabled)
+export function isRemoteControlEnabled(remoteControlEnabled?: boolean): boolean {
+	// Remote control functionality removed with cloud service
+	return false
 }

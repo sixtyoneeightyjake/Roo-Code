@@ -14,7 +14,7 @@ vi.mock("../applyDiffTool", () => ({
 }))
 
 // Mock TelemetryService
-vi.mock("@roo-code/telemetry", () => ({
+vi.mock("@Mojo-code/telemetry", () => ({
 	TelemetryService: {
 		get instance() {
 			return {
@@ -81,10 +81,10 @@ describe("multiApplyDiffTool", () => {
 			api: {
 				getModel: vi.fn().mockReturnValue({ id: "test-model" }),
 			},
-			rooIgnoreController: {
+			MojoIgnoreController: {
 				validateAccess: vi.fn().mockReturnValue(true),
 			},
-			rooProtectedController: {
+			MojoProtectedController: {
 				isWriteProtected: vi.fn().mockReturnValue(false),
 			},
 			fileContextTracker: {

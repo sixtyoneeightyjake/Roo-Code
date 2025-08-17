@@ -10,16 +10,16 @@ import type { FileMetadataEntry, RecordSource, TaskMetadata } from "./FileContex
 import { ClineProvider } from "../webview/ClineProvider"
 
 // This class is responsible for tracking file operations that may result in stale context.
-// If a user modifies a file outside of Roo, the context may become stale and need to be updated.
-// We do not want Roo to reload the context every time a file is modified, so we use this class merely
-// to inform Roo that the change has occurred, and tell Roo to reload the file before making
-// any changes to it. This fixes an issue with diff editing, where Roo was unable to complete a diff edit.
+// If a user modifies a file outside of Mojo, the context may become stale and need to be updated.
+// We do not want Mojo to reload the context every time a file is modified, so we use this class merely
+// to inform Mojo that the change has occurred, and tell Mojo to reload the file before making
+// any changes to it. This fixes an issue with diff editing, where Mojo was unable to complete a diff edit.
 
 // FileContextTracker
 //
 // This class is responsible for tracking file operations.
-// If the full contents of a file are passed to Roo via a tool, mention, or edit, the file is marked as active.
-// If a file is modified outside of Roo, we detect and track this change to prevent stale context.
+// If the full contents of a file are passed to Mojo via a tool, mention, or edit, the file is marked as active.
+// If a file is modified outside of Mojo, we detect and track this change to prevent stale context.
 export class FileContextTracker {
 	readonly taskId: string
 	private providerRef: WeakRef<ClineProvider>
@@ -27,7 +27,7 @@ export class FileContextTracker {
 	// File tracking and watching
 	private fileWatchers = new Map<string, vscode.FileSystemWatcher>()
 	private recentlyModifiedFiles = new Set<string>()
-	private recentlyEditedByRoo = new Set<string>()
+	private recentlyEditedByMojo = new Set<string>()
 	private checkpointPossibleFiles = new Set<string>()
 
 	constructor(provider: ClineProvider, taskId: string) {
@@ -64,10 +64,10 @@ export class FileContextTracker {
 
 		// Track file changes
 		watcher.onDidChange(() => {
-			if (this.recentlyEditedByRoo.has(filePath)) {
-				this.recentlyEditedByRoo.delete(filePath) // This was an edit by Roo, no need to inform Roo
+			if (this.recentlyEditedByMojo.has(filePath)) {
+				this.recentlyEditedByMojo.delete(filePath) // This was an edit by Mojo, no need to inform Mojo
 			} else {
-				this.recentlyModifiedFiles.add(filePath) // This was a user edit, we will inform Roo
+				this.recentlyModifiedFiles.add(filePath) // This was a user edit, we will inform Mojo
 				this.trackFileContext(filePath, "user_edited") // Update the task metadata with file tracking
 			}
 		})
@@ -77,7 +77,7 @@ export class FileContextTracker {
 	}
 
 	// Tracks a file operation in metadata and sets up a watcher for the file
-	// This is the main entry point for FileContextTracker and is called when a file is passed to Roo via a tool, mention, or edit.
+	// This is the main entry point for FileContextTracker and is called when a file is passed to Mojo via a tool, mention, or edit.
 	async trackFileContext(filePath: string, operation: RecordSource) {
 		try {
 			const cwd = this.getCwd()
@@ -165,8 +165,8 @@ export class FileContextTracker {
 				path: filePath,
 				record_state: "active",
 				record_source: source,
-				roo_read_date: getLatestDateForField(filePath, "roo_read_date"),
-				roo_edit_date: getLatestDateForField(filePath, "roo_edit_date"),
+				Mojo_read_date: getLatestDateForField(filePath, "Mojo_read_date"),
+				Mojo_edit_date: getLatestDateForField(filePath, "Mojo_edit_date"),
 				user_edit_date: getLatestDateForField(filePath, "user_edit_date"),
 			}
 
@@ -177,18 +177,18 @@ export class FileContextTracker {
 					this.recentlyModifiedFiles.add(filePath)
 					break
 
-				// roo_edited: Roo has edited the file
-				case "roo_edited":
-					newEntry.roo_read_date = now
-					newEntry.roo_edit_date = now
+				// Mojo_edited: Mojo has edited the file
+				case "Mojo_edited":
+					newEntry.Mojo_read_date = now
+					newEntry.Mojo_edit_date = now
 					this.checkpointPossibleFiles.add(filePath)
-					this.markFileAsEditedByRoo(filePath)
+					this.markFileAsEditedByMojo(filePath)
 					break
 
-				// read_tool/file_mentioned: Roo has read the file via a tool or file mention
+				// read_tool/file_mentioned: Mojo has read the file via a tool or file mention
 				case "read_tool":
 				case "file_mentioned":
-					newEntry.roo_read_date = now
+					newEntry.Mojo_read_date = now
 					break
 			}
 
@@ -212,9 +212,9 @@ export class FileContextTracker {
 		return files
 	}
 
-	// Marks a file as edited by Roo to prevent false positives in file watchers
-	markFileAsEditedByRoo(filePath: string): void {
-		this.recentlyEditedByRoo.add(filePath)
+	// Marks a file as edited by Mojo to prevent false positives in file watchers
+	markFileAsEditedByMojo(filePath: string): void {
+		this.recentlyEditedByMojo.add(filePath)
 	}
 
 	// Disposes all file watchers

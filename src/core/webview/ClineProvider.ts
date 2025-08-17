@@ -15,7 +15,7 @@ import {
 	type GlobalState,
 	type ProviderName,
 	type ProviderSettings,
-	type RooCodeSettings,
+	type MojoCodeSettings,
 	type ProviderSettingsEntry,
 	type StaticAppProperties,
 	type DynamicAppProperties,
@@ -30,15 +30,15 @@ import {
 	type TerminalActionPromptType,
 	type HistoryItem,
 	type ClineAsk,
-	RooCodeEventName,
+	MojoCodeEventName,
 	requestyDefaultModelId,
 	openRouterDefaultModelId,
 	glamaDefaultModelId,
 	DEFAULT_TERMINAL_OUTPUT_CHARACTER_LIMIT,
 	DEFAULT_WRITE_DELAY_MS,
-} from "@roo-code/types"
-import { TelemetryService } from "@roo-code/telemetry"
-import { type CloudUserInfo, CloudService, ORGANIZATION_ALLOW_ALL, getRooCodeApiUrl } from "@roo-code/cloud"
+} from "@Mojo-code/types"
+import { TelemetryService } from "@Mojo-code/telemetry"
+// Cloud imports removed - cloud functionality has been removed
 
 import { Package } from "../../shared/package"
 import { findLast } from "../../shared/array"
@@ -63,7 +63,7 @@ import { MarketplaceManager } from "../../services/marketplace"
 import { ShadowCheckpointService } from "../../services/checkpoints/ShadowCheckpointService"
 import { CodeIndexManager } from "../../services/code-index/manager"
 import type { IndexProgressUpdate } from "../../services/code-index/interfaces/manager"
-import { MdmService } from "../../services/mdm/MdmService"
+
 
 import { fileExistsAtPath } from "../../utils/fs"
 import { setTtsEnabled, setTtsSpeed } from "../../utils/tts"
@@ -112,7 +112,7 @@ export class ClineProvider
 	private _workspaceTracker?: WorkspaceTracker // workSpaceTracker read-only for access outside this class
 	protected mcpHub?: McpHub // Change from private to protected
 	private marketplaceManager: MarketplaceManager
-	private mdmService?: MdmService
+
 	private taskCreationCallback: (task: Task) => void
 	private taskEventListeners: WeakMap<Task, Array<() => void>> = new WeakMap()
 
@@ -129,14 +129,14 @@ export class ClineProvider
 		private readonly outputChannel: vscode.OutputChannel,
 		private readonly renderContext: "sidebar" | "editor" = "sidebar",
 		public readonly contextProxy: ContextProxy,
-		mdmService?: MdmService,
+
 	) {
 		super()
 
 		this.log("ClineProvider instantiated")
 		ClineProvider.activeInstances.add(this)
 
-		this.mdmService = mdmService
+
 		this.updateGlobalState("codebaseIndexModels", EMBEDDING_MODEL_PROFILES)
 
 		// Start configuration loading (which might trigger indexing) in the background.
@@ -167,46 +167,46 @@ export class ClineProvider
 		this.marketplaceManager = new MarketplaceManager(this.context, this.customModesManager)
 
 		this.taskCreationCallback = (instance: Task) => {
-			this.emit(RooCodeEventName.TaskCreated, instance)
+			this.emit(MojoCodeEventName.TaskCreated, instance)
 
 			// Create named listener functions so we can remove them later.
-			const onTaskStarted = () => this.emit(RooCodeEventName.TaskStarted, instance.taskId)
+			const onTaskStarted = () => this.emit(MojoCodeEventName.TaskStarted, instance.taskId)
 			const onTaskCompleted = (taskId: string, tokenUsage: any, toolUsage: any) =>
-				this.emit(RooCodeEventName.TaskCompleted, taskId, tokenUsage, toolUsage)
-			const onTaskAborted = () => this.emit(RooCodeEventName.TaskAborted, instance.taskId)
-			const onTaskFocused = () => this.emit(RooCodeEventName.TaskFocused, instance.taskId)
-			const onTaskUnfocused = () => this.emit(RooCodeEventName.TaskUnfocused, instance.taskId)
-			const onTaskActive = (taskId: string) => this.emit(RooCodeEventName.TaskActive, taskId)
-			const onTaskInteractive = (taskId: string) => this.emit(RooCodeEventName.TaskInteractive, taskId)
-			const onTaskResumable = (taskId: string) => this.emit(RooCodeEventName.TaskResumable, taskId)
-			const onTaskIdle = (taskId: string) => this.emit(RooCodeEventName.TaskIdle, taskId)
+				this.emit(MojoCodeEventName.TaskCompleted, taskId, tokenUsage, toolUsage)
+			const onTaskAborted = () => this.emit(MojoCodeEventName.TaskAborted, instance.taskId)
+			const onTaskFocused = () => this.emit(MojoCodeEventName.TaskFocused, instance.taskId)
+			const onTaskUnfocused = () => this.emit(MojoCodeEventName.TaskUnfocused, instance.taskId)
+			const onTaskActive = (taskId: string) => this.emit(MojoCodeEventName.TaskActive, taskId)
+			const onTaskInteractive = (taskId: string) => this.emit(MojoCodeEventName.TaskInteractive, taskId)
+			const onTaskResumable = (taskId: string) => this.emit(MojoCodeEventName.TaskResumable, taskId)
+			const onTaskIdle = (taskId: string) => this.emit(MojoCodeEventName.TaskIdle, taskId)
 
 			// Attach the listeners.
-			instance.on(RooCodeEventName.TaskStarted, onTaskStarted)
-			instance.on(RooCodeEventName.TaskCompleted, onTaskCompleted)
-			instance.on(RooCodeEventName.TaskAborted, onTaskAborted)
-			instance.on(RooCodeEventName.TaskFocused, onTaskFocused)
-			instance.on(RooCodeEventName.TaskUnfocused, onTaskUnfocused)
-			instance.on(RooCodeEventName.TaskActive, onTaskActive)
-			instance.on(RooCodeEventName.TaskInteractive, onTaskInteractive)
-			instance.on(RooCodeEventName.TaskResumable, onTaskResumable)
-			instance.on(RooCodeEventName.TaskIdle, onTaskIdle)
+			instance.on(MojoCodeEventName.TaskStarted, onTaskStarted)
+			instance.on(MojoCodeEventName.TaskCompleted, onTaskCompleted)
+			instance.on(MojoCodeEventName.TaskAborted, onTaskAborted)
+			instance.on(MojoCodeEventName.TaskFocused, onTaskFocused)
+			instance.on(MojoCodeEventName.TaskUnfocused, onTaskUnfocused)
+			instance.on(MojoCodeEventName.TaskActive, onTaskActive)
+			instance.on(MojoCodeEventName.TaskInteractive, onTaskInteractive)
+			instance.on(MojoCodeEventName.TaskResumable, onTaskResumable)
+			instance.on(MojoCodeEventName.TaskIdle, onTaskIdle)
 
 			// Store the cleanup functions for later removal.
 			this.taskEventListeners.set(instance, [
-				() => instance.off(RooCodeEventName.TaskStarted, onTaskStarted),
-				() => instance.off(RooCodeEventName.TaskCompleted, onTaskCompleted),
-				() => instance.off(RooCodeEventName.TaskAborted, onTaskAborted),
-				() => instance.off(RooCodeEventName.TaskFocused, onTaskFocused),
-				() => instance.off(RooCodeEventName.TaskUnfocused, onTaskUnfocused),
-				() => instance.off(RooCodeEventName.TaskActive, onTaskActive),
-				() => instance.off(RooCodeEventName.TaskInteractive, onTaskInteractive),
-				() => instance.off(RooCodeEventName.TaskResumable, onTaskResumable),
-				() => instance.off(RooCodeEventName.TaskIdle, onTaskIdle),
+				() => instance.off(MojoCodeEventName.TaskStarted, onTaskStarted),
+				() => instance.off(MojoCodeEventName.TaskCompleted, onTaskCompleted),
+				() => instance.off(MojoCodeEventName.TaskAborted, onTaskAborted),
+				() => instance.off(MojoCodeEventName.TaskFocused, onTaskFocused),
+				() => instance.off(MojoCodeEventName.TaskUnfocused, onTaskUnfocused),
+				() => instance.off(MojoCodeEventName.TaskActive, onTaskActive),
+				() => instance.off(MojoCodeEventName.TaskInteractive, onTaskInteractive),
+				() => instance.off(MojoCodeEventName.TaskResumable, onTaskResumable),
+				() => instance.off(MojoCodeEventName.TaskIdle, onTaskIdle),
 			])
 		}
 
-		// Initialize Roo Code Cloud profile sync.
+		// Initialize Mojo Code Cloud profile sync.
 		this.initializeCloudProfileSync().catch((error) => {
 			this.log(`Failed to initialize cloud profile sync: ${error}`)
 		})
@@ -237,15 +237,7 @@ export class ClineProvider
 	 */
 	private async initializeCloudProfileSync() {
 		try {
-			// Check if authenticated and sync profiles
-			if (CloudService.hasInstance() && CloudService.instance.isAuthenticated()) {
-				await this.syncCloudProfiles()
-			}
-
-			// Set up listener for future updates
-			if (CloudService.hasInstance()) {
-				CloudService.instance.on("settings-updated", this.handleCloudSettingsUpdate)
-			}
+			// Cloud profile synchronization has been removed due to unavailability of cloud service integration
 		} catch (error) {
 			this.log(`Error in initializeCloudProfileSync: ${error}`)
 		}
@@ -266,35 +258,7 @@ export class ClineProvider
 	 * Synchronize cloud profiles with local profiles
 	 */
 	private async syncCloudProfiles() {
-		try {
-			const settings = CloudService.instance.getOrganizationSettings()
-			if (!settings?.providerProfiles) {
-				return
-			}
-
-			const currentApiConfigName = this.getGlobalState("currentApiConfigName")
-			const result = await this.providerSettingsManager.syncCloudProfiles(
-				settings.providerProfiles,
-				currentApiConfigName,
-			)
-
-			if (result.hasChanges) {
-				// Update list
-				await this.updateGlobalState("listApiConfigMeta", await this.providerSettingsManager.listConfig())
-
-				if (result.activeProfileChanged && result.activeProfileId) {
-					// Reload full settings for new active profile
-					const profile = await this.providerSettingsManager.getProfile({
-						id: result.activeProfileId,
-					})
-					await this.activateProviderProfile({ name: profile.name })
-				}
-
-				await this.postStateToWebview()
-			}
-		} catch (error) {
-			this.log(`Error syncing cloud profiles: ${error}`)
-		}
+		// Cloud profile synchronization removed - cloud service integration unavailable
 	}
 
 	// Adds a new Task instance to clineStack, marking the start of a new task.
@@ -305,7 +269,7 @@ export class ClineProvider
 
 		// Add this cline instance into the stack that represents the order of all the called tasks.
 		this.clineStack.push(task)
-		task.emit(RooCodeEventName.TaskFocused)
+		task.emit(MojoCodeEventName.TaskFocused)
 
 		// Perform special setup provider specific tasks.
 		await this.performPreparationTasks(task)
@@ -359,7 +323,7 @@ export class ClineProvider
 				)
 			}
 
-			task.emit(RooCodeEventName.TaskUnfocused)
+			task.emit(MojoCodeEventName.TaskUnfocused)
 
 			// Remove event listeners before clearing the reference.
 			const cleanupFunctions = this.taskEventListeners.get(task)
@@ -493,10 +457,7 @@ export class ClineProvider
 
 		this.clearWebviewResources()
 
-		// Clean up cloud service event listener
-		if (CloudService.hasInstance()) {
-			CloudService.instance.off("settings-updated", this.handleCloudSettingsUpdate)
-		}
+		// Cloud service event listener cleanup removed - cloud service integration unavailable
 
 		while (this.disposables.length) {
 			const x = this.disposables.pop()
@@ -610,11 +571,7 @@ export class ClineProvider
 		try {
 			await visibleProvider.createTask(prompt)
 		} catch (error) {
-			if (error instanceof OrganizationAllowListViolationError) {
-				// Errors from terminal commands seem to get swallowed / ignored.
-				vscode.window.showErrorMessage(error.message)
-			}
-
+			// Organization filtering has been removed
 			throw error
 		}
 	}
@@ -763,18 +720,15 @@ export class ClineProvider
 	) {
 		const {
 			apiConfiguration,
-			organizationAllowList,
+
 			diffEnabled: enableDiff,
 			enableCheckpoints,
 			fuzzyMatchThreshold,
 			experiments,
-			cloudUserInfo,
 			remoteControlEnabled,
 		} = await this.getState()
 
-		if (!ProfileValidator.isProfileAllowed(apiConfiguration, organizationAllowList)) {
-			throw new OrganizationAllowListViolationError(t("common:errors.violated_organization_allowlist"))
-		}
+		// Organization filtering has been removed
 
 		const task = new Task({
 			provider: this,
@@ -790,7 +744,7 @@ export class ClineProvider
 			parentTask,
 			taskNumber: this.clineStack.length + 1,
 			onCreated: this.taskCreationCallback,
-			enableTaskBridge: isRemoteControlEnabled(cloudUserInfo, remoteControlEnabled),
+			enableTaskBridge: isRemoteControlEnabled(remoteControlEnabled),
 			...options,
 		})
 
@@ -851,16 +805,15 @@ export class ClineProvider
 
 		const {
 			apiConfiguration,
-			diffEnabled: enableDiff,
+			enableDiff,
 			enableCheckpoints,
 			fuzzyMatchThreshold,
 			experiments,
-			cloudUserInfo,
 			remoteControlEnabled,
 		} = await this.getState()
 
 		// Determine if TaskBridge should be enabled
-		const enableTaskBridge = isRemoteControlEnabled(cloudUserInfo, remoteControlEnabled)
+		const enableTaskBridge = isRemoteControlEnabled(remoteControlEnabled)
 
 		const task = new Task({
 			provider: this,
@@ -976,7 +929,7 @@ export class ClineProvider
 						window.AUDIO_BASE_URI = "${audioUri}"
 						window.MATERIAL_ICONS_BASE_URI = "${materialIconsUri}"
 					</script>
-					<title>Roo Code</title>
+					<title>Mojo Code</title>
 				</head>
 				<body>
 					<div id="root"></div>
@@ -1049,7 +1002,7 @@ export class ClineProvider
 				window.AUDIO_BASE_URI = "${audioUri}"
 				window.MATERIAL_ICONS_BASE_URI = "${materialIconsUri}"
 			</script>
-            <title>Roo Code</title>
+            <title>Mojo Code</title>
           </head>
           <body>
             <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -1083,7 +1036,7 @@ export class ClineProvider
 
 		if (cline) {
 			TelemetryService.instance.captureModeSwitch(cline.taskId, newMode)
-			cline.emit(RooCodeEventName.TaskModeSwitched, cline.taskId, newMode)
+			cline.emit(MojoCodeEventName.TaskModeSwitched, cline.taskId, newMode)
 
 			// Store the current mode in case we need to rollback
 			const previousMode = (cline as any)._taskMode
@@ -1319,21 +1272,21 @@ export class ClineProvider
 		// Get platform-specific application data directory
 		let mcpServersDir: string
 		if (process.platform === "win32") {
-			// Windows: %APPDATA%\Roo-Code\MCP
-			mcpServersDir = path.join(os.homedir(), "AppData", "Roaming", "Roo-Code", "MCP")
+			// Windows: %APPDATA%\Mojo-Code\MCP
+			mcpServersDir = path.join(os.homedir(), "AppData", "Roaming", "Mojo-Code", "MCP")
 		} else if (process.platform === "darwin") {
 			// macOS: ~/Documents/Cline/MCP
 			mcpServersDir = path.join(os.homedir(), "Documents", "Cline", "MCP")
 		} else {
 			// Linux: ~/.local/share/Cline/MCP
-			mcpServersDir = path.join(os.homedir(), ".local", "share", "Roo-Code", "MCP")
+			mcpServersDir = path.join(os.homedir(), ".local", "share", "Mojo-Code", "MCP")
 		}
 
 		try {
 			await fs.mkdir(mcpServersDir, { recursive: true })
 		} catch (error) {
 			// Fallback to a relative path if directory creation fails
-			return path.join(os.homedir(), ".roo-code", "mcp")
+			return path.join(os.homedir(), ".Mojo-code", "mcp")
 		}
 		return mcpServersDir
 	}
@@ -1551,11 +1504,6 @@ export class ClineProvider
 	async postStateToWebview() {
 		const state = await this.getStateToPostToWebview()
 		this.postMessageToWebview({ type: "state", state })
-
-		// Check MDM compliance and send user to account tab if not compliant
-		if (!this.checkMdmCompliance()) {
-			await this.postMessageToWebview({ type: "action", action: "accountButtonClicked" })
-		}
 	}
 
 	/**
@@ -1730,18 +1678,14 @@ export class ClineProvider
 			maxWorkspaceFiles,
 			browserToolEnabled,
 			telemetrySetting,
-			showRooIgnoredFiles,
+			showMojoIgnoredFiles,
 			language,
 			maxReadFileLine,
 			maxImageFileSize,
 			maxTotalImageSize,
 			terminalCompressProgressBar,
 			historyPreviewCollapsed,
-			cloudUserInfo,
-			cloudIsAuthenticated,
-			sharingEnabled,
-			organizationAllowList,
-			organizationSettingsVersion,
+	        organizationSettingsVersion,
 			maxConcurrentFileReads,
 			condensingApiConfigId,
 			customCondensingPrompt,
@@ -1842,7 +1786,7 @@ export class ClineProvider
 			telemetrySetting,
 			telemetryKey,
 			machineId,
-			showRooIgnoredFiles: showRooIgnoredFiles ?? true,
+			showMojoIgnoredFiles: showMojoIgnoredFiles ?? true,
 			language: language ?? formatLanguage(vscode.env.language),
 			renderContext: this.renderContext,
 			maxReadFileLine: maxReadFileLine ?? -1,
@@ -1856,7 +1800,7 @@ export class ClineProvider
 			cloudUserInfo,
 			cloudIsAuthenticated: cloudIsAuthenticated ?? false,
 			sharingEnabled: sharingEnabled ?? false,
-			organizationAllowList,
+			// organizationAllowList removed - organization filtering has been removed
 			organizationSettingsVersion,
 			condensingApiConfigId,
 			customCondensingPrompt,
@@ -1872,10 +1816,8 @@ export class ClineProvider
 				codebaseIndexSearchMaxResults: codebaseIndexConfig?.codebaseIndexSearchMaxResults,
 				codebaseIndexSearchMinScore: codebaseIndexConfig?.codebaseIndexSearchMinScore,
 			},
-			mdmCompliant: this.checkMdmCompliance(),
 			profileThresholds: profileThresholds ?? {},
-			cloudApiUrl: getRooCodeApiUrl(),
-			hasOpenedModeSelector: this.getGlobalState("hasOpenedModeSelector") ?? false,
+		    hasOpenedModeSelector: this.getGlobalState("hasOpenedModeSelector") ?? false,
 			alwaysAllowFollowupQuestions: alwaysAllowFollowupQuestions ?? false,
 			followupAutoApproveTimeoutMs: followupAutoApproveTimeoutMs ?? 60000,
 			includeDiagnosticMessages: includeDiagnosticMessages ?? true,
@@ -1906,58 +1848,13 @@ export class ClineProvider
 			providerSettings.apiProvider = apiProvider
 		}
 
-		let organizationAllowList = ORGANIZATION_ALLOW_ALL
+		// Organization filtering has been removed
 
-		try {
-			organizationAllowList = await CloudService.instance.getAllowList()
-		} catch (error) {
-			console.error(
-				`[getState] failed to get organization allow list: ${error instanceof Error ? error.message : String(error)}`,
-			)
-		}
+		// Cloud service integration removed - user info, authentication, and sharing disabled
+		// cloudUserInfo, cloudIsAuthenticated, and sharingEnabled variables removed
 
-		let cloudUserInfo: CloudUserInfo | null = null
-
-		try {
-			cloudUserInfo = CloudService.instance.getUserInfo()
-		} catch (error) {
-			console.error(
-				`[getState] failed to get cloud user info: ${error instanceof Error ? error.message : String(error)}`,
-			)
-		}
-
-		let cloudIsAuthenticated: boolean = false
-
-		try {
-			cloudIsAuthenticated = CloudService.instance.isAuthenticated()
-		} catch (error) {
-			console.error(
-				`[getState] failed to get cloud authentication state: ${error instanceof Error ? error.message : String(error)}`,
-			)
-		}
-
-		let sharingEnabled: boolean = false
-
-		try {
-			sharingEnabled = await CloudService.instance.canShareTask()
-		} catch (error) {
-			console.error(
-				`[getState] failed to get sharing enabled state: ${error instanceof Error ? error.message : String(error)}`,
-			)
-		}
-
+		// Cloud service integration removed - organization settings version no longer available
 		let organizationSettingsVersion: number = -1
-
-		try {
-			if (CloudService.hasInstance()) {
-				const settings = CloudService.instance.getOrganizationSettings()
-				organizationSettingsVersion = settings?.version ?? -1
-			}
-		} catch (error) {
-			console.error(
-				`[getState] failed to get organization settings version: ${error instanceof Error ? error.message : String(error)}`,
-			)
-		}
 
 		// Return the same structure as before
 		return {
@@ -2033,16 +1930,14 @@ export class ClineProvider
 			openRouterUseMiddleOutTransform: stateValues.openRouterUseMiddleOutTransform ?? true,
 			browserToolEnabled: stateValues.browserToolEnabled ?? true,
 			telemetrySetting: stateValues.telemetrySetting || "unset",
-			showRooIgnoredFiles: stateValues.showRooIgnoredFiles ?? true,
+			showMojoIgnoredFiles: stateValues.showMojoIgnoredFiles ?? true,
 			maxReadFileLine: stateValues.maxReadFileLine ?? -1,
 			maxImageFileSize: stateValues.maxImageFileSize ?? 5,
 			maxTotalImageSize: stateValues.maxTotalImageSize ?? 20,
 			maxConcurrentFileReads: stateValues.maxConcurrentFileReads ?? 5,
 			historyPreviewCollapsed: stateValues.historyPreviewCollapsed ?? false,
-			cloudUserInfo,
-			cloudIsAuthenticated,
-			sharingEnabled,
-			organizationAllowList,
+			// Cloud functionality removed - cloudUserInfo, cloudIsAuthenticated, and sharingEnabled no longer available
+			// organizationAllowList removed - organization filtering has been removed
 			organizationSettingsVersion,
 			// Explicitly add condensing settings
 			condensingApiConfigId: stateValues.condensingApiConfigId,
@@ -2102,11 +1997,11 @@ export class ClineProvider
 		return this.contextProxy.getValue(key)
 	}
 
-	public async setValue<K extends keyof RooCodeSettings>(key: K, value: RooCodeSettings[K]) {
+	public async setValue<K extends keyof MojoCodeSettings>(key: K, value: MojoCodeSettings[K]) {
 		await this.contextProxy.setValue(key, value)
 	}
 
-	public getValue<K extends keyof RooCodeSettings>(key: K) {
+	public getValue<K extends keyof MojoCodeSettings>(key: K) {
 		return this.contextProxy.getValue(key)
 	}
 
@@ -2114,7 +2009,7 @@ export class ClineProvider
 		return this.contextProxy.getValues()
 	}
 
-	public async setValues(values: RooCodeSettings) {
+	public async setValues(values: MojoCodeSettings) {
 		await this.contextProxy.setValues(values)
 	}
 
@@ -2170,76 +2065,9 @@ export class ClineProvider
 		return this.mcpHub
 	}
 
-	/**
-	 * Check if the current state is compliant with MDM policy
-	 * @returns true if compliant, false if blocked
-	 */
-	public checkMdmCompliance(): boolean {
-		if (!this.mdmService) {
-			return true // No MDM service, allow operation
-		}
 
-		const compliance = this.mdmService.isCompliant()
 
-		if (!compliance.compliant) {
-			return false
-		}
-
-		return true
-	}
-
-	public async handleRemoteControlToggle(enabled: boolean) {
-		const { CloudService: CloudServiceImport, ExtensionBridgeService } = await import("@roo-code/cloud")
-
-		const userInfo = CloudServiceImport.instance.getUserInfo()
-
-		const bridgeConfig = await CloudServiceImport.instance.cloudAPI?.bridgeConfig().catch(() => undefined)
-
-		if (!bridgeConfig) {
-			this.log("[ClineProvider#handleRemoteControlToggle] Failed to get bridge config")
-			return
-		}
-
-		await ExtensionBridgeService.handleRemoteControlState(
-			userInfo,
-			enabled,
-			{ ...bridgeConfig, provider: this, sessionId: vscode.env.sessionId },
-			(message: string) => this.log(message),
-		)
-
-		if (isRemoteControlEnabled(userInfo, enabled)) {
-			const currentTask = this.getCurrentTask()
-
-			if (currentTask && !currentTask.bridgeService) {
-				try {
-					currentTask.bridgeService = ExtensionBridgeService.getInstance()
-
-					if (currentTask.bridgeService) {
-						await currentTask.bridgeService.subscribeToTask(currentTask)
-					}
-				} catch (error) {
-					const message = `[ClineProvider#handleRemoteControlToggle] subscribeToTask failed - ${error instanceof Error ? error.message : String(error)}`
-					this.log(message)
-					console.error(message)
-				}
-			}
-		} else {
-			for (const task of this.clineStack) {
-				if (task.bridgeService) {
-					try {
-						await task.bridgeService.unsubscribeFromTask(task.taskId)
-						task.bridgeService = null
-					} catch (error) {
-						const message = `[ClineProvider#handleRemoteControlToggle] unsubscribeFromTask failed - ${error instanceof Error ? error.message : String(error)}`
-						this.log(message)
-						console.error(message)
-					}
-				}
-			}
-
-			ExtensionBridgeService.resetInstance()
-		}
-	}
+	// Remote control functionality removed - cloud service integration no longer available
 
 	private _appProperties?: StaticAppProperties
 
@@ -2263,20 +2091,10 @@ export class ClineProvider
 		return this._appProperties ?? this.getAppProperties()
 	}
 
+	// Cloud properties functionality removed due to unavailable cloud service integration
 	private getCloudProperties(): CloudAppProperties {
-		let cloudIsAuthenticated: boolean | undefined
-
-		try {
-			if (CloudService.hasInstance()) {
-				cloudIsAuthenticated = CloudService.instance.isAuthenticated()
-			}
-		} catch (error) {
-			// Silently handle errors to avoid breaking telemetry collection.
-			this.log(`[getTelemetryProperties] Failed to get cloud auth state: ${error}`)
-		}
-
 		return {
-			cloudIsAuthenticated,
+			cloudIsAuthenticated: undefined,
 		}
 	}
 
@@ -2384,11 +2202,5 @@ export class ClineProvider
 				values: currentManager.getCurrentStatus(),
 			})
 		}
-	}
-}
-
-class OrganizationAllowListViolationError extends Error {
-	constructor(message: string) {
-		super(message)
 	}
 }

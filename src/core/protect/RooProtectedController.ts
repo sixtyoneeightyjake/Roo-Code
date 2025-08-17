@@ -4,22 +4,22 @@ import ignore, { Ignore } from "ignore"
 export const SHIELD_SYMBOL = "\u{1F6E1}"
 
 /**
- * Controls write access to Roo configuration files by enforcing protection patterns.
- * Prevents auto-approved modifications to sensitive Roo configuration files.
+ * Controls write access to Mojo configuration files by enforcing protection patterns.
+ * Prevents auto-approved modifications to sensitive Mojo configuration files.
  */
-export class RooProtectedController {
+export class MojoProtectedController {
 	private cwd: string
 	private ignoreInstance: Ignore
 
-	// Predefined list of protected Roo configuration patterns
+	// Predefined list of protected Mojo configuration patterns
 	private static readonly PROTECTED_PATTERNS = [
-		".rooignore",
-		".roomodes",
-		".roorules*",
+		".Mojoignore",
+		".Mojomodes",
+		".Mojorules*",
 		".clinerules*",
-		".roo/**",
+		".Mojo/**",
 		".vscode/**",
-		".rooprotected", // For future use
+		".Mojoprotected", // For future use
 		"AGENTS.md",
 		"AGENT.md", // Alternative singular form for compatibility
 	]
@@ -28,7 +28,7 @@ export class RooProtectedController {
 		this.cwd = cwd
 		// Initialize ignore instance with protected patterns
 		this.ignoreInstance = ignore()
-		this.ignoreInstance.add(RooProtectedController.PROTECTED_PATTERNS)
+		this.ignoreInstance.add(MojoProtectedController.PROTECTED_PATTERNS)
 	}
 
 	/**
@@ -85,7 +85,7 @@ export class RooProtectedController {
 	 * Get display message for protected file operations
 	 */
 	getProtectionMessage(): string {
-		return "This is a Roo configuration file and requires approval for modifications"
+		return "This is a Mojo configuration file and requires approval for modifications"
 	}
 
 	/**
@@ -93,14 +93,14 @@ export class RooProtectedController {
 	 * @returns Formatted instructions about file protection
 	 */
 	getInstructions(): string {
-		const patterns = RooProtectedController.PROTECTED_PATTERNS.join(", ")
-		return `# Protected Files\n\n(The following Roo configuration file patterns are write-protected and always require approval for modifications, regardless of autoapproval settings. When using list_files, you'll notice a ${SHIELD_SYMBOL} next to files that are write-protected.)\n\nProtected patterns: ${patterns}`
+		const patterns = MojoProtectedController.PROTECTED_PATTERNS.join(", ")
+		return `# Protected Files\n\n(The following Mojo configuration file patterns are write-protected and always require approval for modifications, regardless of autoapproval settings. When using list_files, you'll notice a ${SHIELD_SYMBOL} next to files that are write-protected.)\n\nProtected patterns: ${patterns}`
 	}
 
 	/**
 	 * Get the list of protected patterns (for testing/debugging)
 	 */
 	static getProtectedPatterns(): readonly string[] {
-		return RooProtectedController.PROTECTED_PATTERNS
+		return MojoProtectedController.PROTECTED_PATTERNS
 	}
 }

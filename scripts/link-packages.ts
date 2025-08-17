@@ -54,10 +54,10 @@ interface NpmPackage {
 const config: Config = {
 	packages: [
 		{
-			name: "@roo-code/cloud",
-			sourcePath: "../Roo-Code-Cloud/packages/sdk",
-			targetPaths: ["src/node_modules/@roo-code/cloud"] as const,
-			replacePath: "node_modules/.pnpm/@roo-code+cloud*",
+			name: "@Mojo-code/cloud",
+			sourcePath: "../Mojo-Code-Cloud/packages/sdk",
+			targetPaths: ["src/node_modules/@Mojo-code/cloud"] as const,
+			replacePath: "node_modules/.pnpm/@Mojo-code+cloud*",
 			npmPath: "npm",
 			watchCommand: "pnpm build:development:watch",
 			watchOutput: {

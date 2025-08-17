@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://roocode.com',
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://Mojocode.com',
   generateRobotsTxt: true,
   generateIndexSitemap: false, // We don't need index sitemap for a small site
   changefreq: 'monthly',

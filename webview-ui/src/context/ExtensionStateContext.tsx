@@ -6,22 +6,22 @@ import {
 	type CustomModePrompts,
 	type ModeConfig,
 	type ExperimentId,
-} from "@roo-code/types"
+} from "@Mojo-code/types"
 
-import { type OrganizationAllowList, ORGANIZATION_ALLOW_ALL } from "@roo/cloud"
+// Removed cloud imports
 
-import { ExtensionMessage, ExtensionState, MarketplaceInstalledMetadata, Command } from "@roo/ExtensionMessage"
-import { findLastIndex } from "@roo/array"
-import { McpServer } from "@roo/mcp"
-import { checkExistKey } from "@roo/checkExistApiConfig"
-import { Mode, defaultModeSlug, defaultPrompts } from "@roo/modes"
-import { CustomSupportPrompts } from "@roo/support-prompt"
-import { experimentDefault } from "@roo/experiments"
-import { TelemetrySetting } from "@roo/TelemetrySetting"
-import { RouterModels } from "@roo/api"
+import { ExtensionMessage, ExtensionState, MarketplaceInstalledMetadata, Command } from "@Mojo/ExtensionMessage"
+import { findLastIndex } from "@Mojo/array"
+import { McpServer } from "@Mojo/mcp"
+import { checkExistKey } from "@Mojo/checkExistApiConfig"
+import { Mode, defaultModeSlug, defaultPrompts } from "@Mojo/modes"
+import { CustomSupportPrompts } from "@Mojo/support-prompt"
+import { experimentDefault } from "@Mojo/experiments"
+import { TelemetrySetting } from "@Mojo/TelemetrySetting"
+import { RouterModels } from "@Mojo/api"
 
-import { vscode } from "@src/utils/vscode"
-import { convertTextMateToHljs } from "@src/utils/textMateToHljs"
+import { vscode } from "@/utils/vscode"
+import { convertTextMateToHljs } from "@/utils/textMateToHljs"
 
 export interface ExtensionStateContextType extends ExtensionState {
 	historyPreviewCollapsed?: boolean // Add the new state property
@@ -34,12 +34,8 @@ export interface ExtensionStateContextType extends ExtensionState {
 	filePaths: string[]
 	openedTabs: Array<{ label: string; isActive: boolean; path?: string }>
 	commands: Command[]
-	organizationAllowList: OrganizationAllowList
 	organizationSettingsVersion: number
-	cloudIsAuthenticated: boolean
-	sharingEnabled: boolean
 	maxConcurrentFileReads?: number
-	mdmCompliant?: boolean
 	hasOpenedModeSelector: boolean // New property to track if user has opened mode selector
 	setHasOpenedModeSelector: (value: boolean) => void // Setter for the new property
 	alwaysAllowFollowupQuestions: boolean // New property for follow-up questions auto-approve
@@ -66,7 +62,7 @@ export interface ExtensionStateContextType extends ExtensionState {
 	setAlwaysAllowModeSwitch: (value: boolean) => void
 	setAlwaysAllowSubtasks: (value: boolean) => void
 	setBrowserToolEnabled: (value: boolean) => void
-	setShowRooIgnoredFiles: (value: boolean) => void
+	setShowMojoIgnoredFiles: (value: boolean) => void
 	setShowAnnouncement: (value: boolean) => void
 	setAllowedCommands: (value: string[]) => void
 	setDeniedCommands: (value: string[]) => void
@@ -174,7 +170,7 @@ export const mergeExtensionState = (prevState: ExtensionState, newState: Extensi
 }
 
 export const ExtensionStateContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-	const [state, setState] = useState<ExtensionState & { organizationAllowList?: OrganizationAllowList }>({
+	const [state, setState] = useState<ExtensionState>({
 		version: "",
 		clineMessages: [],
 		taskHistory: [],
@@ -217,7 +213,7 @@ export const ExtensionStateContextProvider: React.FC<{ children: React.ReactNode
 		cwd: "",
 		browserToolEnabled: true,
 		telemetrySetting: "unset",
-		showRooIgnoredFiles: true, // Default to showing .rooignore'd files with lock symbol (current behavior).
+		showMojoIgnoredFiles: true, // Default to showing .Mojoignore'd files with lock symbol (current behavior).
 		renderContext: "sidebar",
 		maxReadFileLine: -1, // Default max read file line limit
 		maxImageFileSize: 5, // Default max image file size in MB
@@ -229,10 +225,7 @@ export const ExtensionStateContextProvider: React.FC<{ children: React.ReactNode
 		terminalZdotdir: false, // Default ZDOTDIR handling setting
 		terminalCompressProgressBar: true, // Default to compress progress bar output
 		historyPreviewCollapsed: false, // Initialize the new state (default to expanded)
-		cloudUserInfo: null,
-		cloudIsAuthenticated: false,
-		sharingEnabled: false,
-		organizationAllowList: ORGANIZATION_ALLOW_ALL,
+
 		organizationSettingsVersion: -1,
 		autoCondenseContext: true,
 		autoCondenseContextPercent: 100,
@@ -404,7 +397,6 @@ export const ExtensionStateContextProvider: React.FC<{ children: React.ReactNode
 		writeDelayMs: state.writeDelayMs,
 		screenshotQuality: state.screenshotQuality,
 		routerModels: extensionRouterModels,
-		cloudIsAuthenticated: state.cloudIsAuthenticated ?? false,
 		organizationSettingsVersion: state.organizationSettingsVersion ?? -1,
 		marketplaceItems,
 		marketplaceInstalledMetadata,
@@ -474,7 +466,7 @@ export const ExtensionStateContextProvider: React.FC<{ children: React.ReactNode
 		setMaxWorkspaceFiles: (value) => setState((prevState) => ({ ...prevState, maxWorkspaceFiles: value })),
 		setBrowserToolEnabled: (value) => setState((prevState) => ({ ...prevState, browserToolEnabled: value })),
 		setTelemetrySetting: (value) => setState((prevState) => ({ ...prevState, telemetrySetting: value })),
-		setShowRooIgnoredFiles: (value) => setState((prevState) => ({ ...prevState, showRooIgnoredFiles: value })),
+		setShowMojoIgnoredFiles: (value) => setState((prevState) => ({ ...prevState, showMojoIgnoredFiles: value })),
 		setRemoteBrowserEnabled: (value) => setState((prevState) => ({ ...prevState, remoteBrowserEnabled: value })),
 		setAwsUsePromptCache: (value) => setState((prevState) => ({ ...prevState, awsUsePromptCache: value })),
 		setMaxReadFileLine: (value) => setState((prevState) => ({ ...prevState, maxReadFileLine: value })),

@@ -5,8 +5,8 @@ import { Info, Download, Upload, TriangleAlert } from "lucide-react"
 
 import { VSCodeCheckbox, VSCodeLink } from "@vscode/webview-ui-toolkit/react"
 
-import { Package } from "@roo/package"
-import { TelemetrySetting } from "@roo/TelemetrySetting"
+import { Package } from "@Mojo/package"
+import { TelemetrySetting } from "@Mojo/TelemetrySetting"
 
 import { vscode } from "@/utils/vscode"
 import { cn } from "@/lib/utils"
@@ -51,7 +51,7 @@ export const About = ({ telemetrySetting, setTelemetrySetting, className, ...pro
 						<Trans
 							i18nKey="settings:footer.telemetry.description"
 							components={{
-								privacyLink: <VSCodeLink href="https://roocode.com/privacy" />,
+								privacyLink: <VSCodeLink href="https://Mojocode.com/privacy" />,
 							}}
 						/>
 					</p>
@@ -61,9 +61,9 @@ export const About = ({ telemetrySetting, setTelemetrySetting, className, ...pro
 					<Trans
 						i18nKey="settings:footer.feedback"
 						components={{
-							githubLink: <VSCodeLink href="https://github.com/RooCodeInc/Roo-Code" />,
-							redditLink: <VSCodeLink href="https://reddit.com/r/RooCode" />,
-							discordLink: <VSCodeLink href="https://discord.gg/roocode" />,
+							githubLink: <VSCodeLink href="https://github.com/MojoCodeInc/Mojo-Code" />,
+							redditLink: <VSCodeLink href="https://reddit.com/r/MojoCode" />,
+							discordLink: <VSCodeLink href="https://discord.gg/Mojocode" />,
 						}}
 					/>
 				</div>

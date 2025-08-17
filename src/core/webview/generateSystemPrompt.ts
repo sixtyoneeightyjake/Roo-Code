@@ -42,7 +42,7 @@ export const generateSystemPrompt = async (provider: ClineProvider, message: Web
 	const mode = message.mode ?? defaultModeSlug
 	const customModes = await provider.customModesManager.getCustomModes()
 
-	const rooIgnoreInstructions = provider.getCurrentTask()?.rooIgnoreController?.getInstructions()
+	const MojoIgnoreInstructions = provider.getCurrentTask()?.MojoIgnoreController?.getInstructions()
 
 	// Determine if browser tools can be used based on model support, mode, and user settings
 	let modelSupportsComputerUse = false
@@ -79,12 +79,12 @@ export const generateSystemPrompt = async (provider: ClineProvider, message: Web
 		experiments,
 		enableMcpServerCreation,
 		language,
-		rooIgnoreInstructions,
+		MojoIgnoreInstructions,
 		maxReadFileLine !== -1,
 		{
 			maxConcurrentFileReads: maxConcurrentFileReads ?? 5,
 			todoListEnabled: apiConfiguration?.todoListEnabled ?? true,
-			useAgentRules: vscode.workspace.getConfiguration("roo-cline").get<boolean>("useAgentRules") ?? true,
+			useAgentRules: vscode.workspace.getConfiguration("Mojo-cline").get<boolean>("useAgentRules") ?? true,
 		},
 	)
 

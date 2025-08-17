@@ -3,7 +3,7 @@
 import { useMemo } from "react"
 import { ScatterChart, Scatter, XAxis, YAxis, Label, Customized, Cross } from "recharts"
 
-import type { TaskMetrics, Run } from "@roo-code/evals"
+import type { TaskMetrics, Run } from "@Mojo-code/evals"
 
 import { formatTokens, formatCurrency, formatDuration, formatScore } from "@/lib"
 import { useOpenRouterModels } from "@/lib/hooks"
@@ -60,8 +60,8 @@ export function Evals({
 		<div className="mx-auto flex max-w-screen-lg flex-col gap-8 p-8">
 			<div className="flex flex-col gap-4">
 				<div>
-					Roo Code tests each frontier model against{" "}
-					<a href="https://github.com/RooCodeInc/Roo-Code-Evals" className="underline">
+					Mojo Code tests each frontier model against{" "}
+					<a href="https://github.com/MojoCodeInc/Mojo-Code-Evals" className="underline">
 						a suite of hundreds of exercises
 					</a>{" "}
 					across 5 programming languages with varying difficulty. These results can help you find the right
@@ -69,7 +69,7 @@ export function Evals({
 				</div>
 				<div>
 					Want to see the results for a model we haven&apos;t tested yet? Ping us in{" "}
-					<a href="https://discord.gg/roocode" className="underline">
+					<a href="https://discord.gg/Mojocode" className="underline">
 						Discord
 					</a>
 					.

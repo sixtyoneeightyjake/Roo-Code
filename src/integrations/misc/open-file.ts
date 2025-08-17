@@ -23,20 +23,20 @@ export async function openFile(filePath: string, options: OpenFileOptions = {}) 
 			console.warn(`Failed to decode file path: ${decodeError}. Using original path.`)
 		}
 
-		const workspaceRoot = getWorkspacePath()
+		const workspaceroot = getWorkspacePath()
 		const homeDir = os.homedir()
 
 		const attemptPaths: string[] = []
 
 		if (filePath.startsWith("./")) {
 			const relativePart = filePath.slice(2)
-			if (workspaceRoot) {
-				attemptPaths.push(path.join(workspaceRoot, relativePart))
+			if (workspaceroot) {
+				attemptPaths.push(path.join(workspaceroot, relativePart))
 			}
 			if (homeDir) {
 				const homePath = path.join(homeDir, relativePart)
-				// Add home path if it's different from what might have been added via workspaceRoot
-				// (e.g. if workspaceRoot itself is the home directory)
+				// Add home path if it's different from what might have been added via workspaceroot
+				// (e.g. if workspaceroot itself is the home directory)
 				if (!attemptPaths.includes(homePath)) {
 					attemptPaths.push(homePath)
 				}
@@ -91,8 +91,8 @@ export async function openFile(filePath: string, options: OpenFileOptions = {}) 
 				let pathToCreateAt: string
 				if (originalFilePathForError.startsWith("./")) {
 					const relativePart = originalFilePathForError.slice(2)
-					if (workspaceRoot) {
-						pathToCreateAt = path.join(workspaceRoot, relativePart)
+					if (workspaceroot) {
+						pathToCreateAt = path.join(workspaceroot, relativePart)
 					} else if (homeDir) {
 						pathToCreateAt = path.join(homeDir, relativePart)
 					} else {

@@ -1,8 +1,8 @@
 import { Anthropic } from "@anthropic-ai/sdk"
 import * as path from "path"
 import * as diff from "diff"
-import { RooIgnoreController, LOCK_TEXT_SYMBOL } from "../ignore/RooIgnoreController"
-import { RooProtectedController } from "../protect/RooProtectedController"
+import { MojoIgnoreController, LOCK_TEXT_SYMBOL } from "../ignore/RooIgnoreController"
+import { MojoProtectedController } from "../protect/RooProtectedController"
 
 export const formatResponse = {
 	toolDenied: () => `The user denied this operation.`,
@@ -15,8 +15,8 @@ export const formatResponse = {
 
 	toolError: (error?: string) => `The tool execution failed with the following error:\n<error>\n${error}\n</error>`,
 
-	rooIgnoreError: (path: string) =>
-		`Access to ${path} is blocked by the .rooignore file settings. You must try to continue in the task without using this file, or ask the user to update the .rooignore file.`,
+	MojoIgnoreError: (path: string) =>
+		`Access to ${path} is blocked by the .Mojoignore file settings. You must try to continue in the task without using this file, or ask the user to update the .Mojoignore file.`,
 
 	noToolsUsed: () =>
 		`[ERROR] You did not use a tool in your previous response! Please retry with a tool use.
@@ -94,9 +94,9 @@ Otherwise, if you have not completed the task and do not need additional informa
 		absolutePath: string,
 		files: string[],
 		didHitLimit: boolean,
-		rooIgnoreController: RooIgnoreController | undefined,
-		showRooIgnoredFiles: boolean,
-		rooProtectedController?: RooProtectedController,
+		MojoIgnoreController: MojoIgnoreController | undefined,
+		showMojoIgnoredFiles: boolean,
+		MojoProtectedController?: MojoProtectedController,
 	): string => {
 		const sorted = files
 			.map((file) => {
@@ -126,43 +126,43 @@ Otherwise, if you have not completed the task and do not need additional informa
 				return aParts.length - bParts.length
 			})
 
-		let rooIgnoreParsed: string[] = sorted
+		let MojoIgnoreParsed: string[] = sorted
 
-		if (rooIgnoreController) {
-			rooIgnoreParsed = []
+		if (MojoIgnoreController) {
+			MojoIgnoreParsed = []
 			for (const filePath of sorted) {
 				// path is relative to absolute path, not cwd
 				// validateAccess expects either path relative to cwd or absolute path
 				// otherwise, for validating against ignore patterns like "assets/icons", we would end up with just "icons", which would result in the path not being ignored.
 				const absoluteFilePath = path.resolve(absolutePath, filePath)
-				const isIgnored = !rooIgnoreController.validateAccess(absoluteFilePath)
+				const isIgnored = !MojoIgnoreController.validateAccess(absoluteFilePath)
 
 				if (isIgnored) {
 					// If file is ignored and we're not showing ignored files, skip it
-					if (!showRooIgnoredFiles) {
+					if (!showMojoIgnoredFiles) {
 						continue
 					}
 					// Otherwise, mark it with a lock symbol
-					rooIgnoreParsed.push(LOCK_TEXT_SYMBOL + " " + filePath)
+					MojoIgnoreParsed.push(LOCK_TEXT_SYMBOL + " " + filePath)
 				} else {
 					// Check if file is write-protected (only for non-ignored files)
-					const isWriteProtected = rooProtectedController?.isWriteProtected(absoluteFilePath) || false
+					const isWriteProtected = MojoProtectedController?.isWriteProtected(absoluteFilePath) || false
 					if (isWriteProtected) {
-						rooIgnoreParsed.push("🛡️ " + filePath)
+						MojoIgnoreParsed.push("🛡️ " + filePath)
 					} else {
-						rooIgnoreParsed.push(filePath)
+						MojoIgnoreParsed.push(filePath)
 					}
 				}
 			}
 		}
 		if (didHitLimit) {
-			return `${rooIgnoreParsed.join(
+			return `${MojoIgnoreParsed.join(
 				"\n",
 			)}\n\n(File list truncated. Use list_files on specific subdirectories if you need to explore further.)`
-		} else if (rooIgnoreParsed.length === 0 || (rooIgnoreParsed.length === 1 && rooIgnoreParsed[0] === "")) {
+		} else if (MojoIgnoreParsed.length === 0 || (MojoIgnoreParsed.length === 1 && MojoIgnoreParsed[0] === "")) {
 			return "No files found."
 		} else {
-			return rooIgnoreParsed.join("\n")
+			return MojoIgnoreParsed.join("\n")
 		}
 	},
 

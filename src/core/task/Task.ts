@@ -26,7 +26,7 @@ import {
 	type InteractiveAsk,
 	type ToolProgressStatus,
 	type HistoryItem,
-	RooCodeEventName,
+	MojoCodeEventName,
 	TelemetryEventName,
 	TaskStatus,
 	TodoItem,
@@ -36,9 +36,9 @@ import {
 	isIdleAsk,
 	isInteractiveAsk,
 	isResumableAsk,
-} from "@roo-code/types"
-import { TelemetryService } from "@roo-code/telemetry"
-import { CloudService, ExtensionBridgeService } from "@roo-code/cloud"
+} from "@Mojo-code/types"
+import { TelemetryService } from "@Mojo-code/telemetry"
+// Cloud service imports removed - cloud functionality has been removed
 
 // api
 import { ApiHandler, ApiHandlerCreateMessageMetadata, buildApiHandler } from "../../api"
@@ -67,7 +67,7 @@ import { RepoPerTaskCheckpointService } from "../../services/checkpoints"
 // integrations
 import { DiffViewProvider } from "../../integrations/editor/DiffViewProvider"
 import { findToolName, formatContentBlockToMarkdown } from "../../integrations/misc/export-markdown"
-import { RooTerminalProcess } from "../../integrations/terminal/types"
+import { rooterminalProcess } from "../../integrations/terminal/types"
 import { TerminalRegistry } from "../../integrations/terminal/TerminalRegistry"
 
 // utils
@@ -81,8 +81,8 @@ import { SYSTEM_PROMPT } from "../prompts/system"
 // core modules
 import { ToolRepetitionDetector } from "../tools/ToolRepetitionDetector"
 import { FileContextTracker } from "../context-tracking/FileContextTracker"
-import { RooIgnoreController } from "../ignore/RooIgnoreController"
-import { RooProtectedController } from "../protect/RooProtectedController"
+import { MojoIgnoreController } from "../ignore/RooIgnoreController"
+import { MojoProtectedController } from "../protect/RooProtectedController"
 import { type AssistantMessageContent, presentAssistantMessage, parseAssistantMessage } from "../assistant-message"
 import { AssistantMessageParser } from "../assistant-message/AssistantMessageParser"
 import { truncateConversationIfNeeded } from "../sliding-window"
@@ -215,11 +215,11 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 	}
 
 	toolRepetitionDetector: ToolRepetitionDetector
-	rooIgnoreController?: RooIgnoreController
-	rooProtectedController?: RooProtectedController
+	MojoIgnoreController?: MojoIgnoreController
+	MojoProtectedController?: MojoProtectedController
 	fileContextTracker: FileContextTracker
 	urlContentFetcher: UrlContentFetcher
-	terminalProcess?: RooTerminalProcess
+	terminalProcess?: rooterminalProcess
 
 	// Computer User
 	browserSession: BrowserSession
@@ -254,7 +254,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 
 	// Task Bridge
 	enableTaskBridge: boolean
-	bridgeService: ExtensionBridgeService | null = null
+	// Cloud functionality removed - bridgeService property removed
 
 	// Streaming
 	isWaitingForFirstChunk = false
@@ -312,12 +312,12 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		this.instanceId = crypto.randomUUID().slice(0, 8)
 		this.taskNumber = -1
 
-		this.rooIgnoreController = new RooIgnoreController(this.cwd)
-		this.rooProtectedController = new RooProtectedController(this.cwd)
+		this.MojoIgnoreController = new MojoIgnoreController(this.cwd)
+		this.MojoProtectedController = new MojoProtectedController(this.cwd)
 		this.fileContextTracker = new FileContextTracker(provider, this.taskId)
 
-		this.rooIgnoreController.initialize().catch((error) => {
-			console.error("Failed to initialize RooIgnoreController:", error)
+		this.MojoIgnoreController.initialize().catch((error) => {
+			console.error("Failed to initialize MojoIgnoreController:", error)
 		})
 
 		this.apiConfiguration = apiConfiguration
@@ -566,17 +566,10 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		this.clineMessages.push(message)
 		const provider = this.providerRef.deref()
 		await provider?.postStateToWebview()
-		this.emit(RooCodeEventName.Message, { action: "created", message })
+		this.emit(MojoCodeEventName.Message, { action: "created", message })
 		await this.saveClineMessages()
 
-		const shouldCaptureMessage = message.partial !== true && CloudService.isEnabled()
-
-		if (shouldCaptureMessage) {
-			CloudService.instance.captureEvent({
-				event: TelemetryEventName.TASK_MESSAGE,
-				properties: { taskId: this.taskId, message },
-			})
-		}
+		// Cloud functionality removed - telemetry capture removed
 	}
 
 	public async overwriteClineMessages(newMessages: ClineMessage[]) {
@@ -588,16 +581,9 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 	private async updateClineMessage(message: ClineMessage) {
 		const provider = this.providerRef.deref()
 		await provider?.postMessageToWebview({ type: "messageUpdated", clineMessage: message })
-		this.emit(RooCodeEventName.Message, { action: "updated", message })
+		this.emit(MojoCodeEventName.Message, { action: "updated", message })
 
-		const shouldCaptureMessage = message.partial !== true && CloudService.isEnabled()
-
-		if (shouldCaptureMessage) {
-			CloudService.instance.captureEvent({
-				event: TelemetryEventName.TASK_MESSAGE,
-				properties: { taskId: this.taskId, message },
-			})
-		}
+		// Cloud functionality removed - telemetry capture removed
 	}
 
 	private async saveClineMessages() {
@@ -617,11 +603,11 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 				mode: this._taskMode || defaultModeSlug, // Use the task's own mode, not the current provider mode
 			})
 
-			this.emit(RooCodeEventName.TaskTokenUsageUpdated, this.taskId, tokenUsage)
+			this.emit(MojoCodeEventName.TaskTokenUsageUpdated, this.taskId, tokenUsage)
 
 			await this.providerRef.deref()?.updateTaskHistory(historyItem)
 		} catch (error) {
-			console.error("Failed to save Roo messages:", error)
+			console.error("Failed to save Mojo messages:", error)
 		}
 	}
 
@@ -654,7 +640,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		// simply removes the reference to this instance, but the instance is
 		// still alive until this promise resolves or rejects.)
 		if (this.abort) {
-			throw new Error(`[RooCode#ask] task ${this.taskId}.${this.instanceId} aborted`)
+			throw new Error(`[MojoCode#ask] task ${this.taskId}.${this.instanceId} aborted`)
 		}
 
 		let askTs: number
@@ -747,7 +733,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 
 						if (message) {
 							this.interactiveAsk = message
-							this.emit(RooCodeEventName.TaskInteractive, this.taskId)
+							this.emit(MojoCodeEventName.TaskInteractive, this.taskId)
 						}
 					}, 1_000),
 				)
@@ -758,7 +744,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 
 						if (message) {
 							this.resumableAsk = message
-							this.emit(RooCodeEventName.TaskResumable, this.taskId)
+							this.emit(MojoCodeEventName.TaskResumable, this.taskId)
 						}
 					}, 1_000),
 				)
@@ -769,7 +755,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 
 						if (message) {
 							this.idleAsk = message
-							this.emit(RooCodeEventName.TaskIdle, this.taskId)
+							this.emit(MojoCodeEventName.TaskIdle, this.taskId)
 						}
 					}, 1_000),
 				)
@@ -804,10 +790,10 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 			this.idleAsk = undefined
 			this.resumableAsk = undefined
 			this.interactiveAsk = undefined
-			this.emit(RooCodeEventName.TaskActive, this.taskId)
+			this.emit(MojoCodeEventName.TaskActive, this.taskId)
 		}
 
-		this.emit(RooCodeEventName.TaskAskResponded)
+		this.emit(MojoCodeEventName.TaskAskResponded)
 		return result
 	}
 
@@ -941,7 +927,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		contextCondense?: ContextCondense,
 	): Promise<undefined> {
 		if (this.abort) {
-			throw new Error(`[RooCode#say] task ${this.taskId}.${this.instanceId} aborted`)
+			throw new Error(`[MojoCode#say] task ${this.taskId}.${this.instanceId} aborted`)
 		}
 
 		if (partial !== undefined) {
@@ -1046,7 +1032,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 	async sayAndCreateMissingParamError(toolName: ToolName, paramName: string, relPath?: string) {
 		await this.say(
 			"error",
-			`Roo tried to use ${toolName}${
+			`Mojo tried to use ${toolName}${
 				relPath ? ` for '${relPath.toPosix()}'` : ""
 			} without value for required parameter '${paramName}'. Retrying...`,
 		)
@@ -1056,19 +1042,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 	// Start / Abort / Resume
 
 	private async startTask(task?: string, images?: string[]): Promise<void> {
-		if (this.enableTaskBridge) {
-			try {
-				this.bridgeService = this.bridgeService || ExtensionBridgeService.getInstance()
-
-				if (this.bridgeService) {
-					await this.bridgeService.subscribeToTask(this)
-				}
-			} catch (error) {
-				console.error(
-					`[Task#startTask] subscribeToTask failed - ${error instanceof Error ? error.message : String(error)}`,
-				)
-			}
-		}
+		// Cloud functionality removed - task bridge service removed
 
 		// `conversationHistory` (for API) and `clineMessages` (for webview)
 		// need to be in sync.
@@ -1098,7 +1072,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 
 	public async resumePausedTask(lastMessage: string) {
 		this.isPaused = false
-		this.emit(RooCodeEventName.TaskUnpaused)
+		this.emit(MojoCodeEventName.TaskUnpaused)
 
 		// Fake an answer from the subtask that it has completed running and
 		// this is the result of what it has done add the message to the chat
@@ -1120,19 +1094,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 	}
 
 	private async resumeTaskFromHistory() {
-		if (this.enableTaskBridge) {
-			try {
-				this.bridgeService = this.bridgeService || ExtensionBridgeService.getInstance()
-
-				if (this.bridgeService) {
-					await this.bridgeService.subscribeToTask(this)
-				}
-			} catch (error) {
-				console.error(
-					`[Task#resumeTaskFromHistory] subscribeToTask failed - ${error instanceof Error ? error.message : String(error)}`,
-				)
-			}
-		}
+		// Cloud functionality removed - task bridge service removed
 
 		const modifiedClineMessages = await this.getSavedClineMessages()
 
@@ -1386,13 +1348,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 			this.pauseInterval = undefined
 		}
 
-		// Unsubscribe from TaskBridge service.
-		if (this.bridgeService) {
-			this.bridgeService
-				.unsubscribeFromTask(this.taskId)
-				.catch((error) => console.error("Error unsubscribing from task bridge:", error))
-			this.bridgeService = null
-		}
+		// Cloud functionality removed - task bridge service removed
 
 		// Release any terminals associated with this task.
 		try {
@@ -1415,12 +1371,12 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		}
 
 		try {
-			if (this.rooIgnoreController) {
-				this.rooIgnoreController.dispose()
-				this.rooIgnoreController = undefined
+			if (this.MojoIgnoreController) {
+				this.MojoIgnoreController.dispose()
+				this.MojoIgnoreController = undefined
 			}
 		} catch (error) {
-			console.error("Error disposing RooIgnoreController:", error)
+			console.error("Error disposing MojoIgnoreController:", error)
 			// This is the critical one for the leak fix.
 		}
 
@@ -1449,7 +1405,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		}
 
 		this.abort = true
-		this.emit(RooCodeEventName.TaskAborted)
+		this.emit(MojoCodeEventName.TaskAborted)
 
 		try {
 			this.dispose() // Call the centralized dispose method
@@ -1491,7 +1447,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		let nextUserContent = userContent
 		let includeFileDetails = true
 
-		this.emit(RooCodeEventName.TaskStarted)
+		this.emit(MojoCodeEventName.TaskStarted)
 
 		while (!this.abort) {
 			const didEndLoop = await this.recursivelyMakeClineRequests(nextUserContent, includeFileDetails)
@@ -1536,7 +1492,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 			const currentIncludeFileDetails = currentItem.includeFileDetails
 
 			if (this.abort) {
-				throw new Error(`[RooCode#recursivelyMakeRooRequests] task ${this.taskId}.${this.instanceId} aborted`)
+				throw new Error(`[MojoCode#recursivelyMakeMojoRequests] task ${this.taskId}.${this.instanceId} aborted`)
 			}
 
 			if (this.consecutiveMistakeLimit > 0 && this.consecutiveMistakeCount >= this.consecutiveMistakeLimit) {
@@ -1605,7 +1561,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 			)
 
 			const {
-				showRooIgnoredFiles = true,
+				showMojoIgnoredFiles = true,
 				includeDiagnosticMessages = true,
 				maxDiagnosticMessages = 50,
 				maxReadFileLine = -1,
@@ -1616,8 +1572,8 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 				cwd: this.cwd,
 				urlContentFetcher: this.urlContentFetcher,
 				fileContextTracker: this.fileContextTracker,
-				rooIgnoreController: this.rooIgnoreController,
-				showRooIgnoredFiles,
+				MojoIgnoreController: this.MojoIgnoreController,
+				showMojoIgnoredFiles,
 				includeDiagnosticMessages,
 				maxDiagnosticMessages,
 				maxReadFileLine,
@@ -2027,7 +1983,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 				// Need to call here in case the stream was aborted.
 				if (this.abort || this.abandoned) {
 					throw new Error(
-						`[RooCode#recursivelyMakeRooRequests] task ${this.taskId}.${this.instanceId} aborted`,
+						`[MojoCode#recursivelyMakeMojoRequests] task ${this.taskId}.${this.instanceId} aborted`,
 					)
 				}
 
@@ -2181,7 +2137,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 			})
 		}
 
-		const rooIgnoreInstructions = this.rooIgnoreController?.getInstructions()
+		const MojoIgnoreInstructions = this.MojoIgnoreController?.getInstructions()
 
 		const state = await this.providerRef.deref()?.getState()
 
@@ -2222,12 +2178,12 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 				experiments,
 				enableMcpServerCreation,
 				language,
-				rooIgnoreInstructions,
+				MojoIgnoreInstructions,
 				maxReadFileLine !== -1,
 				{
 					maxConcurrentFileReads: maxConcurrentFileReads ?? 5,
 					todoListEnabled: apiConfiguration?.todoListEnabled ?? true,
-					useAgentRules: vscode.workspace.getConfiguration("roo-cline").get<boolean>("useAgentRules") ?? true,
+					useAgentRules: vscode.workspace.getConfiguration("Mojo-cline").get<boolean>("useAgentRules") ?? true,
 				},
 			)
 		})()
@@ -2548,7 +2504,7 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 		this.toolUsage[toolName].failures++
 
 		if (error) {
-			this.emit(RooCodeEventName.TaskToolFailed, this.taskId, toolName, error)
+			this.emit(MojoCodeEventName.TaskToolFailed, this.taskId, toolName, error)
 		}
 	}
 

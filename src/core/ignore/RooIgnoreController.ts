@@ -9,19 +9,19 @@ export const LOCK_TEXT_SYMBOL = "\u{1F512}"
 /**
  * Controls LLM access to files by enforcing ignore patterns.
  * Designed to be instantiated once in Cline.ts and passed to file manipulation services.
- * Uses the 'ignore' library to support standard .gitignore syntax in .rooignore files.
+ * Uses the 'ignore' library to support standard .gitignore syntax in .Mojoignore files.
  */
-export class RooIgnoreController {
+export class MojoIgnoreController {
 	private cwd: string
 	private ignoreInstance: Ignore
 	private disposables: vscode.Disposable[] = []
-	rooIgnoreContent: string | undefined
+	MojoIgnoreContent: string | undefined
 
 	constructor(cwd: string) {
 		this.cwd = cwd
 		this.ignoreInstance = ignore()
-		this.rooIgnoreContent = undefined
-		// Set up file watcher for .rooignore
+		this.MojoIgnoreContent = undefined
+		// Set up file watcher for .Mojoignore
 		this.setupFileWatcher()
 	}
 
@@ -30,26 +30,26 @@ export class RooIgnoreController {
 	 * Must be called after construction and before using the controller
 	 */
 	async initialize(): Promise<void> {
-		await this.loadRooIgnore()
+		await this.loadMojoIgnore()
 	}
 
 	/**
-	 * Set up the file watcher for .rooignore changes
+	 * Set up the file watcher for .Mojoignore changes
 	 */
 	private setupFileWatcher(): void {
-		const rooignorePattern = new vscode.RelativePattern(this.cwd, ".rooignore")
-		const fileWatcher = vscode.workspace.createFileSystemWatcher(rooignorePattern)
+		const MojoignorePattern = new vscode.RelativePattern(this.cwd, ".Mojoignore")
+		const fileWatcher = vscode.workspace.createFileSystemWatcher(MojoignorePattern)
 
 		// Watch for changes and updates
 		this.disposables.push(
 			fileWatcher.onDidChange(() => {
-				this.loadRooIgnore()
+				this.loadMojoIgnore()
 			}),
 			fileWatcher.onDidCreate(() => {
-				this.loadRooIgnore()
+				this.loadMojoIgnore()
 			}),
 			fileWatcher.onDidDelete(() => {
-				this.loadRooIgnore()
+				this.loadMojoIgnore()
 			}),
 		)
 
@@ -58,24 +58,24 @@ export class RooIgnoreController {
 	}
 
 	/**
-	 * Load custom patterns from .rooignore if it exists
+	 * Load custom patterns from .Mojoignore if it exists
 	 */
-	private async loadRooIgnore(): Promise<void> {
+	private async loadMojoIgnore(): Promise<void> {
 		try {
 			// Reset ignore instance to prevent duplicate patterns
 			this.ignoreInstance = ignore()
-			const ignorePath = path.join(this.cwd, ".rooignore")
+			const ignorePath = path.join(this.cwd, ".Mojoignore")
 			if (await fileExistsAtPath(ignorePath)) {
 				const content = await fs.readFile(ignorePath, "utf8")
-				this.rooIgnoreContent = content
+				this.MojoIgnoreContent = content
 				this.ignoreInstance.add(content)
-				this.ignoreInstance.add(".rooignore")
+				this.ignoreInstance.add(".Mojoignore")
 			} else {
-				this.rooIgnoreContent = undefined
+				this.MojoIgnoreContent = undefined
 			}
 		} catch (error) {
 			// Should never happen: reading file failed even though it exists
-			console.error("Unexpected error loading .rooignore:", error)
+			console.error("Unexpected error loading .Mojoignore:", error)
 		}
 	}
 
@@ -85,8 +85,8 @@ export class RooIgnoreController {
 	 * @returns true if file is accessible, false if ignored
 	 */
 	validateAccess(filePath: string): boolean {
-		// Always allow access if .rooignore does not exist
-		if (!this.rooIgnoreContent) {
+		// Always allow access if .Mojoignore does not exist
+		if (!this.MojoIgnoreContent) {
 			return true
 		}
 		try {
@@ -109,8 +109,8 @@ export class RooIgnoreController {
 	 * @returns path of file that is being accessed if it is being accessed, undefined if command is allowed
 	 */
 	validateCommand(command: string): string | undefined {
-		// Always allow if no .rooignore exists
-		if (!this.rooIgnoreContent) {
+		// Always allow if no .Mojoignore exists
+		if (!this.MojoIgnoreContent) {
 			return undefined
 		}
 
@@ -188,14 +188,14 @@ export class RooIgnoreController {
 	}
 
 	/**
-	 * Get formatted instructions about the .rooignore file for the LLM
-	 * @returns Formatted instructions or undefined if .rooignore doesn't exist
+	 * Get formatted instructions about the .Mojoignore file for the LLM
+	 * @returns Formatted instructions or undefined if .Mojoignore doesn't exist
 	 */
 	getInstructions(): string | undefined {
-		if (!this.rooIgnoreContent) {
+		if (!this.MojoIgnoreContent) {
 			return undefined
 		}
 
-		return `# .rooignore\n\n(The following is provided by a root-level .rooignore file where the user has specified files and directories that should not be accessed. When using list_files, you'll notice a ${LOCK_TEXT_SYMBOL} next to files that are blocked. Attempting to access the file's contents e.g. through read_file will result in an error.)\n\n${this.rooIgnoreContent}\n.rooignore`
+		return `# .Mojoignore\n\n(The following is provided by a root-level .Mojoignore file where the user has specified files and directories that should not be accessed. When using list_files, you'll notice a ${LOCK_TEXT_SYMBOL} next to files that are blocked. Attempting to access the file's contents e.g. through read_file will result in an error.)\n\n${this.MojoIgnoreContent}\n.Mojoignore`
 	}
 }

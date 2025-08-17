@@ -46,7 +46,7 @@
 		"Mojocode"
 	],
 	"activationEvents": [
-		"onLanguage",
+		"onView:Mojo-cline.SidebarProvider",
 		"onStartupFinished"
 	],
 	"main": "./dist/extension.js",

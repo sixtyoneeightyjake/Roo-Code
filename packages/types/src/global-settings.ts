@@ -167,34 +167,13 @@ export type MojoCodeSettings = GlobalSettings & ProviderSettings
  */
 export const SECRET_STATE_KEYS = [
 	"apiKey",
-	"glamaApiKey",
-	"openRouterApiKey",
-	"awsAccessKey",
-	"awsApiKey",
-	"awsSecretKey",
-	"awsSessionToken",
 	"openAiApiKey",
 	"geminiApiKey",
 	"openAiNativeApiKey",
-	"cerebrasApiKey",
-	"deepSeekApiKey",
-	"moonshotApiKey",
-	"mistralApiKey",
-	"unboundApiKey",
-	"requestyApiKey",
-	"xaiApiKey",
-	"groqApiKey",
-	"chutesApiKey",
-	"litellmApiKey",
 	"codeIndexOpenAiKey",
 	"codeIndexQdrantApiKey",
 	"codebaseIndexOpenAiCompatibleApiKey",
 	"codebaseIndexGeminiApiKey",
-	"codebaseIndexMistralApiKey",
-	"huggingFaceApiKey",
-	"sambaNovaApiKey",
-	"fireworksApiKey",
-	"ioIntelligenceApiKey",
 ] as const satisfies readonly (keyof ProviderSettings)[]
 export type SecretState = Pick<ProviderSettings, (typeof SECRET_STATE_KEYS)[number]>
 
@@ -220,8 +199,7 @@ export const isGlobalStateKey = (key: string): key is Keys<GlobalState> =>
 
 // Default settings when running evals (unless overridden).
 export const EVALS_SETTINGS: MojoCodeSettings = {
-	apiProvider: "openrouter",
-	openRouterUseMiddleOutTransform: false,
+	apiProvider: "openai",
 
 	lastShownAnnouncementId: "jul-09-2025-3-23-0",
 

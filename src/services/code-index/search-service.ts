@@ -4,7 +4,7 @@ import { IEmbedder } from "./interfaces/embedder"
 import { IVectorStore } from "./interfaces/vector-store"
 import { CodeIndexConfigManager } from "./config-manager"
 import { CodeIndexStateManager } from "./state-manager"
-import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryService } from "./../../stubs/telemetry"
 import { TelemetryEventName } from "@Mojo-code/types"
 
 /**

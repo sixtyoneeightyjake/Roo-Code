@@ -37,7 +37,7 @@ import {
 	isInteractiveAsk,
 	isResumableAsk,
 } from "@Mojo-code/types"
-import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryService } from "./../../stubs/telemetry"
 // Cloud service imports removed - cloud functionality has been removed
 
 // api
@@ -2183,7 +2183,8 @@ export class Task extends EventEmitter<TaskEvents> implements TaskLike {
 				{
 					maxConcurrentFileReads: maxConcurrentFileReads ?? 5,
 					todoListEnabled: apiConfiguration?.todoListEnabled ?? true,
-					useAgentRules: vscode.workspace.getConfiguration("Mojo-cline").get<boolean>("useAgentRules") ?? true,
+					useAgentRules:
+						vscode.workspace.getConfiguration("Mojo-cline").get<boolean>("useAgentRules") ?? true,
 				},
 			)
 		})()

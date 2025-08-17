@@ -14,7 +14,7 @@ import fs from "fs/promises"
 import ignore from "ignore"
 import path from "path"
 import { t } from "../../i18n"
-import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryService } from "./../../stubs/telemetry"
 import { TelemetryEventName } from "@Mojo-code/types"
 
 export class CodeIndexManager {

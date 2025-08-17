@@ -1,5 +1,5 @@
 import { ProviderSettings, ClineMessage, GlobalState, TelemetryEventName } from "@Mojo-code/types"
-import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryService } from "./../../stubs/telemetry"
 import { supportPrompt } from "../../shared/support-prompt"
 import { singleCompletionHandler } from "../../utils/single-completion-handler"
 import { ProviderSettingsManager } from "../config/ProviderSettingsManager"

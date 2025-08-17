@@ -9,8 +9,8 @@ import {
 	openAiModelInfoSaneDefaults,
 	openAiNativeDefaultModelId,
 	openAiNativeModels,
-	claudeCodeDefaultModelId,
-	claudeCodeModels,
+	_claudeCodeDefaultModelId,
+	_claudeCodeModels,
 } from "@Mojo-code/types"
 
 import { useRouterModels } from "./useRouterModels"
@@ -63,12 +63,7 @@ function getSelectedModel({
 			const info = apiConfiguration?.openAiCustomModelInfo ?? openAiModelInfoSaneDefaults
 			return { id, info }
 		}
-		case "claude-code": {
-			// Claude Code models extend anthropic models but with images and prompt caching disabled
-			const id = apiConfiguration.apiModelId ?? claudeCodeDefaultModelId
-			const info = claudeCodeModels[id as keyof typeof claudeCodeModels]
-			return { id, info: { ...openAiModelInfoSaneDefaults, ...info } }
-		}
+
 		// case "anthropic":
 		// case "human-relay":
 		// case "fake-ai":

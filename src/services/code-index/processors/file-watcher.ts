@@ -23,7 +23,7 @@ import { codeParser } from "./parser"
 import { CacheManager } from "../cache-manager"
 import { generateNormalizedAbsolutePath, generateRelativeFilePath } from "../shared/get-relative-path"
 import { isPathInIgnoredDirectory } from "../../glob/ignore-utils"
-import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryService } from "./../../../stubs/telemetry"
 import { TelemetryEventName } from "@Mojo-code/types"
 import { sanitizeErrorMessage } from "../shared/validation-helpers"
 

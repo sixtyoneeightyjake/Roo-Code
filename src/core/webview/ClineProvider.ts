@@ -34,7 +34,7 @@ import {
 	DEFAULT_TERMINAL_OUTPUT_CHARACTER_LIMIT,
 	DEFAULT_WRITE_DELAY_MS,
 } from "@Mojo-code/types"
-import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryService } from "./../../stubs/telemetry"
 // Cloud imports removed - cloud functionality has been removed
 
 import { Package } from "../../shared/package"

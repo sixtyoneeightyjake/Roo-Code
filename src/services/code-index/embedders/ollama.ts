@@ -4,7 +4,7 @@ import { getModelQueryPrefix } from "../../../shared/embeddingModels"
 import { MAX_ITEM_TOKENS } from "../constants"
 import { t } from "../../../i18n"
 import { withValidationErrorHandling, sanitizeErrorMessage } from "../shared/validation-helpers"
-import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryService } from "./../../../stubs/telemetry"
 import { TelemetryEventName } from "@Mojo-code/types"
 
 // Timeout constants for Ollama API requests

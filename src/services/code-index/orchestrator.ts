@@ -5,7 +5,7 @@ import { CodeIndexStateManager, IndexingState } from "./state-manager"
 import { IFileWatcher, IVectorStore, BatchProcessingSummary } from "./interfaces"
 import { DirectoryScanner } from "./processors"
 import { CacheManager } from "./cache-manager"
-import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryService } from "./../../stubs/telemetry"
 import { TelemetryEventName } from "@Mojo-code/types"
 import { t } from "../../i18n"
 

@@ -2,7 +2,7 @@ import * as vscode from "vscode"
 import delay from "delay"
 
 import type { CommandId } from "@Mojo-code/types"
-import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryService } from "../stubs/telemetry"
 
 import { Package } from "../shared/package"
 import { getCommand } from "../utils/commands"
@@ -230,7 +230,7 @@ export const openClineInNewTab = async ({ context, outputChannel }: Omit<Registe
 		mdmService = undefined
 	}
 
-	const tabProvider = new ClineProvider(context, outputChannel, "editor", contextProxy, mdmService)
+	const tabProvider = new ClineProvider(context, outputChannel, "editor", contextProxy)
 	const lastCol = Math.max(...vscode.window.visibleTextEditors.map((editor) => editor.viewColumn || 0))
 
 	// Check if there are any visible text editors, otherwise open a new group
@@ -246,7 +246,7 @@ export const openClineInNewTab = async ({ context, outputChannel }: Omit<Registe
 	const newPanel = vscode.window.createWebviewPanel(ClineProvider.tabPanelId, "Mojo Code", targetCol, {
 		enableScripts: true,
 		retainContextWhenHidden: true,
-		localResourceroots: [context.extensionUri],
+		localResourceRoots: [context.extensionUri],
 	})
 
 	// Save as tab type panel.

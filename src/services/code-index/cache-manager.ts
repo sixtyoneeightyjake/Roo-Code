@@ -3,7 +3,7 @@ import { createHash } from "crypto"
 import { ICacheManager } from "./interfaces/cache"
 import debounce from "lodash.debounce"
 import { safeWriteJson } from "../../utils/safeWriteJson"
-import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryService } from "./../../stubs/telemetry"
 import { TelemetryEventName } from "@Mojo-code/types"
 
 /**

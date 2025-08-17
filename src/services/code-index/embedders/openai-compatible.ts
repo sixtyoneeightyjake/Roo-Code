@@ -10,7 +10,7 @@ import { getDefaultModelId, getModelQueryPrefix } from "../../../shared/embeddin
 import { t } from "../../../i18n"
 import { withValidationErrorHandling, HttpError, formatEmbeddingError } from "../shared/validation-helpers"
 import { TelemetryEventName } from "@Mojo-code/types"
-import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryService } from "./../../../stubs/telemetry"
 import { Mutex } from "async-mutex"
 
 interface EmbeddingItem {

@@ -89,6 +89,7 @@ export default defineConfig(({ mode }) => {
 				"@": resolve(__dirname, "./src"),
 				"@src": resolve(__dirname, "./src"),
 				"@Mojo": resolve(__dirname, "../src/shared"),
+				"posthog-js": resolve(__dirname, "./src/utils/posthogStub.ts"),
 			},
 		},
 		build: {

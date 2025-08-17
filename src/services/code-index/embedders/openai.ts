@@ -12,7 +12,7 @@ import { getModelQueryPrefix } from "../../../shared/embeddingModels"
 import { t } from "../../../i18n"
 import { withValidationErrorHandling, formatEmbeddingError, HttpError } from "../shared/validation-helpers"
 import { TelemetryEventName } from "@Mojo-code/types"
-import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryService } from "./../../../stubs/telemetry"
 
 /**
  * OpenAI implementation of the embedder interface with batching and rate limiting

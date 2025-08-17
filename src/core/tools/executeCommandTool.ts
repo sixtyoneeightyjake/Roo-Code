@@ -5,7 +5,7 @@ import * as vscode from "vscode"
 import delay from "delay"
 
 import { CommandExecutionStatus, DEFAULT_TERMINAL_OUTPUT_CHARACTER_LIMIT } from "@Mojo-code/types"
-import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryService } from "./../../stubs/telemetry"
 
 import { Task } from "../task/Task"
 

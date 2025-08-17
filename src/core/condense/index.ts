@@ -1,6 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk"
 
-import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryService } from "./../../stubs/telemetry"
 
 import { t } from "../../i18n"
 import { ApiHandler } from "../../api"

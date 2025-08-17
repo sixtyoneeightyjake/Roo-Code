@@ -1,7 +1,7 @@
 import path from "path"
 import fs from "fs/promises"
 
-import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryService } from "./../../stubs/telemetry"
 import { DEFAULT_WRITE_DELAY_MS } from "@Mojo-code/types"
 
 import { ClineSayTool } from "../../shared/ExtensionMessage"

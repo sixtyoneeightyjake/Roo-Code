@@ -26,7 +26,7 @@ import {
 	MAX_PENDING_BATCHES,
 } from "../constants"
 import { isPathInIgnoredDirectory } from "../../glob/ignore-utils"
-import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryService } from "./../../../stubs/telemetry"
 import { TelemetryEventName } from "@Mojo-code/types"
 import { sanitizeErrorMessage } from "../shared/validation-helpers"
 

@@ -1,4 +1,4 @@
-import posthog from "posthog-js"
+import posthog from "./posthogStub"
 
 import { TelemetrySetting } from "@Mojo/TelemetrySetting"
 

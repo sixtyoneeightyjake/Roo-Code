@@ -3,7 +3,7 @@ import { IEmbedder, EmbeddingResponse, EmbedderInfo } from "../interfaces/embedd
 import { MAX_ITEM_TOKENS } from "../constants"
 import { t } from "../../../i18n"
 import { TelemetryEventName } from "@Mojo-code/types"
-import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryService } from "./../../../stubs/telemetry"
 
 /**
  * Mistral embedder implementation that wraps the OpenAI Compatible embedder

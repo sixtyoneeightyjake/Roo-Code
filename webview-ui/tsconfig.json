@@ -22,7 +22,8 @@
 		"paths": {
 			"@/*": ["./src/*"],
 			"@src/*": ["./src/*"],
-			"@Mojo/*": ["../src/shared/*"]
+			"@Mojo/*": ["../src/shared/*"],
+			"posthog-js": ["./src/utils/posthogStub.ts"]
 		}
 	},
 	"include": ["src", "../src/shared", "vitest.setup.ts"]

@@ -2,7 +2,7 @@ import Anthropic from "@anthropic-ai/sdk"
 import * as vscode from "vscode"
 
 import { MojoCodeEventName } from "@Mojo-code/types"
-import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryService } from "./../../stubs/telemetry"
 
 import { Task } from "../task/Task"
 import {

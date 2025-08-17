@@ -13,7 +13,7 @@ import {
 	type ClineMessage,
 	TelemetryEventName,
 } from "@Mojo-code/types"
-import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryService } from "./../../stubs/telemetry"
 import { type ApiMessage } from "../task-persistence/apiMessages"
 
 import { ClineProvider } from "./ClineProvider"
@@ -1949,7 +1949,6 @@ export const webviewMessageHandler = async (
 			await provider.postStateToWebview()
 			break
 		}
-
 
 		case "saveCodeIndexSettingsAtomic": {
 			if (!message.codeIndexSettings) {

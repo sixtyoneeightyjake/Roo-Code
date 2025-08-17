@@ -18,7 +18,10 @@
 		"strict": true,
 		"target": "es2022",
 		"useDefineForClassFields": true,
-		"useUnknownInCatchVariables": false
+		"useUnknownInCatchVariables": false,
+		"paths": {
+			"@Mojo-code/telemetry": ["./stubs/telemetry.ts"]
+		}
 	},
 	"include": ["."],
 	"exclude": ["node_modules"],

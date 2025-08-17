@@ -13,7 +13,7 @@ try {
 }
 
 // Cloud service imports removed - cloud functionality has been removed
-import { TelemetryService, PostHogTelemetryClient } from "@Mojo-code/telemetry"
+import { TelemetryService, PostHogTelemetryClient } from "./stubs/telemetry"
 
 import "./utils/path" // Necessary to have access to String.prototype.toPosix.
 import { createOutputChannelLogger, createDualLogger } from "./utils/outputChannelLogger"

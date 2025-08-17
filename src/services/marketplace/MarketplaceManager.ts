@@ -5,7 +5,7 @@ import * as vscode from "vscode"
 import * as yaml from "yaml"
 
 import type { MarketplaceItem, MarketplaceItemType, McpMarketplaceItem } from "@Mojo-code/types"
-import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryService } from "./../../stubs/telemetry"
 // Cloud service imports removed - cloud functionality has been removed
 
 import { GlobalFileNames } from "../../shared/globalFileNames"

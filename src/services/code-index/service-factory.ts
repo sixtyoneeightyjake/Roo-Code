@@ -13,7 +13,7 @@ import { CacheManager } from "./cache-manager"
 import { MojoIgnoreController } from "../../core/ignore/RooIgnoreController"
 import { Ignore } from "ignore"
 import { t } from "../../i18n"
-import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryService } from "./../../stubs/telemetry"
 import { TelemetryEventName } from "@Mojo-code/types"
 
 /**

@@ -15,7 +15,7 @@ import {
 	globalSettingsSchema,
 	isSecretStateKey,
 } from "@Mojo-code/types"
-import { TelemetryService } from "@Mojo-code/telemetry"
+import { TelemetryService } from "./../../stubs/telemetry"
 
 import { logger } from "../../utils/logging"
 
